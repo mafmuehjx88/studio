@@ -119,13 +119,7 @@ export default function ProfilePage() {
       </Card>
       
       <Card>
-        <CardHeader className="flex-row items-center justify-between p-4">
-            <div className="flex items-center gap-3">
-                 <ShoppingCart className="h-6 w-6 text-primary" />
-                <CardTitle className="text-lg">Total Spent</CardTitle>
-            </div>
-        </CardHeader>
-        <CardContent className="p-4 pt-0">
+        <CardContent className="p-4">
              {spentLoading ? (
                 <Skeleton className="h-8 w-28" />
              ) : (
