@@ -2,7 +2,7 @@ import type { Game, Product } from './types';
 
 export const games: Game[] = [
   { id: 'mlbb', name: 'MLBB', image: 'https://picsum.photos/seed/mobile-legends/600/300', needsServerId: true },
-  { id: 'pubg', name: 'PUBG', image: 'https://picsum.photos/seed/pubg-mobile/600/300', needsServerId: false },
+  { id: 'pubg', name: 'PUBG', image: 'https://i.ibb.co/XMTZkvX/new3589-516a74d6d701c86c007f668d7cf2891a.jpg', needsServerId: false },
   { id: 'hok', name: 'HOK', image: 'https://picsum.photos/seed/honor-of-kings/600/300', needsServerId: false },
 ];
 
