@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { collectionGroup, query, onSnapshot, orderBy, doc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
@@ -14,6 +14,8 @@ import { cn } from "@/lib/utils";
 import type { Order } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { formatDistanceToNow } from "date-fns";
 
 export default function AdminOrdersPage() {
   const { isAdmin } = useAuth();
@@ -21,6 +23,7 @@ export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [updatingIds, setUpdatingIds] = useState<string[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
 
   useEffect(() => {
@@ -73,6 +76,12 @@ export default function AdminOrdersPage() {
     }
   };
 
+  const filteredOrders = useMemo(() => {
+    return orders.filter(order => 
+      order.username.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [orders, searchTerm]);
+
   const statusColors: Record<Order["status"], string> = {
     Completed: 'bg-green-500/20 text-green-400 border-green-500/30',
     Pending: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
@@ -101,6 +110,14 @@ export default function AdminOrdersPage() {
     <Card>
       <CardHeader>
         <CardTitle>All Orders</CardTitle>
+        <div className="pt-4">
+          <Input 
+            placeholder="Search by username..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="max-w-sm"
+          />
+        </div>
       </CardHeader>
       <CardContent className="p-0">
         <Table>
@@ -108,17 +125,21 @@ export default function AdminOrdersPage() {
             <TableRow>
               <TableHead>Username</TableHead>
               <TableHead>Item</TableHead>
+              <TableHead>Date</TableHead>
               <TableHead>Status</TableHead>
               <TableHead className="text-right">Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {orders.map((order) => (
+            {filteredOrders.map((order) => (
               <TableRow key={order.id}>
                 <TableCell>{order.username}</TableCell>
                 <TableCell>
                     <div className="font-medium">{order.itemName}</div>
                     <div className="text-xs text-muted-foreground">{order.price.toLocaleString()} Ks</div>
+                </TableCell>
+                <TableCell className="text-xs text-muted-foreground">
+                  {order.createdAt ? formatDistanceToNow(order.createdAt.toDate(), { addSuffix: true }) : 'N/A'}
                 </TableCell>
                  <TableCell>
                      <Badge 

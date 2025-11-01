@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { collection, query, onSnapshot, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
@@ -9,11 +9,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { UserProfile } from "@/lib/types";
+import { Input } from "@/components/ui/input";
 
 export default function AdminUsersPage() {
   const { isAdmin } = useAuth();
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     if (!isAdmin) {
@@ -45,6 +47,12 @@ export default function AdminUsersPage() {
     return () => unsubscribe();
   }, [isAdmin]);
 
+  const filteredUsers = useMemo(() => {
+    return users.filter(user =>
+      user.username.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [users, searchTerm]);
+
   if (loading) {
     return (
       <Card>
@@ -67,6 +75,14 @@ export default function AdminUsersPage() {
     <Card>
       <CardHeader>
         <CardTitle>User Management</CardTitle>
+         <div className="pt-4">
+          <Input 
+            placeholder="Search by username..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="max-w-sm"
+          />
+        </div>
       </CardHeader>
       <CardContent className="p-0">
         <Table>
@@ -78,7 +94,7 @@ export default function AdminUsersPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {users.map((user) => (
+            {filteredUsers.map((user) => (
               <TableRow key={user.uid}>
                 <TableCell className="font-medium">{user.username}</TableCell>
                 <TableCell className="text-muted-foreground">{user.email}</TableCell>
