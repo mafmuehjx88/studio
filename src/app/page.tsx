@@ -51,15 +51,12 @@ export default async function Home() {
         )}
       </Card>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 gap-4">
         <Button asChild size="sm">
           <Link href="/top-up">ငွေဖြည့်မည်</Link>
         </Button>
         <Button asChild variant="secondary" size="sm">
           <Link href="/orders">အော်ဒါများ</Link>
-        </Button>
-        <Button asChild variant="secondary" size="sm">
-          <Link href="#">အကောင့်ဝယ်ရန်</Link>
         </Button>
       </div>
 
@@ -95,6 +92,22 @@ export default async function Home() {
                 <Button variant="secondary" size="sm" className="h-8 w-full text-xs">ဝယ်မည်</Button>
             </Link>
           ))}
+            <Link href="#" className="group flex flex-col gap-2 text-center">
+                <Card className="overflow-hidden transition-transform group-hover:scale-105">
+                    <Image
+                    src="https://picsum.photos/seed/buy-account/400/400"
+                    alt="အကောင့်ဝယ်ရန်"
+                    width={400}
+                    height={400}
+                    data-ai-hint="user key"
+                    className="aspect-square w-full rounded-lg object-cover"
+                    />
+                </Card>
+                 <p className="truncate text-sm font-semibold text-foreground">
+                    အကောင့်ဝယ်ရန်
+                </p>
+                <Button variant="secondary" size="sm" className="h-8 w-full text-xs">ဝယ်မည်</Button>
+            </Link>
         </div>
       </div>
       
