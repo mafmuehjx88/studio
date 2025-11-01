@@ -19,34 +19,37 @@ export default function AuthGuard({
   const pathname = usePathname();
 
   useEffect(() => {
-    if (loading) return;
+    // Don't do anything while loading, useEffect will re-run when loading changes.
+    if (loading) {
+      return;
+    }
 
-    // If it's an authentication page (login/register)
+    const isUserLoggedIn = !!user;
+
+    // Logic for auth pages (login, register)
     if (isAuthPage) {
-      // and the user is logged in, redirect them away.
-      if (user) {
-        router.replace(isAdmin ? "/admin" : "/");
+      if (isUserLoggedIn) {
+        // If user is logged in, redirect away from auth pages.
+        const targetRoute = isAdmin ? "/admin" : "/";
+        router.replace(targetRoute);
       }
+      // If not logged in, do nothing and show the auth page.
     } 
-    // If it's a protected page
+    // Logic for protected pages
     else {
-      // and the user is not logged in, redirect them to login.
-      if (!user) {
+      if (!isUserLoggedIn) {
+        // If user is not logged in, redirect to login.
         router.replace(`/login?redirect=${pathname}`);
-      } 
-      // If it's an admin-only page and the user is not an admin, redirect.
-      else if (isAdminPage && !isAdmin) {
+      } else if (isAdminPage && !isAdmin) {
+        // If it's an admin page and the user is not an admin, redirect.
         router.replace("/");
       }
+      // If user is logged in (and is admin if required), do nothing and show the protected page.
     }
   }, [user, loading, router, isAuthPage, isAdminPage, isAdmin, pathname]);
 
-  // Show a loader under these conditions:
-  // 1. Auth state is still loading.
-  // 2. It's a protected page and there's no user (will be redirected).
-  // 3. It's an auth page and there IS a user (will be redirected).
-  // 4. It's an admin page, user is logged in, but is not an admin (will be redirected).
-  if (loading || (!isAuthPage && !user) || (isAuthPage && user) || (isAdminPage && user && !isAdmin)) {
+  // Show a loading spinner if auth state is loading, or if a redirect is imminent.
+  if (loading || (!isAuthPage && !user) || (isAuthPage && user)) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -54,5 +57,6 @@ export default function AuthGuard({
     );
   }
 
+  // Otherwise, render the children.
   return <>{children}</>;
 }
