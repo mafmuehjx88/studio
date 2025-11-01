@@ -19,6 +19,9 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const AUTH_PAGES = ['/login', '/register'];
+const PROTECTED_PAGES = ['/profile', '/wallet', '/orders', '/top-up', '/games']; // Add any other protected routes here
+
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
@@ -29,11 +32,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (firebaseUser) => {
+      setLoading(true); // Start loading whenever auth state changes
       setUser(firebaseUser);
       setIsAdmin(firebaseUser?.email === 'ohshif5@gmail.com');
       
       if (!firebaseUser) {
-        // User is signed out
+        // User is signed out, no profile to fetch.
         setUserProfile(null);
         setLoading(false);
       }
@@ -44,18 +48,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (!user) {
-      // If user is signed out, no need to listen to profile.
+      // User is signed out, no need to listen to profile.
       return;
     }
-    // We are definitely logged in if we get here. Start loading profile.
-    setLoading(true);
+
+    // User is logged in, start listening for profile changes.
     const userDocRef = doc(db, 'users', user.uid);
     const unsubscribeProfile = onSnapshot(userDocRef, 
       (docSnap) => {
         if (docSnap.exists()) {
           setUserProfile({ uid: docSnap.id, ...docSnap.data() } as UserProfile);
         } else {
-          setUserProfile(null); // Profile doesn't exist in DB
+          setUserProfile(null);
         }
         setLoading(false); // Finished loading profile
       }, 
@@ -68,30 +72,28 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     return () => unsubscribeProfile();
 
-  }, [user]); // This effect depends only on the user object.
+  }, [user]); // This effect re-runs only when the user object itself changes.
 
   useEffect(() => {
-    // This effect handles ALL redirection logic.
-    if (loading) return; // Don't redirect while loading
+    // This effect handles ALL redirection logic after loading is complete.
+    if (loading) return;
 
-    const authPages = ['/login', '/register'];
-    const isAuthPage = authPages.includes(pathname);
+    const isAuthPage = AUTH_PAGES.includes(pathname);
+    const isProtectedRoute = PROTECTED_PAGES.some(p => pathname.startsWith(p));
 
     if (user && isAuthPage) {
-      // Logged-in user on an auth page -> redirect to profile
+      // Logged-in user on an auth page (e.g., /login) -> redirect to profile
       router.replace('/profile');
-    } else if (!user && !isAuthPage) {
-      // Logged-out user not on an auth page -> redirect to login
+    } else if (!user && isProtectedRoute) {
+      // Logged-out user trying to access a protected page -> redirect to login
       router.replace('/login');
     }
   }, [user, loading, pathname, router]);
 
   const value = { user, userProfile, loading, isAdmin };
 
-  // While loading, we can show a blank screen or a global loader
-  // to prevent content flashing, especially on protected routes.
-  const authPages = ['/login', '/register'];
-  const isAuthPage = authPages.includes(pathname);
+  // While loading, we can show a global skeleton loader to prevent content flashing.
+  const isAuthPage = AUTH_PAGES.includes(pathname);
   if (loading && !isAuthPage) {
      return (
         <div className="relative mx-auto flex min-h-screen w-full max-w-md flex-col bg-background">
@@ -121,7 +123,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         </div>
      );
   }
-
 
   return (
     <AuthContext.Provider value={value}>
