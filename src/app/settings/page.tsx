@@ -14,8 +14,8 @@ const settingsOptions = [
     icon: Lock,
     title: 'Change Password',
     description: 'Update your account password.',
-    href: '#',
-    disabled: true,
+    href: '/settings/change-password',
+    disabled: false,
   },
   {
     icon: Bell,
