@@ -1,11 +1,10 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { products as allProducts, games as allGames } from '@/lib/data';
-import PlaceHolderImages from '@/lib/placeholder-images.json';
 import ProductGrid from '@/components/ProductGrid';
 import {
   Dialog,
@@ -28,6 +27,7 @@ import {
   increment,
   collection,
   serverTimestamp,
+  getDoc,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { sendTelegramNotification } from '@/lib/actions';
@@ -46,7 +46,6 @@ export default function GameItemsPage() {
   const [game, setGame] = useState<Game | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [imagesMap, setImagesMap] = useState<Record<string, PlaceholderImage>>({});
-  const [bannerUrl, setBannerUrl] = useState<string | null>(null);
 
   const [dataLoading, setDataLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -58,36 +57,40 @@ export default function GameItemsPage() {
   useEffect(() => {
     if (!gameId) return;
 
-    setDataLoading(true);
-    
-    // Find game and products from static data
-    const currentGame = allGames.find((g) => g.id === gameId) || null;
-    const gameProducts = allProducts.filter((p) => p.gameId === gameId);
+    async function fetchData() {
+      setDataLoading(true);
+      try {
+        const imagesDocRef = doc(db, 'settings', 'placeholderImages');
+        const imagesDocSnap = await getDoc(imagesDocRef);
+        
+        let fetchedImagesMap: Record<string, PlaceholderImage> = {};
+        if (imagesDocSnap.exists()) {
+           fetchedImagesMap = imagesDocSnap.data().images || {};
+        }
 
-    // Create an images map from the local JSON import
-    const localImagesMap: Record<string, PlaceholderImage> = {};
-    PlaceHolderImages.forEach(item => {
-      localImagesMap[item.id] = {
-        imageUrl: item.imageUrl,
-        description: item.description,
-        imageHint: item.imageHint,
-      };
-    });
+        const currentGame = allGames.find((g) => g.id === gameId) || null;
+        const gameProducts = allProducts.filter((p) => p.gameId === gameId);
 
-    let currentBannerUrl: string | null = null;
-    if (currentGame) {
-      currentBannerUrl = localImagesMap[currentGame.image]?.imageUrl || null;
+        setGame(currentGame);
+        setProducts(gameProducts);
+        setImagesMap(fetchedImagesMap);
+
+      } catch (error) {
+          console.error("Failed to fetch data:", error);
+          toast({
+              title: "Error",
+              description: "Could not load game data. Please try again later.",
+              variant: "destructive"
+          });
+      } finally {
+        setDataLoading(false);
+      }
     }
-    
-    setGame(currentGame);
-    setProducts(gameProducts);
-    setImagesMap(localImagesMap);
-    setBannerUrl(currentBannerUrl);
-    
-    setDataLoading(false);
 
-  }, [gameId]);
+    fetchData();
+  }, [gameId, toast]);
 
+  const bannerUrl = game ? imagesMap[game.image]?.imageUrl : null;
 
   const isPassProduct = selectedProduct?.name.toLowerCase().includes('pass');
 
@@ -205,13 +208,15 @@ Order Time: ${new Date().toLocaleString('en-US', {
   const renderProductGrids = () => {
     if (!game) return null;
 
+    const passes = products.filter(p => p.category === 'weekly' || p.name.toLowerCase().includes('pass'));
+
     switch (game.id) {
       case 'mlbb':
         return (
           <>
             <ProductGrid
               title="Passes"
-              products={products.filter((p) => p.name.toLowerCase().includes('pass'))}
+              products={passes}
               onProductClick={handleProductClick}
               imagesMap={imagesMap}
             />
@@ -258,7 +263,14 @@ Order Time: ${new Date().toLocaleString('en-US', {
           </>
         );
       default:
-        return <p>No products available for this game.</p>;
+         return (
+            <ProductGrid
+                title="Items"
+                products={products}
+                onProductClick={handleProductClick}
+                imagesMap={imagesMap}
+            />
+         )
     }
   };
 

@@ -5,18 +5,38 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { LogOut, Settings, Wallet } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { auth } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import PlaceHolderImages from "@/lib/placeholder-images.json";
+import { useEffect, useState } from "react";
+import { doc, getDoc } from "firebase/firestore";
+import type { PlaceholderImage } from "@/lib/types";
+
 
 export default function ProfilePage() {
   const { userProfile, loading } = useAuth();
   const router = useRouter();
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   
-  const avatarImage = PlaceHolderImages.find(img => img.id === 'default-avatar');
-  const avatarUrl = avatarImage?.imageUrl || null;
+  useEffect(() => {
+    async function fetchAvatar() {
+      try {
+        const imagesDoc = await getDoc(doc(db, "settings", "placeholderImages"));
+        if (imagesDoc.exists()) {
+          const images = imagesDoc.data().images;
+          const avatar: PlaceholderImage = images['default-avatar'];
+          if (avatar) {
+            setAvatarUrl(avatar.imageUrl);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch avatar image", error);
+      }
+    }
+    fetchAvatar();
+  }, []);
+
 
   const handleLogout = async () => {
     await signOut(auth);

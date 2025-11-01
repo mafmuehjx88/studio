@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { games as staticGames } from '@/lib/data';
-import PlaceHolderImages from '@/lib/placeholder-images.json';
 import { Marquee } from '@/components/ui/marquee';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -14,39 +13,37 @@ import { useEffect, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function Home() {
+  const [imagesMap, setImagesMap] = useState<Record<string, PlaceholderImage>>({});
   const [marqueeText, setMarqueeText] = useState('');
   const [loading, setLoading] = useState(true);
 
-  // Create an images map from the local JSON import
-  const imagesMap: Record<string, PlaceholderImage> = {};
-  PlaceHolderImages.forEach(item => {
-    imagesMap[item.id] = {
-      imageUrl: item.imageUrl,
-      description: item.description,
-      imageHint: item.imageHint,
-    };
-  });
-
-  const bannerImage = imagesMap['banner'];
   const games = staticGames;
 
   useEffect(() => {
-    const fetchMarquee = async () => {
+    const fetchInitialData = async () => {
       try {
-        const marqueeDoc = await getDoc(doc(db, "settings", "marquee"));
-        const text = marqueeDoc.exists() 
-          ? marqueeDoc.data().text 
+        const settingsDoc = await getDoc(doc(db, "settings", "marquee"));
+        const text = settingsDoc.exists() 
+          ? settingsDoc.data().text 
           : "Welcome to AT Game HUB! Your trusted partner for game top-ups.";
         setMarqueeText(text);
+
+        const imagesDoc = await getDoc(doc(db, "settings", "placeholderImages"));
+        if (imagesDoc.exists()) {
+            setImagesMap(imagesDoc.data().images || {});
+        }
+
       } catch (error) {
-        console.error("Error fetching marquee text:", error);
+        console.error("Error fetching initial data:", error);
         setMarqueeText("Welcome to AT Game HUB!");
       } finally {
         setLoading(false);
       }
     };
-    fetchMarquee();
+    fetchInitialData();
   }, []);
+  
+  const bannerImage = imagesMap['banner'];
 
   if (loading) {
     return (

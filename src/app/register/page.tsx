@@ -1,11 +1,11 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { doc, setDoc, serverTimestamp, getDoc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
 
 import { Button } from "@/components/ui/button";
@@ -13,11 +13,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import PlaceHolderImages from "@/lib/placeholder-images.json";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { errorEmitter } from "@/firebase/error-emitter";
 import { FirestorePermissionError } from "@/firebase/errors";
+import { PlaceholderImage } from "@/lib/types";
 
 
 export default function RegisterPage() {
@@ -32,8 +32,25 @@ export default function RegisterPage() {
   const [isRegistering, setIsRegistering] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [logo, setLogo] = useState<PlaceholderImage | null>(null);
 
-  const logo = PlaceHolderImages.find((img) => img.id === "logo");
+  useEffect(() => {
+    async function fetchLogo() {
+      try {
+        const imagesDoc = await getDoc(doc(db, "settings", "placeholderImages"));
+        if (imagesDoc.exists()) {
+          const images = imagesDoc.data().images;
+          const logoData: PlaceholderImage = images['logo'];
+          if (logoData) {
+            setLogo(logoData);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch logo image", error);
+      }
+    }
+    fetchLogo();
+  }, []);
   
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
