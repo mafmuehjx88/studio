@@ -17,8 +17,7 @@ import { useToast } from "@/hooks/use-toast";
 import { loginUser } from "@/lib/actions";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { FirebaseError } from "firebase/app";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address." }),
@@ -63,7 +62,7 @@ export default function LoginForm() {
         title: "Login Successful",
         description: "Welcome back!",
       });
-      // Redirect immediately on success instead of waiting for AuthGuard
+      // Redirect immediately on success
       router.replace('/profile');
     }
   }
@@ -78,7 +77,7 @@ export default function LoginForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="you@example.com" {...field} />
+                <Input placeholder="you@example.com" {...field} disabled={isSubmitting} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -91,7 +90,7 @@ export default function LoginForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="••••••••" {...field} />
+                <Input type="password" placeholder="••••••••" {...field} disabled={isSubmitting} />
               </FormControl>
               <FormMessage />
             </FormItem>
