@@ -277,7 +277,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
           alt={game.name}
           width={600}
           height={300}
-          className="aspect-[2/1] w-full rounded-lg object-cover"
+          className="aspect-[2/1] w-full rounded-lg object-contain"
           priority
         />
       )}
