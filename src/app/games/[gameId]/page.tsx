@@ -182,26 +182,34 @@ Order Time: ${new Date().toLocaleString('en-US', {
   const renderProductGrids = () => {
     if (!game) return null;
 
-    const passes = products.filter(p => p.category === 'weekly' || p.name.toLowerCase().includes('pass'));
+    const passes = products.filter(p => p.category === 'pass');
+    const diamonds2x = products.filter(p => p.category === '2x');
+    const otherDiamonds = products.filter(p => p.category === 'diamonds');
 
     switch (game.id) {
       case 'mlbb':
         return (
           <>
             <ProductGrid
-              title="Passes"
+              title="Weekly Pass & Twilight Pass"
               products={passes}
               onProductClick={handleProductClick}
+              gridCols="grid-cols-2"
+              titleNumber={1}
             />
             <ProductGrid
-              title="First Recharge Bonus"
-              products={products.filter((p) => p.category === '2x')}
+              title="2x Diamonds"
+              products={diamonds2x}
               onProductClick={handleProductClick}
+              gridCols="grid-cols-3"
+              titleNumber={2}
             />
              <ProductGrid
-              title="Diamonds"
-              products={products.filter((p) => p.category === 'diamonds')}
+              title="Other Diamonds"
+              products={otherDiamonds}
               onProductClick={handleProductClick}
+              gridCols="grid-cols-3"
+              titleNumber={3}
             />
           </>
         );
@@ -212,6 +220,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
               title="UC Top-Up"
               products={products.filter((p) => p.category === 'UC')}
               onProductClick={handleProductClick}
+              gridCols="grid-cols-2"
             />
           </>
         );
@@ -222,11 +231,13 @@ Order Time: ${new Date().toLocaleString('en-US', {
               title="Weekly Passes"
               products={products.filter((p) => p.category === 'Weekly Passes')}
               onProductClick={handleProductClick}
+              gridCols="grid-cols-2"
             />
             <ProductGrid
               title="Tokens"
               products={products.filter((p) => p.category === 'Tokens')}
               onProductClick={handleProductClick}
+              gridCols="grid-cols-2"
             />
           </>
         );
@@ -236,6 +247,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
                 title="Items"
                 products={products}
                 onProductClick={handleProductClick}
+                gridCols="grid-cols-2"
             />
          )
     }
@@ -246,10 +258,11 @@ Order Time: ${new Date().toLocaleString('en-US', {
           <div className="space-y-6">
               <Skeleton className="aspect-[2/1] w-full rounded-lg" />
               <Skeleton className="h-8 w-1/3" />
-              <div className="grid grid-cols-3 gap-3">
-                  <Skeleton className="aspect-square w-full rounded-lg" />
-                  <Skeleton className="aspect-square w-full rounded-lg" />
-                  <Skeleton className="aspect-square w-full rounded-lg" />
+              <div className="grid grid-cols-2 gap-4">
+                  <Skeleton className="h-32 w-full rounded-lg" />
+                  <Skeleton className="h-32 w-full rounded-lg" />
+                  <Skeleton className="h-32 w-full rounded-lg" />
+                  <Skeleton className="h-32 w-full rounded-lg" />
               </div>
           </div>
       )
