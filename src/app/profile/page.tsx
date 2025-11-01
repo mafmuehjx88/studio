@@ -1,7 +1,6 @@
 "use client";
 
-import { useRequireAuth } from "@/hooks/use-auth";
-import { useAuth as useAuthContext } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { logoutUser } from "@/lib/actions";
@@ -12,18 +11,19 @@ import { LogOut, Settings, Wallet, Loader2 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ProfilePage() {
-  const { user, loading: authLoading } = useRequireAuth();
-  const { userProfile, loading: profileLoading } = useAuthContext();
+  const { userProfile, loading } = useAuth();
   const router = useRouter();
 
   const handleLogout = async () => {
     await logoutUser();
+    // After logout, the middleware will automatically handle redirecting to /login
+    // We can also push it here to make it feel faster.
     router.replace("/login");
   };
 
   const avatar = PlaceHolderImages.find((img) => img.id === "default-avatar");
 
-  if (authLoading || profileLoading || !user) {
+  if (loading || !userProfile) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -38,24 +38,15 @@ export default function ProfilePage() {
           <Avatar className="h-16 w-16 border-2 border-primary">
             {avatar && <AvatarImage src={avatar.imageUrl} alt={userProfile?.username} />}
             <AvatarFallback>
-              {!userProfile ? <Skeleton className="h-full w-full" /> : userProfile.username.charAt(0).toUpperCase()}
+              {userProfile.username.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
           <div className="space-y-1">
-            {!userProfile ? (
-              <>
-                <Skeleton className="h-6 w-32" />
-                <Skeleton className="h-4 w-24" />
-              </>
-            ) : (
-              <>
-                <CardTitle className="text-xl">{userProfile.username}</CardTitle>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Wallet className="h-4 w-4 text-primary" />
-                  <span className="font-semibold text-primary">{userProfile.walletBalance.toFixed(2)} Ks</span>
-                </div>
-              </>
-            )}
+            <CardTitle className="text-xl">{userProfile.username}</CardTitle>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Wallet className="h-4 w-4 text-primary" />
+              <span className="font-semibold text-primary">{userProfile.walletBalance.toFixed(2)} Ks</span>
+            </div>
           </div>
         </CardHeader>
       </Card>

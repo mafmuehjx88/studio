@@ -62,7 +62,8 @@ export default function LoginForm() {
         title: "Login Successful",
         description: "Welcome back!",
       });
-      // Redirect immediately on success
+      // On success, the middleware will handle the redirect.
+      // We can optimistically navigate to make the UX feel faster.
       router.replace('/profile');
     }
   }

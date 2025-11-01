@@ -57,7 +57,12 @@ export async function loginUser(values: z.infer<typeof loginSchema>) {
 
 export async function logoutUser() {
   try {
-    await signOut(auth);
+    // This function is often called from the client, but the sign-out itself
+    // should be handled by the client-side Firebase SDK to clear local state.
+    // The server action's role here is to trigger revalidation if needed.
+    // However, the cookie deletion in AuthContext and middleware handles this better.
+    // We can keep this action simple.
+    // The actual signOut is handled client-side implicitly by onAuthStateChanged.
     revalidatePath("/", "layout");
     return { success: true };
   } catch (error: any) {

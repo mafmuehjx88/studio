@@ -2,13 +2,15 @@
 
 import LoginForm from "@/components/auth/LoginForm";
 import Link from "next/link";
-import { useRedirectIfAuth } from "@/hooks/use-auth";
+import { useAuth } from "@/contexts/AuthContext";
 import { Loader2 } from "lucide-react";
 
 export default function LoginPage() {
-  const { loading } = useRedirectIfAuth();
+  const { loading, user } = useAuth();
 
-  if (loading) {
+  // The middleware handles redirection, but we can show a loading state 
+  // while the initial auth state is being determined.
+  if (loading || user) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />

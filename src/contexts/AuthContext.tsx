@@ -5,6 +5,10 @@ import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
 import type { UserProfile } from '@/lib/types';
+import { setCookie, destroyCookie } from 'nookies';
+
+// The cookie name for the Firebase auth token
+const AUTH_COOKIE_NAME = 'firebase-auth-token';
 
 interface AuthContextType {
   user: FirebaseUser | null;
@@ -23,10 +27,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    const unsubscribeAuth = onAuthStateChanged(auth, (firebaseUser) => {
+    const unsubscribeAuth = onAuthStateChanged(auth, async (firebaseUser) => {
       setUser(firebaseUser);
       setAuthLoading(false);
-      if (!firebaseUser) {
+
+      if (firebaseUser) {
+        // Set a cookie when user logs in
+        const token = await firebaseUser.getIdToken();
+        setCookie(null, AUTH_COOKIE_NAME, token, {
+          maxAge: 30 * 24 * 60 * 60,
+          path: '/',
+        });
+      } else {
+        // Destroy the cookie on logout
+        destroyCookie(null, AUTH_COOKIE_NAME, { path: '/' });
         setProfileLoading(false);
       }
     });

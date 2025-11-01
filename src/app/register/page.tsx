@@ -15,15 +15,15 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { useRedirectIfAuth } from "@/hooks/use-auth";
+import { useAuth } from "@/contexts/AuthContext";
+
 
 export default function RegisterPage() {
+  const { loading, user } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
   const auth = useAuthInstance();
   const db = useFirestoreInstance();
-
-  const { loading: authLoading } = useRedirectIfAuth();
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -101,9 +101,8 @@ export default function RegisterPage() {
         title: "Registration Successful",
         description: "Your account has been created. Redirecting...",
       });
-      // The useRedirectIfAuth hook will handle the redirect on the next render cycle
-      // when the auth state changes. No need to manually set isRegistering to false
-      // as the component will unmount on redirect.
+      // On success, the middleware will handle the redirect automatically
+      // when the auth state changes. No need to call router.push here.
       
     } catch (error: any) {
       let description = "An unexpected error occurred.";
@@ -119,7 +118,7 @@ export default function RegisterPage() {
     }
   };
   
-  if (authLoading) {
+  if (loading || user) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
