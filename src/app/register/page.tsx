@@ -15,11 +15,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
-
 
 export default function RegisterPage() {
-  const { loading } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
   const auth = useAuthInstance();
@@ -121,14 +118,8 @@ export default function RegisterPage() {
     }
   };
   
-  if (loading) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
-  }
-
+  // The middleware prevents this page from being shown if logged in.
+  // No need for a top-level loading check here.
   return (
     <div className="flex min-h-full flex-col items-center justify-center">
       <div className="w-full max-w-sm space-y-6">

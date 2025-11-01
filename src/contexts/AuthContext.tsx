@@ -2,10 +2,10 @@
 
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
-import { doc, onSnapshot } from 'firebase/firestore';
+import { doc, onSnapshot, DocumentData } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
 import type { UserProfile } from '@/lib/types';
-import { setCookie, destroyCookie } from 'nookies';
+import { setCookie, destroyCookie, parseCookies } from 'nookies';
 
 const AUTH_COOKIE_NAME = 'firebase-auth-token';
 
@@ -27,17 +27,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        // User is logged in.
+        // User is signed in.
         setUser(firebaseUser);
-        const token = await firebaseUser.getIdToken();
-        setCookie(null, AUTH_COOKIE_NAME, token, { maxAge: 30 * 24 * 60 * 60, path: '/' });
+        
+        // Asynchronously get the token and set the cookie.
+        firebaseUser.getIdToken().then(token => {
+          setCookie(null, AUTH_COOKIE_NAME, token, { maxAge: 30 * 24 * 60 * 60, path: '/' });
+        });
+        
         setIsAdmin(firebaseUser.email === 'ohshif5@gmail.com');
 
+        // Listen for real-time profile updates.
         const userDocRef = doc(db, 'users', firebaseUser.uid);
         const unsubscribeProfile = onSnapshot(userDocRef, (docSnap) => {
           if (docSnap.exists()) {
             setUserProfile({ uid: docSnap.id, ...docSnap.data() } as UserProfile);
           } else {
+            // This case can happen briefly after registration before the doc is created.
             setUserProfile(null);
           }
           // Once we get the first profile snapshot (or lack thereof), auth flow is complete.
@@ -51,7 +57,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         return () => unsubscribeProfile();
 
       } else {
-        // User is logged out.
+        // User is signed out.
         setUser(null);
         setUserProfile(null);
         destroyCookie(null, AUTH_COOKIE_NAME, { path: '/' });

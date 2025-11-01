@@ -2,26 +2,10 @@
 
 import LoginForm from "@/components/auth/LoginForm";
 import Link from "next/link";
-import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useAuth } from "@/contexts/AuthContext";
 
 export default function LoginPage() {
-    const { user, loading } = useAuth();
-    const router = useRouter();
-
-    // While the initial auth state is loading, it's better to show a loader.
-    // The middleware prevents this page from being shown if logged in, but this handles the initial check.
-    if (loading) {
-        return (
-          <div className="flex h-screen w-full items-center justify-center">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          </div>
-        );
-    }
-    
-    // If we're done loading and the user is somehow still null, show the login form.
+    // The middleware prevents this page from being shown if logged in.
+    // No need for loading or user checks here.
     return (
       <div className="flex min-h-full flex-col items-center justify-center">
         <h1 className="text-3xl font-bold text-primary mb-8">AT Game HUB</h1>
