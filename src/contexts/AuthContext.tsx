@@ -26,20 +26,23 @@ const ADMIN_PAGES = ['/admin'];
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [authLoading, setAuthLoading] = useState(true);
+  const [profileLoading, setProfileLoading] = useState(false); // Only true when fetching profile
   const [isAdmin, setIsAdmin] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (firebaseUser) => {
+      setAuthLoading(true);
       setUser(firebaseUser);
       setIsAdmin(firebaseUser?.email === 'ohshif5@gmail.com');
       if (!firebaseUser) {
-        // If user logs out, we are no longer loading
+        // If user logs out or is not logged in, we are done loading.
         setUserProfile(null);
-        setLoading(false);
+        setAuthLoading(false);
       }
+      // If a user *is* found, loading will be set to false inside the profile snapshot effect
     });
     
     return () => unsubscribeAuth();
@@ -49,21 +52,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // This effect runs when the user's auth state changes.
     // If we have a user, we fetch their profile. If not, we are done.
     if (user) {
-        setLoading(true); // Start loading profile data
+        setProfileLoading(true); // Start loading profile data
         const userDocRef = doc(db, 'users', user.uid);
         const unsubscribeProfile = onSnapshot(userDocRef, 
           (docSnap) => {
             if (docSnap.exists()) {
-              setUserProfile({ uid: docSnap.id, ...docSnap.data() } as UserProfile);
+              setUserProfile({ ...docSnap.data(), uid: docSnap.id } as UserProfile);
             } else {
               setUserProfile(null); // User exists in auth, but not in db
+              console.error(`Profile not found in Firestore for user ${user.uid}`);
             }
-            setLoading(false); // Finished loading profile data
+            setProfileLoading(false); // Finished loading profile data
+            setAuthLoading(false); // Finished loading auth and profile sequence
           }, 
           (error) => {
             console.error("Error listening to user profile:", error);
             setUserProfile(null);
-            setLoading(false); // Finished loading, but with an error
+            setProfileLoading(false); // Finished loading, but with an error
+            setAuthLoading(false);
           }
         );
 
@@ -71,9 +77,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } else {
         // No user, so no profile to fetch. Not loading.
         setUserProfile(null);
-        setLoading(false);
+        setProfileLoading(false);
     }
   }, [user]);
+
+  // The overall loading state is true if we are checking auth OR fetching the profile
+  const loading = authLoading || profileLoading;
 
   useEffect(() => {
     // This effect handles redirection after loading is complete.
