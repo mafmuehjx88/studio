@@ -18,7 +18,6 @@ import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { errorEmitter } from "@/firebase/error-emitter";
 import { FirestorePermissionError } from "@/firebase/errors";
-import { loginUser } from "@/lib/actions";
 
 
 export default function RegisterPage() {
@@ -99,16 +98,13 @@ export default function RegisterPage() {
       // 3. Create user document in Firestore
       const userDocRef = doc(db, "users", user.uid);
       await setDoc(userDocRef, userProfileData);
-
-      // 4. Log the user in via server action to set the cookie
-      await loginUser({ email, password });
       
-      // 5. Show success and redirect
+      // 4. Show success and redirect (AuthContext will handle redirection)
       toast({
         title: "Registration Successful",
         description: "Your account has been created. Redirecting...",
       });
-      router.replace('/profile');
+      // The redirect is now handled by the AuthContext, so we don't need to do it here.
 
     } catch (error: any) {
       let description = "An unexpected error occurred.";
@@ -272,5 +268,3 @@ export default function RegisterPage() {
     </div>
   );
 }
-
-    
