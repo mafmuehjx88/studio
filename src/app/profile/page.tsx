@@ -9,7 +9,7 @@ import {
   CardTitle,
   CardContent,
 } from '@/components/ui/card';
-import { LogOut, Settings, Wallet, History } from 'lucide-react';
+import { LogOut, Settings, History, Wallet } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { auth, db } from '@/lib/firebase';
 import { signOut } from 'firebase/auth';
@@ -18,7 +18,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { staticImages } from '@/lib/data';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { Order } from '@/lib/types';
 import {
   Sheet,
@@ -35,7 +35,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 
 export default function ProfilePage() {
@@ -62,19 +61,25 @@ export default function ProfilePage() {
       try {
         const ordersQuery = query(
           collection(db, `users/${user.uid}/orders`),
-          where('status', '==', 'Completed'),
           orderBy('createdAt', 'desc')
         );
         const querySnapshot = await getDocs(ordersQuery);
+        
         let total = 0;
         const fetchedOrders: Order[] = [];
+        
         querySnapshot.forEach((doc) => {
           const order = doc.data() as Order;
-          total += order.price;
           fetchedOrders.push(order);
+          if (order.status === 'Completed') {
+            total += order.price;
+          }
         });
+
+        const completedOrders = fetchedOrders.filter(order => order.status === 'Completed');
+
         setTotalSpent(total);
-        setOrders(fetchedOrders);
+        setOrders(completedOrders);
       } catch (error) {
         console.error('Error fetching order data:', error);
       } finally {
@@ -162,11 +167,11 @@ export default function ProfilePage() {
       </Card>
 
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
+        <CardHeader className="flex flex-row items-center justify-between p-4">
           <CardTitle className="text-lg">ငွေသုံးစွဲမှု</CardTitle>
-          <Sheet>
+           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="sm" className="h-8 gap-1">
+              <Button variant="ghost" size="sm" className="h-8 gap-1 text-sm">
                 <History className="h-4 w-4" />
                 History
               </Button>
@@ -177,7 +182,7 @@ export default function ProfilePage() {
               </SheetHeader>
               <div className="mt-4 max-h-[60vh] overflow-y-auto">
                 {ordersLoading ? (
-                  <div className="space-y-4">
+                  <div className="space-y-4 p-4">
                     <Skeleton className="h-12 w-full" />
                     <Skeleton className="h-12 w-full" />
                     <Skeleton className="h-12 w-full" />
@@ -254,5 +259,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-
-    
