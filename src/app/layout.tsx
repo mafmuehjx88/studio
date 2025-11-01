@@ -27,7 +27,12 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className={cn("font-sans antialiased", poppins.variable)}>
         <AuthProvider>
-          <div className="relative mx-auto flex min-h-screen w-full max-w-md flex-col bg-background">
+          <div
+            className="relative mx-auto flex min-h-screen w-full max-w-md flex-col"
+            style={{
+              background: 'radial-gradient(circle, #007BFF 0%, #002D72 100%)'
+            }}
+          >
             <Header />
             <main className="flex-1 px-4 pb-24 pt-6">{children}</main>
             <Footer />
