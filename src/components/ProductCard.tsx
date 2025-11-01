@@ -4,6 +4,7 @@ import type { Product } from '@/lib/types';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 interface ProductCardProps {
   product: Product;
@@ -12,22 +13,38 @@ interface ProductCardProps {
 
 export default function ProductCard({ product, onClick }: ProductCardProps) {
   const is2xProduct = product.category === '2x';
+  const isPassProduct = product.category === 'pass';
 
   return (
     <Card
-      className="group flex cursor-pointer flex-col overflow-hidden rounded-lg border border-white/20 bg-card text-white transition-all duration-300 hover:border-white/40 hover:bg-card/80"
+      className="group flex cursor-pointer flex-col overflow-hidden rounded-md border-white/20 bg-card text-white transition-all duration-300 hover:border-white/40 hover:bg-card/80"
       onClick={() => onClick(product)}
     >
-      <CardContent className="relative flex flex-1 flex-col justify-center p-2 text-center">
-        <Badge className="absolute right-1 top-1 z-10 rounded-sm border-none bg-green-500 px-1.5 py-0.5 text-[10px] font-medium text-white">
-          မစောင့်ရပါ
-        </Badge>
-        {is2xProduct && (
-          <Badge className="absolute left-1/2 top-1 z-10 -translate-x-1/2 transform whitespace-nowrap rounded-sm border-none bg-red-600 px-1.5 py-0.5 text-[10px] font-medium text-white">
-            First Recharge
+      <CardContent className="relative flex flex-1 flex-col justify-start p-2 text-left">
+        {!is2xProduct && (
+          <Badge className="absolute right-1 top-1 z-10 rounded-sm border-none bg-green-500 px-1.5 py-0.5 text-[10px] font-medium text-white">
+            မစောင့်ရပါ
           </Badge>
         )}
-        <div className="flex flex-1 flex-col items-center justify-center gap-1 pt-8">
+        {is2xProduct && (
+          <div className="absolute left-0 top-0 z-10">
+            <span className="inline-block rounded-br-md rounded-tl-md bg-red-600 px-2 py-0.5 text-[10px] font-medium text-white">
+              First Recharge
+            </span>
+          </div>
+        )}
+        
+        {isPassProduct && product.image && (
+             <Image
+                src={product.image}
+                alt={product.name}
+                width={150}
+                height={80}
+                className="w-full rounded-md object-cover"
+              />
+        )}
+        
+        <div className={cn("flex flex-1 flex-col gap-1", isPassProduct ? "pt-2" : "pt-8 justify-center items-center")}>
             <p className="text-xs font-semibold">{product.name}</p>
             <p className="text-xs font-bold text-yellow-400">{product.price.toLocaleString()} Ks</p>
         </div>
