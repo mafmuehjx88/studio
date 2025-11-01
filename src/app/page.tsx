@@ -2,27 +2,47 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { games } from "@/lib/data";
-import { PlaceHolderImages } from "@/lib/placeholder-images";
+import { games as staticGames } from "@/lib/data";
 import { Marquee } from "@/components/ui/marquee";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import type { Game } from "@/lib/types";
 
-async function getMarqueeText() {
+type HomePageData = {
+  marqueeText: string;
+  images: Record<string, { imageUrl: string; description: string; imageHint?: string }>;
+  games: Game[];
+};
+
+async function getPageData(): Promise<HomePageData> {
   try {
+    const settingsDoc = await getDoc(doc(db, "settings", "placeholderImages"));
     const marqueeDoc = await getDoc(doc(db, "settings", "marquee"));
-    if (marqueeDoc.exists()) {
-      return marqueeDoc.data().text;
-    }
+    
+    const images = settingsDoc.exists() ? settingsDoc.data().images : {};
+    const marqueeText = marqueeDoc.exists() 
+      ? marqueeDoc.data().text 
+      : "Welcome to AT Game HUB! Your trusted partner for game top-ups.";
+
+    // For now, we still use static games data from lib/data.ts
+    // This can be migrated to Firestore later if needed.
+    const games = staticGames;
+
+    return { marqueeText, images, games };
   } catch (error) {
-    console.error("Error fetching marquee text:", error);
+    console.error("Error fetching page data:", error);
+    // Return default/fallback data on error
+    return { 
+      marqueeText: "Welcome to AT Game HUB!", 
+      images: {},
+      games: staticGames
+    };
   }
-  return "Welcome to AT Game HUB! Your trusted partner for game top-ups.";
 }
 
 export default async function Home() {
-  const bannerImage = PlaceHolderImages.find((img) => img.id === "banner");
-  const marqueeText = await getMarqueeText();
+  const { marqueeText, images, games } = await getPageData();
+  const bannerImage = images['banner'];
 
   return (
     <div className="space-y-6">
@@ -61,14 +81,12 @@ export default async function Home() {
         <h2 className="mb-4 text-2xl font-bold">Games</h2>
         <div className="grid grid-cols-3 gap-4">
           {games.map((game) => {
-            const gameImage = PlaceHolderImages.find(
-              (img) => img.id === game.image
-            );
+            const gameImage = images[game.image];
             return (
               <Link href={`/games/${game.id}`} key={game.id}>
                 <Card className="overflow-hidden transition-transform hover:scale-105">
                   <CardContent className="p-0">
-                    {gameImage && (
+                    {gameImage ? (
                       <Image
                         src={gameImage.imageUrl}
                         alt={game.name}
@@ -77,6 +95,8 @@ export default async function Home() {
                         className="aspect-square w-full rounded-t-lg object-cover"
                         data-ai-hint={gameImage.imageHint}
                       />
+                    ) : (
+                      <div className="aspect-square w-full bg-muted"></div>
                     )}
                     <div className="p-2 text-center">
                       <p className="truncate text-xs font-semibold">

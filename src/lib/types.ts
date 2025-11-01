@@ -8,6 +8,22 @@ export interface UserProfile {
   createdAt: Timestamp;
 }
 
+export interface Game {
+  id: string;
+  name: string;
+  image: string; // This now refers to the key in the Firestore images map
+  needsServerId: boolean;
+}
+
+export interface Product {
+  id: string;
+  gameId: string;
+  name: string;
+  category: string;
+  price: number;
+  image: string; // This can be a direct URL or an identifier
+}
+
 export interface Order {
     id: string;
     userId: string;

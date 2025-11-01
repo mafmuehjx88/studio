@@ -6,27 +6,39 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { LogOut, Settings, Wallet } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { auth } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { PlaceHolderImages } from "@/lib/placeholder-images";
+import { useEffect, useState } from "react";
+import { doc, getDoc } from "firebase/firestore";
 
 export default function ProfilePage() {
   const { userProfile, loading } = useAuth();
   const router = useRouter();
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchAvatar = async () => {
+      try {
+        const imagesDocRef = doc(db, "settings", "placeholderImages");
+        const imagesDoc = await getDoc(imagesDocRef);
+        if (imagesDoc.exists()) {
+          const images = imagesDoc.data().images;
+          setAvatarUrl(images['default-avatar']?.imageUrl || null);
+        }
+      } catch (error) {
+        console.error("Failed to fetch avatar:", error);
+      }
+    };
+    fetchAvatar();
+  }, []);
 
   const handleLogout = async () => {
     await signOut(auth);
-    // The AuthContext will detect the sign-out and redirect via middleware logic.
-    // For a faster UX, we can preemptively push.
     router.replace("/login");
   };
 
-  const avatar = PlaceHolderImages.find((img) => img.id === "default-avatar");
-
-  // The middleware protects this page. We only need to handle the loading state
-  // for the user profile data itself.
   if (loading) {
     return (
         <div className="space-y-6">
@@ -47,7 +59,6 @@ export default function ProfilePage() {
     );
   }
 
-  // Handle case where user is authenticated but profile is not found (e.g., deleted from db)
   if (!userProfile) {
     return (
         <div className="flex flex-col items-center justify-center text-center">
@@ -65,7 +76,7 @@ export default function ProfilePage() {
       <Card className="overflow-hidden">
         <CardHeader className="flex-row items-center gap-4 p-4">
           <Avatar className="h-16 w-16 border-2 border-primary">
-            {avatar && <AvatarImage src={avatar.imageUrl} alt={userProfile.username} /> }
+            {avatarUrl && <AvatarImage src={avatarUrl} alt={userProfile.username} /> }
              <AvatarFallback>
               {userProfile.username.charAt(0).toUpperCase()}
             </AvatarFallback>

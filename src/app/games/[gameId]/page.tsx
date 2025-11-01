@@ -1,11 +1,10 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
-import { games, products as allProducts, Product } from '@/lib/data';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { products as allProducts, Product } from '@/lib/data';
 import ProductGrid from '@/components/ProductGrid';
 import {
   Dialog,
@@ -28,17 +27,22 @@ import {
   increment,
   collection,
   serverTimestamp,
+  getDoc,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { sendTelegramNotification } from '@/lib/actions';
 import { generateOrderId } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
+import type { Game } from '@/lib/types';
 
 export default function GameItemsPage() {
   const params = useParams();
   const router = useRouter();
   const { userProfile, user, loading } = useAuth();
   const { toast } = useToast();
+
+  const [gameData, setGameData] = useState<{game: Game | null, bannerUrl: string | null}>({ game: null, bannerUrl: null });
+  const [dataLoading, setDataLoading] = useState(true);
 
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [userGameId, setUserGameId] = useState('');
@@ -48,15 +52,46 @@ export default function GameItemsPage() {
 
   const gameId = params.gameId as string;
 
-  const game = useMemo(() => games.find((g) => g.id === gameId), [gameId]);
-  const gameBanner = useMemo(
-    () => PlaceHolderImages.find((img) => img.id === game?.image),
-    [game]
-  );
+  useEffect(() => {
+    if (!gameId) return;
+
+    const fetchGameData = async () => {
+      setDataLoading(true);
+      try {
+        const gameDocRef = doc(db, "games", gameId);
+        const gameDoc = await getDoc(gameDocRef);
+        
+        let fetchedGame: Game | null = null;
+        if (gameDoc.exists()) {
+          fetchedGame = { id: gameDoc.id, ...gameDoc.data() } as Game;
+        }
+
+        const imagesDocRef = doc(db, "settings", "placeholderImages");
+        const imagesDoc = await getDoc(imagesDocRef);
+        let bannerUrl: string | null = null;
+        if (imagesDoc.exists() && fetchedGame) {
+           bannerUrl = imagesDoc.data().images[fetchedGame.image]?.imageUrl || null;
+        }
+        
+        setGameData({ game: fetchedGame, bannerUrl });
+      } catch (error) {
+        console.error("Error fetching game data:", error);
+        toast({ title: "Error", description: "Could not load game data.", variant: "destructive" });
+      } finally {
+        setDataLoading(false);
+      }
+    };
+
+    fetchGameData();
+  }, [gameId, toast]);
+
+
   const products = useMemo(
     () => allProducts.filter((p) => p.gameId === gameId),
     [gameId]
   );
+  
+  const { game, bannerUrl } = gameData;
 
   const isPassProduct =
     selectedProduct?.category.toLowerCase().includes('pass') ||
@@ -78,7 +113,7 @@ export default function GameItemsPage() {
   };
 
   const handlePurchase = async () => {
-    if (!user || !userProfile || !selectedProduct) return;
+    if (!user || !userProfile || !selectedProduct || !game) return;
 
     if (!userGameId) {
       toast({
@@ -89,7 +124,7 @@ export default function GameItemsPage() {
       return;
     }
 
-    if (game?.needsServerId && !userServerId) {
+    if (game.needsServerId && !userServerId) {
       toast({
         title: 'Error',
         description: 'Please enter your Server ID.',
@@ -115,7 +150,7 @@ export default function GameItemsPage() {
         userId: user.uid,
         username: userProfile.username,
         gameId: gameId,
-        gameName: game?.name ?? 'Unknown Game',
+        gameName: game.name,
         itemId: selectedProduct.id,
         itemName: `${selectedProduct.name}${
           isPassProduct ? ` (x${quantity})` : ''
@@ -175,7 +210,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
   };
 
   const renderProductGrids = () => {
-    if (!game) return <p>Game not found.</p>;
+    if (!game) return null;
 
     switch (game.id) {
       case 'mlbb':
@@ -228,7 +263,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
     }
   };
 
-  if (loading) {
+  if (loading || dataLoading) {
       return (
           <div className="space-y-6">
               <Skeleton className="aspect-[2/1] w-full rounded-lg" />
@@ -258,9 +293,9 @@ Order Time: ${new Date().toLocaleString('en-US', {
   
   return (
     <div className="space-y-6">
-      {gameBanner && (
+      {bannerUrl && (
         <Image
-          src={gameBanner.imageUrl}
+          src={bannerUrl}
           alt={game.name}
           width={600}
           height={300}

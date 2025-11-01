@@ -1,18 +1,4 @@
-export interface Game {
-  id: string;
-  name: string;
-  image: string; // id from placeholder-images.json
-  needsServerId: boolean;
-}
-
-export interface Product {
-  id: string;
-  gameId: string;
-  name: string;
-  category: string;
-  price: number;
-  image: string;
-}
+import type { Game, Product } from './types';
 
 export const games: Game[] = [
   { id: 'mlbb', name: 'MLBB', image: 'mobile-legends', needsServerId: true },
