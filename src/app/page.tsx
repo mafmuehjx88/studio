@@ -1,48 +1,70 @@
-import Image from "next/image";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { games as staticGames } from "@/lib/data";
-import { Marquee } from "@/components/ui/marquee";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
-import type { Game } from "@/lib/types";
+'use client';
 
-type HomePageData = {
-  marqueeText: string;
-  images: Record<string, { imageUrl: string; description: string; imageHint?: string }>;
-  games: Game[];
-};
+import Image from 'next/image';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { games as staticGames } from '@/lib/data';
+import PlaceHolderImages from '@/lib/placeholder-images.json';
+import { Marquee } from '@/components/ui/marquee';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import type { Game, PlaceholderImage } from '@/lib/types';
+import { useEffect, useState } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
 
-async function getPageData(): Promise<HomePageData> {
-  try {
-    const settingsDoc = await getDoc(doc(db, "settings", "placeholderImages"));
-    const marqueeDoc = await getDoc(doc(db, "settings", "marquee"));
-    
-    const images = settingsDoc.exists() ? settingsDoc.data().images : {};
-    const marqueeText = marqueeDoc.exists() 
-      ? marqueeDoc.data().text 
-      : "Welcome to AT Game HUB! Your trusted partner for game top-ups.";
+export default function Home() {
+  const [marqueeText, setMarqueeText] = useState('');
+  const [loading, setLoading] = useState(true);
 
-    // For now, we still use static games data from lib/data.ts
-    // This can be migrated to Firestore later if needed.
-    const games = staticGames;
-
-    return { marqueeText, images, games };
-  } catch (error) {
-    console.error("Error fetching page data:", error);
-    // Return default/fallback data on error
-    return { 
-      marqueeText: "Welcome to AT Game HUB!", 
-      images: {},
-      games: staticGames
+  // Create an images map from the local JSON import
+  const imagesMap: Record<string, PlaceholderImage> = {};
+  PlaceHolderImages.forEach(item => {
+    imagesMap[item.id] = {
+      imageUrl: item.imageUrl,
+      description: item.description,
+      imageHint: item.imageHint,
     };
-  }
-}
+  });
 
-export default async function Home() {
-  const { marqueeText, images, games } = await getPageData();
-  const bannerImage = images['banner'];
+  const bannerImage = imagesMap['banner'];
+  const games = staticGames;
+
+  useEffect(() => {
+    const fetchMarquee = async () => {
+      try {
+        const marqueeDoc = await getDoc(doc(db, "settings", "marquee"));
+        const text = marqueeDoc.exists() 
+          ? marqueeDoc.data().text 
+          : "Welcome to AT Game HUB! Your trusted partner for game top-ups.";
+        setMarqueeText(text);
+      } catch (error) {
+        console.error("Error fetching marquee text:", error);
+        setMarqueeText("Welcome to AT Game HUB!");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMarquee();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <Skeleton className="aspect-[3/1] w-full" />
+        <div className="grid grid-cols-2 gap-4">
+          <Skeleton className="h-9 w-full" />
+          <Skeleton className="h-9 w-full" />
+        </div>
+        <Skeleton className="h-8 w-full" />
+        <div className="grid grid-cols-3 gap-4">
+          <Skeleton className="aspect-square w-full" />
+          <Skeleton className="aspect-square w-full" />
+          <Skeleton className="aspect-square w-full" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -81,7 +103,7 @@ export default async function Home() {
         <h2 className="mb-4 text-2xl font-bold">Games</h2>
         <div className="grid grid-cols-3 gap-4">
           {games.map((game) => {
-            const gameImage = images[game.image];
+            const gameImage = imagesMap[game.image];
             return (
               <Link href={`/games/${game.id}`} key={game.id}>
                 <Card className="overflow-hidden transition-transform hover:scale-105">

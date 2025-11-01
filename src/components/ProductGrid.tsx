@@ -35,3 +35,5 @@ export default function ProductGrid({ title, products, onProductClick, imagesMap
     </div>
   );
 }
+
+    

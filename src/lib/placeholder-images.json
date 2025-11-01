@@ -1,0 +1,140 @@
+[
+  {
+    "id": "logo",
+    "imageUrl": "https://picsum.photos/seed/logo/64/64",
+    "description": "AT Game HUB Logo",
+    "imageHint": "gaming logo"
+  },
+  {
+    "id": "banner",
+    "imageUrl": "https://picsum.photos/seed/banner/1200/400",
+    "description": "Promotional banner for game top-ups",
+    "imageHint": "video game"
+  },
+  {
+    "id": "mobile-legends",
+    "imageUrl": "https://picsum.photos/seed/mlbb/400/400",
+    "description": "Mobile Legends: Bang Bang game cover",
+    "imageHint": "fantasy battle"
+  },
+  {
+    "id": "pubg-mobile",
+    "imageUrl": "https://picsum.photos/seed/pubg/400/400",
+    "description": "PUBG Mobile game cover",
+    "imageHint": "soldier action"
+  },
+  {
+    "id": "honor-of-kings",
+    "imageUrl": "https://picsum.photos/seed/hok/400/400",
+    "description": "Honor of Kings game cover",
+    "imageHint": "chinese warrior"
+  },
+  {
+    "id": "default-avatar",
+    "imageUrl": "https://picsum.photos/seed/avatar/128/128",
+    "description": "Default user avatar",
+    "imageHint": "abstract character"
+  },
+  {
+    "id": "weekly-pass",
+    "imageUrl": "https://picsum.photos/seed/weeklypass/200/200",
+    "description": "Weekly Pass Icon",
+    "imageHint": "ticket pass"
+  },
+  {
+    "id": "twilight-pass",
+    "imageUrl": "https://picsum.photos/seed/twilightpass/200/200",
+    "description": "Twilight Pass Icon",
+    "imageHint": "glowing pass"
+  },
+  {
+    "id": "2x-50",
+    "imageUrl": "https://picsum.photos/seed/2x50/200/200",
+    "description": "First recharge bonus 50 diamonds",
+    "imageHint": "diamond bonus"
+  },
+  {
+    "id": "2x-100",
+    "imageUrl": "https://picsum.photos/seed/2x100/200/200",
+    "description": "First recharge bonus 100 diamonds",
+    "imageHint": "diamond bonus"
+  },
+  {
+    "id": "dm-12",
+    "imageUrl": "https://picsum.photos/seed/dm12/200/200",
+    "description": "12 Diamonds",
+    "imageHint": "diamond pile"
+  },
+  {
+    "id": "dm-28",
+    "imageUrl": "https://picsum.photos/seed/dm28/200/200",
+    "description": "28 Diamonds",
+    "imageHint": "diamond pile"
+  },
+  {
+    "id": "dm-44",
+    "imageUrl": "https://picsum.photos/seed/dm44/200/200",
+    "description": "44 Diamonds",
+    "imageHint": "diamond pile"
+  },
+  {
+    "id": "dm-59",
+    "imageUrl": "https://picsum.photos/seed/dm59/200/200",
+    "description": "59 Diamonds",
+    "imageHint": "diamond pile"
+  },
+  {
+    "id": "dm-86",
+    "imageUrl": "https://picsum.photos/seed/dm86/200/200",
+    "description": "86 Diamonds",
+    "imageHint": "diamond pile"
+  },
+  {
+    "id": "dm-172",
+    "imageUrl": "https://picsum.photos/seed/dm172/200/200",
+    "description": "172 Diamonds",
+    "imageHint": "diamond pile"
+  },
+  {
+    "id": "dm-257",
+    "imageUrl": "https://picsum.photos/seed/dm257/200/200",
+    "description": "257 Diamonds",
+    "imageHint": "diamond pile"
+  },
+  {
+    "id": "dm-344",
+    "imageUrl": "https://picsum.photos/seed/dm344/200/200",
+    "description": "344 Diamonds",
+    "imageHint": "diamond pile"
+  },
+  {
+    "id": "dm-429",
+    "imageUrl": "https://picsum.photos/seed/dm429/200/200",
+    "description": "429 Diamonds",
+    "imageHint": "diamond pile"
+  },
+  {
+    "id": "dm-514",
+    "imageUrl": "https://picsum.photos/seed/dm514/200/200",
+    "description": "514 Diamonds",
+    "imageHint": "diamond pile"
+  },
+  {
+    "id": "pubg-uc",
+    "imageUrl": "https://picsum.photos/seed/pubguc/200/200",
+    "description": "PUBG UC icon",
+    "imageHint": "coins currency"
+  },
+  {
+    "id": "hok-pass",
+    "imageUrl": "https://picsum.photos/seed/hokpass/200/200",
+    "description": "Honor of Kings pass icon",
+    "imageHint": "scroll pass"
+  },
+  {
+    "id": "hok-token",
+    "imageUrl": "https://picsum.photos/seed/hoktoken/200/200",
+    "description": "Honor of Kings token icon",
+    "imageHint": "gold token"
+  }
+]

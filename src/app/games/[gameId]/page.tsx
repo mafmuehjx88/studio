@@ -4,7 +4,8 @@ import { useState, useMemo, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
-import { products as allProducts, Product, games as allGames } from '@/lib/data';
+import { products as allProducts, games as allGames } from '@/lib/data';
+import PlaceHolderImages from '@/lib/placeholder-images.json';
 import ProductGrid from '@/components/ProductGrid';
 import {
   Dialog,
@@ -27,13 +28,12 @@ import {
   increment,
   collection,
   serverTimestamp,
-  getDoc,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { sendTelegramNotification } from '@/lib/actions';
 import { generateOrderId } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
-import type { Game, PlaceholderImage } from '@/lib/types';
+import type { Game, Product, PlaceholderImage } from '@/lib/types';
 
 export default function GameItemsPage() {
   const params = useParams();
@@ -43,12 +43,10 @@ export default function GameItemsPage() {
 
   const gameId = params.gameId as string;
 
-  const [pageData, setPageData] = useState<{
-    game: Game | null;
-    products: Product[];
-    imagesMap: Record<string, PlaceholderImage>;
-    bannerUrl: string | null;
-  }>({ game: null, products: [], imagesMap: {}, bannerUrl: null });
+  const [game, setGame] = useState<Game | null>(null);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [imagesMap, setImagesMap] = useState<Record<string, PlaceholderImage>>({});
+  const [bannerUrl, setBannerUrl] = useState<string | null>(null);
 
   const [dataLoading, setDataLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -60,42 +58,38 @@ export default function GameItemsPage() {
   useEffect(() => {
     if (!gameId) return;
 
-    const fetchPageData = async () => {
-      setDataLoading(true);
-      try {
-        // Find game and products from static data
-        const game = allGames.find((g) => g.id === gameId) || null;
-        const products = allProducts.filter((p) => p.gameId === gameId);
+    setDataLoading(true);
+    
+    // Find game and products from static data
+    const currentGame = allGames.find((g) => g.id === gameId) || null;
+    const gameProducts = allProducts.filter((p) => p.gameId === gameId);
 
-        // Fetch images from Firestore
-        const imagesDocRef = doc(db, "settings", "placeholderImages");
-        const imagesDoc = await getDoc(imagesDocRef);
-        const imagesMap = imagesDoc.exists() ? (imagesDoc.data().images as Record<string, PlaceholderImage>) : {};
-        
-        let bannerUrl: string | null = null;
-        if (game) {
-           bannerUrl = imagesMap[game.image]?.imageUrl || null;
-        }
-        
-        setPageData({ game, products, imagesMap, bannerUrl });
+    // Create an images map from the local JSON import
+    const localImagesMap: Record<string, PlaceholderImage> = {};
+    PlaceHolderImages.forEach(item => {
+      localImagesMap[item.id] = {
+        imageUrl: item.imageUrl,
+        description: item.description,
+        imageHint: item.imageHint,
+      };
+    });
 
-      } catch (error) {
-        console.error("Error fetching page data:", error);
-        toast({ title: "Error", description: "Could not load game data.", variant: "destructive" });
-      } finally {
-        setDataLoading(false);
-      }
-    };
+    let currentBannerUrl: string | null = null;
+    if (currentGame) {
+      currentBannerUrl = localImagesMap[currentGame.image]?.imageUrl || null;
+    }
+    
+    setGame(currentGame);
+    setProducts(gameProducts);
+    setImagesMap(localImagesMap);
+    setBannerUrl(currentBannerUrl);
+    
+    setDataLoading(false);
 
-    fetchPageData();
-  }, [gameId, toast]);
+  }, [gameId]);
 
 
-  const { game, products, imagesMap, bannerUrl } = pageData;
-
-  const isPassProduct =
-    selectedProduct?.category.toLowerCase().includes('pass') ||
-    selectedProduct?.category.toLowerCase().includes('weekly');
+  const isPassProduct = selectedProduct?.name.toLowerCase().includes('pass');
 
   const totalPrice = selectedProduct
     ? isPassProduct
@@ -217,7 +211,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
           <>
             <ProductGrid
               title="Passes"
-              products={products.filter((p) => p.category === 'weekly')}
+              products={products.filter((p) => p.name.toLowerCase().includes('pass'))}
               onProductClick={handleProductClick}
               imagesMap={imagesMap}
             />
