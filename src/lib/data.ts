@@ -11,10 +11,10 @@ export const products: Product[] = [
   { id: 'twilight-pass', gameId: 'mlbb', name: 'Twilight Pass', category: 'pass', price: 32900, image: 'https://i.ibb.co/C0qP8b0/twilight-pass.png' },
   { id: 'weekly-pass', gameId: 'mlbb', name: 'Weekly Pass', category: 'pass', price: 5850, image: 'https://i.ibb.co/NnNMr8gq/New-Project-85-E9-F449-A.png' },
   
-  { id: '2x-50', gameId: 'mlbb', name: '50 (2x50)', category: '2x', price: 3400, image: 'https://i.ibb.co/VvZv7gM/diamond-pile-1.png' },
-  { id: '2x-150', gameId: 'mlbb', name: '150 (2x150)', category: '2x', price: 10200, image: 'https://i.ibb.co/Rbm5y1V/diamond-pile-2.png' },
-  { id: '2x-250', gameId: 'mlbb', name: '250 (2x250)', category: '2x', price: 17000, image: 'https://i.ibb.co/Rbm5y1V/diamond-pile-2.png' },
-  { id: '2x-500', gameId: 'mlbb', name: '500 (2x500)', category: '2x', price: 34000, image: 'https://i.ibb.co/Q8Q0p6j/diamond-pile-3.png' },
+  { id: '2x-50', gameId: 'mlbb', name: '50', category: '2x', price: 3400, image: 'https://i.ibb.co/VvZv7gM/diamond-pile-1.png' },
+  { id: '2x-150', gameId: 'mlbb', name: '150', category: '2x', price: 10200, image: 'https://i.ibb.co/Rbm5y1V/diamond-pile-2.png' },
+  { id: '2x-250', gameId: 'mlbb', name: '250', category: '2x', price: 17000, image: 'https://i.ibb.co/Rbm5y1V/diamond-pile-2.png' },
+  { id: '2x-500', gameId: 'mlbb', name: '500', category: '2x', price: 34000, image: 'https://i.ibb.co/Q8Q0p6j/diamond-pile-3.png' },
 
   { id: 'dm-11', gameId: 'mlbb', name: '11 💎', category: 'diamonds', price: 870, image: 'https://i.ibb.co/GtnS1gS/diamond-1.png' },
   { id: 'dm-22', gameId: 'mlbb', name: '22 💎', category: 'diamonds', price: 1740, image: 'https://i.ibb.co/GtnS1gS/diamond-1.png' },
@@ -33,16 +33,16 @@ export const products: Product[] = [
 
 
   // PUBG Mobile
-  { id: 'pubg-60uc', gameId: 'pubg', name: '60 UC', category: 'UC', price: 3950, image: 'https://picsum.photos/seed/pubg-uc1/200/200' },
-  { id: 'pubg-120uc', gameId: 'pubg', name: '120 UC', category: 'UC', price: 7900, image: 'https://picsum.photos/seed/pubg-uc2/200/200' },
-  { id: 'pubg-180uc', gameId: 'pubg', name: '180 UC', category: 'UC', price: 11850, image: 'https://picsum.photos/seed/pubg-uc3/200/200' },
-  { id: 'pubg-300uc', gameId: 'pubg', name: '300 UC', category: 'UC', price: 19750, image: 'https://picsum.photos/seed/pubg-uc4/200/200' },
-  { id: 'pubg-360uc', gameId: 'pubg', name: '360 UC', category: 'UC', price: 23700, image: 'https://picsum.photos/seed/pubg-uc5/200/200' },
-  { id: 'pubg-480uc', gameId: 'pubg', name: '480 UC', category: 'UC', price: 31600, image: 'https://picsum.photos/seed/pubg-uc6/200/200' },
-  { id: 'pubg-660uc', gameId: 'pubg', name: '660 UC', category: 'UC', price: 43450, image: 'https://picsum.photos/seed/pubg-uc7/200/200' },
-  { id: 'pubg-1800uc', gameId: 'pubg', name: '1800 UC', category: 'UC', price: 118500, image: 'https://picsum.photos/seed/pubg-uc8/200/200' },
-  { id: 'pubg-3850uc', gameId: 'pubg', name: '3850 UC', category: 'UC', price: 252800, image: 'https://picsum.photos/seed/pubg-uc9/200/200' },
-  { id: 'pubg-8100uc', gameId: 'pubg', name: '8100 UC', category: 'UC', price: 533250, image: 'https://picsum.photos/seed/pubg-uc10/200/200' },
+  { id: 'pubg-60uc', gameId: 'pubg', name: '60 UC', category: 'UC', price: 3950, image: 'https://i.ibb.co/7NGpPr48/7ae05f485fd0725143225238a2ef1cc2.jpg' },
+  { id: 'pubg-120uc', gameId: 'pubg', name: '120 UC', category: 'UC', price: 7900, image: 'https://i.ibb.co/7NGpPr48/7ae05f485fd0725143225238a2ef1cc2.jpg' },
+  { id: 'pubg-180uc', gameId: 'pubg', name: '180 UC', category: 'UC', price: 11850, image: 'https://i.ibb.co/7NGpPr48/7ae05f485fd0725143225238a2ef1cc2.jpg' },
+  { id: 'pubg-300uc', gameId: 'pubg', name: '300 UC', category: 'UC', price: 19750, image: 'https://i.ibb.co/7NGpPr48/7ae05f485fd0725143225238a2ef1cc2.jpg' },
+  { id: 'pubg-360uc', gameId: 'pubg', name: '360 UC', category: 'UC', price: 23700, image: 'https://i.ibb.co/7NGpPr48/7ae05f485fd0725143225238a2ef1cc2.jpg' },
+  { id: 'pubg-480uc', gameId: 'pubg', name: '480 UC', category: 'UC', price: 31600, image: 'https://i.ibb.co/7NGpPr48/7ae05f485fd0725143225238a2ef1cc2.jpg' },
+  { id: 'pubg-660uc', gameId: 'pubg', name: '660 UC', category: 'UC', price: 43450, image: 'https://i.ibb.co/7NGpPr48/7ae05f485fd0725143225238a2ef1cc2.jpg' },
+  { id: 'pubg-1800uc', gameId: 'pubg', name: '1800 UC', category: 'UC', price: 118500, image: 'https://i.ibb.co/7NGpPr48/7ae05f485fd0725143225238a2ef1cc2.jpg' },
+  { id: 'pubg-3850uc', gameId: 'pubg', name: '3850 UC', category: 'UC', price: 252800, image: 'https://i.ibb.co/7NGpPr48/7ae05f485fd0725143225238a2ef1cc2.jpg' },
+  { id: 'pubg-8100uc', gameId: 'pubg', name: '8100 UC', category: 'UC', price: 533250, image: 'https://i.ibb.co/7NGpPr48/7ae05f485fd0725143225238a2ef1cc2.jpg' },
 
   // Honor of Kings
   { id: 'hok-weekly', gameId: 'hok', name: 'Weekly Pass', category: 'Weekly Passes', price: 3000, image: 'https://picsum.photos/seed/hok-pass/200/200' },
