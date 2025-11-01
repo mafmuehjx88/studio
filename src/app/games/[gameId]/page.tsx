@@ -220,7 +220,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
               title="UC Top-Up"
               products={products.filter((p) => p.category === 'UC')}
               onProductClick={handleProductClick}
-              gridCols="grid-cols-2"
+              gridCols="grid-cols-3"
             />
           </>
         );
