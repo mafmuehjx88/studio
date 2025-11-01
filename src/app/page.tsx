@@ -1,4 +1,3 @@
-'use client';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -9,64 +8,40 @@ import { Marquee } from '@/components/ui/marquee';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import type { Game, PlaceholderImage } from '@/lib/types';
-import { useEffect, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 
-export default function Home() {
-  const [imagesMap, setImagesMap] = useState<Record<string, PlaceholderImage>>({});
-  const [marqueeText, setMarqueeText] = useState('');
-  const [loading, setLoading] = useState(true);
+// Helper function to fetch data on the server
+async function getHomePageData() {
+  try {
+    const settingsDoc = await getDoc(doc(db, "settings", "marquee"));
+    const marqueeText = settingsDoc.exists() 
+      ? settingsDoc.data().text 
+      : "Welcome to AT Game HUB! Your trusted partner for game top-ups.";
 
-  const games = staticGames;
-
-  useEffect(() => {
-    const fetchInitialData = async () => {
-      try {
-        const settingsDoc = await getDoc(doc(db, "settings", "marquee"));
-        const text = settingsDoc.exists() 
-          ? settingsDoc.data().text 
-          : "Welcome to AT Game HUB! Your trusted partner for game top-ups.";
-        setMarqueeText(text);
-
-        const imagesDoc = await getDoc(doc(db, "settings", "placeholderImages"));
-        if (imagesDoc.exists()) {
-            setImagesMap(imagesDoc.data().images || {});
-        }
-
-      } catch (error) {
-        console.error("Error fetching initial data:", error);
-        setMarqueeText("Welcome to AT Game HUB!");
-      } finally {
-        setLoading(false);
-      }
+    const imagesDoc = await getDoc(doc(db, "settings", "placeholderImages"));
+    const imagesMap = imagesDoc.exists() ? (imagesDoc.data().images || {}) : {};
+    
+    return { marqueeText, imagesMap };
+  } catch (error) {
+    console.error("Error fetching initial data:", error);
+    // Return default values in case of an error
+    return {
+      marqueeText: "Welcome to AT Game HUB!",
+      imagesMap: {}
     };
-    fetchInitialData();
-  }, []);
-  
-  const bannerImage = imagesMap['banner'];
-
-  if (loading) {
-    return (
-      <div className="space-y-6">
-        <Skeleton className="aspect-[3/1] w-full" />
-        <div className="grid grid-cols-2 gap-4">
-          <Skeleton className="h-9 w-full" />
-          <Skeleton className="h-9 w-full" />
-        </div>
-        <Skeleton className="h-8 w-full" />
-        <div className="grid grid-cols-3 gap-4">
-          <Skeleton className="aspect-square w-full" />
-          <Skeleton className="aspect-square w-full" />
-          <Skeleton className="aspect-square w-full" />
-        </div>
-      </div>
-    );
   }
+}
+
+export default async function Home() {
+  const { marqueeText, imagesMap } = await getHomePageData();
+  
+  const games = staticGames;
+  const bannerImage = imagesMap['banner'];
 
   return (
     <div className="space-y-6">
       <Card className="overflow-hidden border-none">
-        {bannerImage && (
+        {bannerImage ? (
           <Image
             src={bannerImage.imageUrl}
             alt={bannerImage.description}
@@ -76,6 +51,8 @@ export default function Home() {
             data-ai-hint={bannerImage.imageHint}
             priority
           />
+        ) : (
+          <Skeleton className="aspect-[3/1] w-full" />
         )}
       </Card>
 
