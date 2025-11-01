@@ -24,10 +24,10 @@ export default function WalletBalance() {
   return (
     <Button asChild variant="outline" size="sm" className="h-8 rounded-full border-primary text-primary hover:bg-primary hover:text-primary-foreground">
       <Link href="/wallet">
+        <Wallet className="mr-2 h-4 w-4" />
         <span>
           {userProfile.walletBalance.toFixed(2)} Ks
         </span>
-        <PlusCircle className="h-4 w-4" />
       </Link>
     </Button>
   );

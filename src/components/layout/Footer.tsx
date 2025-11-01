@@ -2,20 +2,25 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, ClipboardList, User, Wallet } from "lucide-react";
+import { Home, ClipboardList, User, Wallet, LogIn } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 
-const navItems = [
+const loggedInNavItems = [
   { href: "/", icon: Home, label: "Home" },
   { href: "/orders", icon: ClipboardList, label: "Orders" },
   { href: "/wallet", icon: Wallet, label: "Wallet" },
   { href: "/profile", icon: User, label: "Profile" },
 ];
 
+const loggedOutNavItems = [
+    { href: "/", icon: Home, label: "Home" },
+    { href: "/login", icon: LogIn, label: "Login" },
+]
+
 export default function Footer() {
   const pathname = usePathname();
-  const { user, loading, isAdmin } = useAuth();
+  const { user, loading } = useAuth();
   
   if (pathname === '/login' || pathname === '/register') return null;
 
@@ -25,17 +30,12 @@ export default function Footer() {
             <div className="flex h-full items-center justify-around">
                 <div className="h-8 w-1/4 animate-pulse rounded-md bg-muted"></div>
                 <div className="h-8 w-1/4 animate-pulse rounded-md bg-muted"></div>
-                <div className="h-8 w-1/4 animate-pulse rounded-md bg-muted"></div>
-                <div className="h-8 w-1/4 animate-pulse rounded-md bg-muted"></div>
             </div>
         </footer>
     )
   }
 
-  const items = user ? (isAdmin ? navItems : navItems) : [
-    { href: "/", icon: Home, label: "Home" },
-    { href: "/login", icon: User, label: "Login" },
-  ];
+  const items = user ? loggedInNavItems : loggedOutNavItems;
 
   return (
     <footer className="fixed bottom-0 left-0 right-0 z-20 mx-auto h-16 w-full max-w-md border-t border-border/50 bg-background/95 backdrop-blur-lg">
