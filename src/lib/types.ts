@@ -72,3 +72,5 @@ export interface PlaceholderImage {
     description: string;
     imageHint?: string;
 }
+
+    
