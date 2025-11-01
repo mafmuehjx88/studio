@@ -85,8 +85,11 @@ export default function AdminOrdersPage() {
   };
 
   const filteredOrders = useMemo(() => {
+    if (!searchTerm) {
+      return orders;
+    }
     return orders.filter(order => 
-      order.username.toLowerCase().includes(searchTerm.toLowerCase())
+      order.username && order.username.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [orders, searchTerm]);
 
