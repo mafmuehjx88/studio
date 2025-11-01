@@ -37,6 +37,7 @@ service cloud.firestore {
     }
 
     // Allow admins to list documents from collection groups
+    // This also helps Firebase auto-generate the required index for the collection group query.
     match /{path=**}/orders/{orderId} {
       allow get, list: if isAdmin();
     }
