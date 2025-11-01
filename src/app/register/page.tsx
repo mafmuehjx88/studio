@@ -15,10 +15,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { useRedirectIfAuth } from "@/hooks/use-auth";
 
 export default function RegisterPage() {
   const router = useRouter();
   const { toast } = useToast();
+
+  const { loading: authLoading } = useRedirectIfAuth();
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -95,7 +98,7 @@ export default function RegisterPage() {
         title: "Registration Successful",
         description: "Your account has been created. Redirecting...",
       });
-      // AuthGuard will handle the redirect
+      // useRedirectIfAuth hook will handle the redirect on next render
       
     } catch (error: any) {
       let description = "An unexpected error occurred.";
@@ -110,6 +113,14 @@ export default function RegisterPage() {
       setIsRegistering(false);
     }
   };
+  
+  if (authLoading) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-full flex-col items-center justify-center">
