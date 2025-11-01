@@ -45,8 +45,10 @@ export default function LoginForm() {
     
     if (result.error) {
       let description = result.error;
-      if (result.error.includes("auth/invalid-credential") || result.error.includes("auth/user-not-found")) {
-        description = "Incorrect email or password. Please try again or register a new account.";
+      if (result.error.includes("auth/invalid-credential")) {
+        description = "Incorrect email or password. Please try again.";
+      } else if (result.error.includes("auth/user-not-found")) {
+        description = "Account does not exist. Please register a new account.";
       }
       
       toast({
