@@ -7,11 +7,10 @@ import { Badge } from './ui/badge';
 
 interface ProductCardProps {
   product: Product;
-  imageUrl: string | null;
   onClick: (product: Product) => void;
 }
 
-export default function ProductCard({ product, imageUrl, onClick }: ProductCardProps) {
+export default function ProductCard({ product, onClick }: ProductCardProps) {
   const isSpecial = product.category === '2x';
 
   return (
@@ -20,17 +19,13 @@ export default function ProductCard({ product, imageUrl, onClick }: ProductCardP
       onClick={() => onClick(product)}
     >
       <CardContent className="relative p-0">
-        {imageUrl ? (
-          <Image
-            src={imageUrl}
+        <Image
+            src={product.image}
             alt={product.name}
             width={200}
             height={200}
             className="aspect-square w-full object-cover"
-          />
-        ) : (
-          <div className="aspect-square w-full bg-muted"></div>
-        )}
+        />
         {isSpecial && (
             <Badge className="absolute left-1 top-1 bg-green-500 text-white">First Recharge</Badge>
         )}

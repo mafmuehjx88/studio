@@ -27,13 +27,12 @@ import {
   increment,
   collection,
   serverTimestamp,
-  getDoc,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { sendTelegramNotification } from '@/lib/actions';
 import { generateOrderId } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
-import type { Game, Product, PlaceholderImage } from '@/lib/types';
+import type { Game, Product } from '@/lib/types';
 
 export default function GameItemsPage() {
   const params = useParams();
@@ -45,9 +44,8 @@ export default function GameItemsPage() {
 
   const [game, setGame] = useState<Game | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
-  const [imagesMap, setImagesMap] = useState<Record<string, PlaceholderImage>>({});
-
   const [dataLoading, setDataLoading] = useState(true);
+
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [userGameId, setUserGameId] = useState('');
   const [userServerId, setUserServerId] = useState('');
@@ -56,41 +54,17 @@ export default function GameItemsPage() {
 
   useEffect(() => {
     if (!gameId) return;
+    
+    setDataLoading(true);
+    const currentGame = allGames.find((g) => g.id === gameId) || null;
+    const gameProducts = allProducts.filter((p) => p.gameId === gameId);
+    
+    setGame(currentGame);
+    setProducts(gameProducts);
+    setDataLoading(false);
 
-    async function fetchData() {
-      setDataLoading(true);
-      try {
-        const imagesDocRef = doc(db, 'settings', 'placeholderImages');
-        const imagesDocSnap = await getDoc(imagesDocRef);
-        
-        let fetchedImagesMap: Record<string, PlaceholderImage> = {};
-        if (imagesDocSnap.exists()) {
-           fetchedImagesMap = imagesDocSnap.data().images || {};
-        }
+  }, [gameId]);
 
-        const currentGame = allGames.find((g) => g.id === gameId) || null;
-        const gameProducts = allProducts.filter((p) => p.gameId === gameId);
-
-        setGame(currentGame);
-        setProducts(gameProducts);
-        setImagesMap(fetchedImagesMap);
-
-      } catch (error) {
-          console.error("Failed to fetch data:", error);
-          toast({
-              title: "Error",
-              description: "Could not load game data. Please try again later.",
-              variant: "destructive"
-          });
-      } finally {
-        setDataLoading(false);
-      }
-    }
-
-    fetchData();
-  }, [gameId, toast]);
-
-  const bannerUrl = game ? imagesMap[game.image]?.imageUrl : null;
 
   const isPassProduct = selectedProduct?.name.toLowerCase().includes('pass');
 
@@ -218,19 +192,16 @@ Order Time: ${new Date().toLocaleString('en-US', {
               title="Passes"
               products={passes}
               onProductClick={handleProductClick}
-              imagesMap={imagesMap}
             />
             <ProductGrid
               title="First Recharge Bonus"
               products={products.filter((p) => p.category === '2x')}
               onProductClick={handleProductClick}
-              imagesMap={imagesMap}
             />
              <ProductGrid
               title="Diamonds"
               products={products.filter((p) => p.category === 'diamonds')}
               onProductClick={handleProductClick}
-              imagesMap={imagesMap}
             />
           </>
         );
@@ -241,7 +212,6 @@ Order Time: ${new Date().toLocaleString('en-US', {
               title="UC Top-Up"
               products={products.filter((p) => p.category === 'UC')}
               onProductClick={handleProductClick}
-              imagesMap={imagesMap}
             />
           </>
         );
@@ -252,13 +222,11 @@ Order Time: ${new Date().toLocaleString('en-US', {
               title="Weekly Passes"
               products={products.filter((p) => p.category === 'Weekly Passes')}
               onProductClick={handleProductClick}
-              imagesMap={imagesMap}
             />
             <ProductGrid
               title="Tokens"
               products={products.filter((p) => p.category === 'Tokens')}
               onProductClick={handleProductClick}
-              imagesMap={imagesMap}
             />
           </>
         );
@@ -268,7 +236,6 @@ Order Time: ${new Date().toLocaleString('en-US', {
                 title="Items"
                 products={products}
                 onProductClick={handleProductClick}
-                imagesMap={imagesMap}
             />
          )
     }
@@ -304,9 +271,9 @@ Order Time: ${new Date().toLocaleString('en-US', {
   
   return (
     <div className="space-y-6">
-      {bannerUrl && (
+      {game.image && (
         <Image
-          src={bannerUrl}
+          src={game.image}
           alt={game.name}
           width={600}
           height={300}

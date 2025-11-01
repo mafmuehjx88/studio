@@ -11,7 +11,7 @@ export interface UserProfile {
 export interface Game {
   id: string;
   name: string;
-  image: string; // This refers to the key in the placeholder images map
+  image: string; // This is now a direct URL
   needsServerId: boolean;
 }
 
@@ -21,7 +21,7 @@ export interface Product {
   name: string;
   category: string;
   price: number;
-  image: string; // This is a key to map to the image in placeholder-images.json
+  image: string; // This is now a direct URL
 }
 
 export interface Order {
@@ -72,5 +72,3 @@ export interface PlaceholderImage {
     description: string;
     imageHint?: string;
 }
-
-    
