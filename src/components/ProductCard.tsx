@@ -1,6 +1,6 @@
 'use client';
 
-import { Product } from '@/lib/data';
+import type { Product } from '@/lib/types';
 import Image from 'next/image';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
@@ -19,7 +19,7 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
       onClick={() => onClick(product)}
     >
       <CardContent className="flex flex-1 flex-col p-0">
-        <div className="relative aspect-square w-full flex-shrink-0">
+        <div className="relative aspect-square w-full">
             <Image
                 src={product.image}
                 alt={product.name}
