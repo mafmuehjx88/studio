@@ -88,6 +88,7 @@ export default function RegisterPage() {
       const user = userCredential.user;
 
       await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
         username: username,
         email: user.email,
         walletBalance: 0,
@@ -98,7 +99,9 @@ export default function RegisterPage() {
         title: "Registration Successful",
         description: "Your account has been created. Redirecting...",
       });
-      // useRedirectIfAuth hook will handle the redirect on next render
+      // The useRedirectIfAuth hook will handle the redirect on the next render cycle
+      // when the auth state changes. No need to manually set isRegistering to false
+      // as the component will unmount on redirect.
       
     } catch (error: any) {
       let description = "An unexpected error occurred.";
