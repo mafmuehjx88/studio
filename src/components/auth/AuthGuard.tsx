@@ -25,7 +25,7 @@ export default function AuthGuard({
     }
 
     const isUserLoggedIn = !!user;
-    const redirectUrl = searchParams.get("redirect") || (isAdmin ? "/admin" : "/");
+    const redirectUrl = searchParams.get("redirect") || (isAdmin ? "/admin" : "/profile");
 
     // Logic for auth pages (e.g., /login, /register)
     if (isAuthPage) {
