@@ -32,10 +32,9 @@ export default function AdminOrdersPage() {
       return;
     }
 
-    const q = query(
-      collectionGroup(db, 'orders'),
-      orderBy("createdAt", "desc")
-    );
+    // Remove orderBy from the query to prevent index errors.
+    // We will sort the data on the client-side.
+    const q = query(collectionGroup(db, 'orders'));
 
     const unsubscribe = onSnapshot(
       q,
@@ -44,6 +43,15 @@ export default function AdminOrdersPage() {
         querySnapshot.forEach((doc) => {
           ordersData.push({ ...doc.data(), id: doc.id, userId: doc.ref.parent.parent!.id } as Order);
         });
+        
+        // Sort the data on the client-side by creation date, descending
+        ordersData.sort((a, b) => {
+            if (a.createdAt && b.createdAt) {
+                return b.createdAt.toMillis() - a.createdAt.toMillis();
+            }
+            return 0;
+        });
+
         setOrders(ordersData);
         setLoading(false);
       },
