@@ -21,7 +21,7 @@ export interface Product {
   name: string;
   category: string;
   price: number;
-  image: string; // This can be a direct URL or an identifier
+  image: string; // This is a key to map to the image in Firestore
 }
 
 export interface Order {
@@ -65,4 +65,10 @@ export interface AdminPaymentAccount {
     accountName: string;
     accountNumber: string;
     logo: string;
+}
+
+export interface PlaceholderImage {
+    imageUrl: string;
+    description: string;
+    imageHint?: string;
 }

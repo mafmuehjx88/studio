@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
-import { products as allProducts, Product } from '@/lib/data';
+import { products as allProducts, Product, games as allGames } from '@/lib/data';
 import ProductGrid from '@/components/ProductGrid';
 import {
   Dialog,
@@ -33,69 +33,68 @@ import { db } from '@/lib/firebase';
 import { sendTelegramNotification } from '@/lib/actions';
 import { generateOrderId } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
-import type { Game } from '@/lib/types';
+import type { Game, PlaceholderImage } from '@/lib/types';
 
 export default function GameItemsPage() {
   const params = useParams();
   const router = useRouter();
-  const { userProfile, user, loading } = useAuth();
+  const { userProfile, user, loading: authLoading } = useAuth();
   const { toast } = useToast();
 
-  const [gameData, setGameData] = useState<{game: Game | null, bannerUrl: string | null}>({ game: null, bannerUrl: null });
-  const [dataLoading, setDataLoading] = useState(true);
+  const gameId = params.gameId as string;
 
+  const [pageData, setPageData] = useState<{
+    game: Game | null;
+    products: Product[];
+    imagesMap: Record<string, PlaceholderImage>;
+    bannerUrl: string | null;
+  }>({ game: null, products: [], imagesMap: {}, bannerUrl: null });
+
+  const [dataLoading, setDataLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [userGameId, setUserGameId] = useState('');
   const [userServerId, setUserServerId] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [isPurchasing, setIsPurchasing] = useState(false);
 
-  const gameId = params.gameId as string;
-
   useEffect(() => {
     if (!gameId) return;
 
-    const fetchGameData = async () => {
+    const fetchPageData = async () => {
       setDataLoading(true);
       try {
-        const gameDocRef = doc(db, "games", gameId);
-        const gameDoc = await getDoc(gameDocRef);
-        
-        let fetchedGame: Game | null = null;
-        if (gameDoc.exists()) {
-          fetchedGame = { id: gameDoc.id, ...gameDoc.data() } as Game;
-        }
+        // Find game and products from static data
+        const game = allGames.find((g) => g.id === gameId) || null;
+        const products = allProducts.filter((p) => p.gameId === gameId);
 
+        // Fetch images from Firestore
         const imagesDocRef = doc(db, "settings", "placeholderImages");
         const imagesDoc = await getDoc(imagesDocRef);
+        const imagesMap = imagesDoc.exists() ? (imagesDoc.data().images as Record<string, PlaceholderImage>) : {};
+        
         let bannerUrl: string | null = null;
-        if (imagesDoc.exists() && fetchedGame) {
-           bannerUrl = imagesDoc.data().images[fetchedGame.image]?.imageUrl || null;
+        if (game) {
+           bannerUrl = imagesMap[game.image]?.imageUrl || null;
         }
         
-        setGameData({ game: fetchedGame, bannerUrl });
+        setPageData({ game, products, imagesMap, bannerUrl });
+
       } catch (error) {
-        console.error("Error fetching game data:", error);
+        console.error("Error fetching page data:", error);
         toast({ title: "Error", description: "Could not load game data.", variant: "destructive" });
       } finally {
         setDataLoading(false);
       }
     };
 
-    fetchGameData();
+    fetchPageData();
   }, [gameId, toast]);
 
 
-  const products = useMemo(
-    () => allProducts.filter((p) => p.gameId === gameId),
-    [gameId]
-  );
-  
-  const { game, bannerUrl } = gameData;
+  const { game, products, imagesMap, bannerUrl } = pageData;
 
   const isPassProduct =
     selectedProduct?.category.toLowerCase().includes('pass') ||
-    selectedProduct?.category.toLowerCase().includes('card') ||
     selectedProduct?.category.toLowerCase().includes('weekly');
 
   const totalPrice = selectedProduct
@@ -220,16 +219,19 @@ Order Time: ${new Date().toLocaleString('en-US', {
               title="Passes"
               products={products.filter((p) => p.category === 'weekly')}
               onProductClick={handleProductClick}
+              imagesMap={imagesMap}
             />
             <ProductGrid
               title="First Recharge Bonus"
               products={products.filter((p) => p.category === '2x')}
               onProductClick={handleProductClick}
+              imagesMap={imagesMap}
             />
              <ProductGrid
               title="Diamonds"
               products={products.filter((p) => p.category === 'diamonds')}
               onProductClick={handleProductClick}
+              imagesMap={imagesMap}
             />
           </>
         );
@@ -240,6 +242,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
               title="UC Top-Up"
               products={products.filter((p) => p.category === 'UC')}
               onProductClick={handleProductClick}
+              imagesMap={imagesMap}
             />
           </>
         );
@@ -250,11 +253,13 @@ Order Time: ${new Date().toLocaleString('en-US', {
               title="Weekly Passes"
               products={products.filter((p) => p.category === 'Weekly Passes')}
               onProductClick={handleProductClick}
+              imagesMap={imagesMap}
             />
             <ProductGrid
               title="Tokens"
               products={products.filter((p) => p.category === 'Tokens')}
               onProductClick={handleProductClick}
+              imagesMap={imagesMap}
             />
           </>
         );
@@ -263,7 +268,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
     }
   };
 
-  if (loading || dataLoading) {
+  if (authLoading || dataLoading) {
       return (
           <div className="space-y-6">
               <Skeleton className="aspect-[2/1] w-full rounded-lg" />

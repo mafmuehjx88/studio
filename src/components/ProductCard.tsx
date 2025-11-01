@@ -7,10 +7,11 @@ import { Badge } from './ui/badge';
 
 interface ProductCardProps {
   product: Product;
+  imageUrl: string | null;
   onClick: (product: Product) => void;
 }
 
-export default function ProductCard({ product, onClick }: ProductCardProps) {
+export default function ProductCard({ product, imageUrl, onClick }: ProductCardProps) {
   const isSpecial = product.category === '2x';
 
   return (
@@ -19,20 +20,22 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
       onClick={() => onClick(product)}
     >
       <CardContent className="relative p-0">
-        {product.image && (
+        {imageUrl ? (
           <Image
-            src={product.image}
+            src={imageUrl}
             alt={product.name}
             width={200}
             height={200}
             className="aspect-square w-full object-cover"
           />
+        ) : (
+          <div className="aspect-square w-full bg-muted"></div>
         )}
         {isSpecial && (
             <Badge className="absolute left-1 top-1 bg-green-500 text-white">First Recharge</Badge>
         )}
-        <div className="p-2 text-center min-h-[56px] flex flex-col justify-center">
-            <p className="text-xs font-bold whitespace-normal">{product.name}</p>
+        <div className="flex min-h-[56px] flex-col justify-center p-2 text-center">
+            <p className="whitespace-normal text-xs font-bold">{product.name}</p>
             <p className="text-xs font-bold text-primary">{product.price.toLocaleString()} Ks</p>
         </div>
       </CardContent>
