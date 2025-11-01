@@ -16,7 +16,8 @@ export default function Header() {
   return (
     <>
       <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-border/50 bg-background/95 px-4 backdrop-blur-lg">
-        <div className="flex items-center gap-2">
+        {/* Left Section */}
+        <div className="flex flex-1 items-center justify-start gap-2">
           <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsSidebarOpen(true)}>
             <Menu className="h-5 w-5" />
             <span className="sr-only">Open menu</span>
@@ -28,14 +29,20 @@ export default function Header() {
             </Button>
           )}
         </div>
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+
+        {/* Center Section */}
+        <div className="flex-shrink-0">
             <h1 className="text-xl font-bold tracking-tight">
                 <span className="bg-gradient-to-r from-red-500 to-yellow-500 bg-clip-text text-transparent">
                 AT Game HUB
                 </span>
             </h1>
         </div>
-        <WalletBalance />
+
+        {/* Right Section */}
+        <div className="flex flex-1 items-center justify-end">
+            <WalletBalance />
+        </div>
       </header>
       <Sidebar isOpen={isSidebarOpen} onOpenChange={setIsSidebarOpen} />
     </>
