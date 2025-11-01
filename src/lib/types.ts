@@ -38,7 +38,7 @@ export interface Order {
     paymentMethod?: string;
     status: 'Pending' | 'Completed' | 'Failed';
     createdAt: Timestamp;
-    type: 'Purchase' | 'Top-up'; // Added to distinguish order types
+    type?: 'Purchase' | 'Top-up';
 }
 
 export interface TopUpRequest {

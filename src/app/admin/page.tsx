@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useAuth } from "@/contexts/AuthContext";
@@ -7,6 +6,7 @@ import { useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AdminOrdersPage from "./orders/page";
 import AdminUsersPage from "./users/page";
+import AdminContentPage from "./content/page";
 
 export default function AdminPage() {
   const { isAdmin, loading } = useAuth();
@@ -26,15 +26,19 @@ export default function AdminPage() {
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">Admin Panel</h1>
       <Tabs defaultValue="orders" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="orders">All Orders</TabsTrigger>
           <TabsTrigger value="users">User Management</TabsTrigger>
+          <TabsTrigger value="content">Content</TabsTrigger>
         </TabsList>
         <TabsContent value="orders">
           <AdminOrdersPage />
         </TabsContent>
         <TabsContent value="users">
           <AdminUsersPage />
+        </TabsContent>
+        <TabsContent value="content">
+            <AdminContentPage />
         </TabsContent>
       </Tabs>
     </div>

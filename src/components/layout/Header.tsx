@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from 'next/link';
@@ -8,10 +7,12 @@ import { Bell, Menu } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Sidebar } from './Sidebar';
 import { useState } from 'react';
+import { AnnouncementsSheet } from './AnnouncementsSheet';
 
 export default function Header() {
   const { user } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isAnnouncementsOpen, setIsAnnouncementsOpen] = useState(false);
   
   return (
     <>
@@ -23,7 +24,7 @@ export default function Header() {
             <span className="sr-only">Open menu</span>
           </Button>
           {user && (
-             <Button variant="ghost" size="icon" className="h-8 w-8">
+             <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsAnnouncementsOpen(true)}>
               <Bell className="h-5 w-5" />
               <span className="sr-only">Notifications</span>
             </Button>
@@ -40,6 +41,7 @@ export default function Header() {
         </div>
       </header>
       <Sidebar isOpen={isSidebarOpen} onOpenChange={setIsSidebarOpen} />
+      <AnnouncementsSheet isOpen={isAnnouncementsOpen} onOpenChange={setIsAnnouncementsOpen} />
     </>
   );
 }
