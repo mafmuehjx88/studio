@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server'
 import { auth } from './lib/firebase-admin'; // Using admin SDK for verification
 
 // This function can be marked `async` if using `await` inside
-export default async function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const idToken = request.cookies.get('firebase-auth-token')?.value;
 
