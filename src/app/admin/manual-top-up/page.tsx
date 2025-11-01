@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { collection, query, orderBy } from 'firebase/firestore';
+import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
@@ -10,25 +10,45 @@ import { UserProfile } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import UserTopUpRow from '@/components/admin/UserTopUpRow';
-import { useCollection } from 'react-firebase-hooks/firestore';
 
 export default function ManualTopUpPage() {
   const { isAdmin } = useAuth();
   const [searchTerm, setSearchTerm] = useState('');
+  const [users, setUsers] = useState<UserProfile[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
-  const usersCollectionRef = query(
-    collection(db, 'users'),
-    orderBy('createdAt', 'desc')
-  );
+  useEffect(() => {
+    if (!isAdmin) {
+      setLoading(false);
+      return;
+    }
 
-  const [usersSnapshot, loading, error] = useCollection(usersCollectionRef);
-
-  const users: UserProfile[] = useMemo(() => {
-    if (!usersSnapshot) return [];
-    return usersSnapshot.docs.map(
-      (doc) => ({ ...doc.data(), uid: doc.id } as UserProfile)
+    const usersCollectionRef = query(
+      collection(db, 'users'),
+      orderBy('createdAt', 'desc')
     );
-  }, [usersSnapshot]);
+
+    const unsubscribe = onSnapshot(
+      usersCollectionRef,
+      (snapshot) => {
+        const usersData = snapshot.docs.map(
+          (doc) => ({ ...doc.data(), uid: doc.id } as UserProfile)
+        );
+        setUsers(usersData);
+        setLoading(false);
+      },
+      (err) => {
+        console.error("Failed to fetch users:", err);
+        setError(err);
+        setLoading(false);
+      }
+    );
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, [isAdmin]);
+
 
   const filteredUsers = useMemo(() => {
     if (!searchTerm) {
