@@ -35,13 +35,13 @@ const paymentAccounts = [
     name: 'Than Htay',
     phone: '09769181524',
     type: 'Wave Pay',
-    logo: 'https://i.ibb.co/yQW2Wz5/wave.png',
+    logo: 'https://i.ibb.co/7tdxdMP0/new355-ab76bb0483ac7c445251c650cc7c1227-1.jpg',
   },
   {
     name: 'Eant Phone Khant',
     phone: '09961034354',
     type: 'Wave Pay',
-    logo: 'https://i.ibb.co/yQW2Wz5/wave.png',
+    logo: 'https://i.ibb.co/7tdxdMP0/new355-ab76bb0483ac7c445251c650cc7c1227-1.jpg',
   },
 ];
 
