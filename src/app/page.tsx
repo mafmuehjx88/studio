@@ -69,25 +69,22 @@ export default async function Home() {
 
       <div>
         <h2 className="mb-4 text-center text-2xl font-bold">Games</h2>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-3 gap-3">
           {games.map((game) => (
-            <Link href={`/games/${game.id}`} key={game.id}>
-              <Card className="overflow-hidden transition-transform hover:scale-105">
-                <CardContent className="p-0">
-                  <Image
+            <Link href={`/games/${game.id}`} key={game.id} className="group flex flex-col gap-2 text-center">
+                <Card className="overflow-hidden transition-transform group-hover:scale-105">
+                    <Image
                     src={game.image}
                     alt={game.name}
                     width={400}
                     height={400}
-                    className="aspect-square w-full rounded-t-lg object-cover"
-                  />
-                  <div className="p-2 text-center">
-                    <p className="truncate text-xs font-semibold">
-                      {game.name}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
+                    className="aspect-square w-full rounded-lg object-cover"
+                    />
+                </Card>
+                 <p className="truncate text-sm font-semibold text-foreground">
+                    {game.name}
+                </p>
+                <Button variant="secondary" size="sm" className="h-8 w-full text-xs">ဝယ်မည်</Button>
             </Link>
           ))}
         </div>
