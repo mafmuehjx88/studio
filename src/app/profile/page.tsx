@@ -1,21 +1,59 @@
+
 "use client";
 
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import { LogOut, Settings, Wallet } from "lucide-react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { LogOut, Settings, Wallet, ShoppingCart } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { auth } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { staticImages } from "@/lib/data";
+import Link from 'next/link';
+import { useEffect, useState } from "react";
+import { collection, getDocs, query } from "firebase/firestore";
+import { Order } from "@/lib/types";
 
 export default function ProfilePage() {
-  const { userProfile, loading } = useAuth();
+  const { userProfile, user, loading } = useAuth();
   const router = useRouter();
   
+  const [totalSpent, setTotalSpent] = useState(0);
+  const [spentLoading, setSpentLoading] = useState(true);
+
   const avatarUrl = staticImages['default-avatar']?.imageUrl;
+
+  useEffect(() => {
+    if (!user) {
+      setSpentLoading(false);
+      return;
+    }
+
+    const fetchTotalSpent = async () => {
+      try {
+        const ordersQuery = query(collection(db, `users/${user.uid}/orders`));
+        const querySnapshot = await getDocs(ordersQuery);
+        let total = 0;
+        querySnapshot.forEach((doc) => {
+          const order = doc.data() as Order;
+          // Only add to total if order is completed to reflect actual spending
+          if (order.status === 'Completed') {
+            total += order.price;
+          }
+        });
+        setTotalSpent(total);
+      } catch (error) {
+        console.error("Error fetching total spent:", error);
+      } finally {
+        setSpentLoading(false);
+      }
+    };
+
+    fetchTotalSpent();
+  }, [user]);
+
 
   const handleLogout = async () => {
     await signOut(auth);
@@ -33,6 +71,11 @@ export default function ProfilePage() {
                         <Skeleton className="h-5 w-24 rounded-md" />
                     </div>
                 </CardHeader>
+            </Card>
+            <Card>
+                <CardContent className="p-4">
+                    <Skeleton className="h-8 w-40" />
+                </CardContent>
             </Card>
             <div className="grid grid-cols-1 gap-2">
                 <Skeleton className="h-12 w-full rounded-md" />
@@ -73,11 +116,31 @@ export default function ProfilePage() {
           </div>
         </CardHeader>
       </Card>
+      
+      <Card>
+        <CardHeader className="flex-row items-center justify-between p-4">
+            <div className="flex items-center gap-3">
+                 <ShoppingCart className="h-6 w-6 text-primary" />
+                <CardTitle className="text-lg">Total Spent</CardTitle>
+            </div>
+        </CardHeader>
+        <CardContent className="p-4 pt-0">
+             {spentLoading ? (
+                <Skeleton className="h-8 w-28" />
+             ) : (
+                <p className="text-3xl font-bold text-foreground">
+                    {totalSpent.toLocaleString()} Ks
+                </p>
+             )}
+        </CardContent>
+      </Card>
 
       <div className="grid grid-cols-1 gap-2">
-          <Button variant="outline" className="justify-start gap-3 text-base h-12">
+          <Button variant="outline" className="justify-start gap-3 text-base h-12" asChild>
+            <Link href="/settings">
               <Settings className="h-5 w-5 text-muted-foreground" />
               <span>Settings</span>
+            </Link>
           </Button>
           <Button 
             variant="outline" 
