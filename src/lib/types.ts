@@ -47,7 +47,7 @@ export interface TopUpRequest {
     amount: number;
     screenshotUrl: string;
     status: 'Pending' | 'Approved' | 'Rejected';
-    createdAt: Timestamp;
+    createdAt: Timestamp | FieldValue;
     paymentMethod: string;
     transactionId: string;
 }
