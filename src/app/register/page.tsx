@@ -130,17 +130,17 @@ export default function RegisterPage() {
       <div className="w-full max-w-sm space-y-6">
         <div className="flex flex-col items-center text-center">
           {logo && (
-            <div className="relative mb-4">
-              <div className="absolute -inset-0.5 animate-pulse rounded-full bg-primary/50 blur-lg"></div>
-              <Image
-                src={logo.imageUrl}
-                alt={logo.description}
-                width={64}
-                height={64}
-                className="relative rounded-full"
-                data-ai-hint={logo.imageHint}
-              />
-            </div>
+             <div className="relative mb-4 h-16 w-16">
+               <div className="absolute -inset-1 animate-pulse rounded-full bg-primary/50 blur-lg"></div>
+               <Image
+                 src={logo.imageUrl}
+                 alt={logo.description}
+                 width={64}
+                 height={64}
+                 className="relative rounded-full"
+                 data-ai-hint={logo.imageHint}
+               />
+             </div>
           )}
           <h1 className="text-2xl font-bold tracking-tight text-foreground">
             Create Your Account
@@ -195,7 +195,7 @@ export default function RegisterPage() {
               onClick={() => setShowPassword(!showPassword)}
               disabled={isRegistering}
             >
-              {showPassword ? <EyeOff /> : <Eye />}
+              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </Button>
           </div>
           <div className="relative space-y-2">
@@ -218,7 +218,7 @@ export default function RegisterPage() {
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               disabled={isRegistering}
             >
-              {showConfirmPassword ? <EyeOff /> : <Eye />}
+              {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </Button>
           </div>
           <div className="flex items-center space-x-2 pt-2">
