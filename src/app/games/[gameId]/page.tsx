@@ -333,7 +333,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
 
             <div className="space-y-2.5">
                <Input
-                  className="h-10 rounded-md border-[#E5E7EB] bg-gray-100"
+                  className="h-10 rounded-md border-[#E5E7EB] bg-gray-100 text-black"
                   value={userProfile?.username || ''}
                   readOnly
                   disabled
