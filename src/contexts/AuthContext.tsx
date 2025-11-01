@@ -22,58 +22,50 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-  const [authLoading, setAuthLoading] = useState(true);
-  const [profileLoading, setProfileLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // Single loading state
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, async (firebaseUser) => {
+      setLoading(true); // Start loading whenever auth state might change
       setUser(firebaseUser);
-      setAuthLoading(false);
 
       if (firebaseUser) {
-        // Set a cookie when user logs in
+        // Set cookie and admin status
         const token = await firebaseUser.getIdToken();
-        setCookie(null, AUTH_COOKIE_NAME, token, {
-          maxAge: 30 * 24 * 60 * 60,
-          path: '/',
+        setCookie(null, AUTH_COOKIE_NAME, token, { maxAge: 30 * 24 * 60 * 60, path: '/' });
+        setIsAdmin(firebaseUser.email === 'ohshif5@gmail.com');
+
+        // Listen for profile changes
+        const userDocRef = doc(db, 'users', firebaseUser.uid);
+        const unsubscribeProfile = onSnapshot(userDocRef, (docSnap) => {
+          if (docSnap.exists()) {
+            setUserProfile({ uid: docSnap.id, ...docSnap.data() } as UserProfile);
+          } else {
+            setUserProfile(null);
+          }
+          setLoading(false); // Stop loading once profile is fetched (or not found)
+        }, (error) => {
+          console.error("Error fetching user profile:", error);
+          setUserProfile(null);
+          setLoading(false); // Stop loading on error
         });
+        
+        // Return the profile listener unsubscribe function to be called on cleanup
+        return () => unsubscribeProfile();
       } else {
-        // Destroy the cookie on logout
+        // User is logged out
         destroyCookie(null, AUTH_COOKIE_NAME, { path: '/' });
         setUserProfile(null);
-        setProfileLoading(false); // Explicitly set profile loading to false on logout
         setIsAdmin(false);
+        setLoading(false); // Stop loading on logout
       }
     });
 
+    // Return the auth listener unsubscribe function to be called on component unmount
     return () => unsubscribeAuth();
   }, []);
 
-  useEffect(() => {
-    if (user) {
-      setProfileLoading(true);
-      setIsAdmin(user.email === 'ohshif5@gmail.com');
-      const userDocRef = doc(db, 'users', user.uid);
-      const unsubscribeProfile = onSnapshot(userDocRef, (docSnap) => {
-        if (docSnap.exists()) {
-          setUserProfile({ uid: docSnap.id, ...docSnap.data() } as UserProfile);
-        } else {
-          setUserProfile(null);
-        }
-        setProfileLoading(false);
-      }, (error) => {
-        console.error("Error fetching user profile:", error);
-        setUserProfile(null);
-        setProfileLoading(false);
-      });
-      return () => unsubscribeProfile();
-    }
-  }, [user]);
-
-  // Combined loading state. True if either auth state is loading,
-  // or if we have a user but their profile is still loading.
-  const loading = authLoading || (user != null && profileLoading);
 
   return (
     <AuthContext.Provider value={{ user, userProfile, loading, isAdmin }}>
