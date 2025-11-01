@@ -74,11 +74,11 @@ export default async function Home() {
                         alt={game.name}
                         width={400}
                         height={400}
-                        className="aspect-square object-cover"
+                        className="aspect-square w-full rounded-t-lg object-cover"
                         data-ai-hint={gameImage.imageHint}
                       />
                     )}
-                    <div className="bg-card/50 p-2 text-center">
+                    <div className="p-2 text-center">
                       <p className="truncate text-xs font-semibold">
                         {game.name}
                       </p>
