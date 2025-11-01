@@ -74,8 +74,11 @@ export default function ProfilePage() {
                 </CardHeader>
             </Card>
             <Card>
-                <CardContent className="p-4">
-                    <Skeleton className="h-8 w-40" />
+                <CardHeader>
+                    <CardTitle className="text-lg">ငွေသုံးစွဲမှု</CardTitle>
+                </CardHeader>
+                <CardContent className="p-4 pt-0">
+                    <Skeleton className="h-8 w-28" />
                 </CardContent>
             </Card>
             <div className="grid grid-cols-1 gap-2">
@@ -119,7 +122,10 @@ export default function ProfilePage() {
       </Card>
       
       <Card>
-        <CardContent className="p-4">
+        <CardHeader>
+          <CardTitle className="text-lg">ငွေသုံးစွဲမှု</CardTitle>
+        </CardHeader>
+        <CardContent className="p-4 pt-0">
              {spentLoading ? (
                 <Skeleton className="h-8 w-28" />
              ) : (
