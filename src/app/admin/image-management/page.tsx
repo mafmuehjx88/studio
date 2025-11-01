@@ -14,6 +14,7 @@ import { Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { products as staticProducts, games as staticGames } from '@/lib/data';
+import type { PlaceholderImage } from '@/lib/types';
 
 type ImageData = {
   imageUrl: string;
@@ -85,7 +86,6 @@ export default function ImageManagementPage() {
               }
           });
 
-
           setImages(initialImages);
           // Save this initial structure to Firestore so it's there for next time
           await setDoc(docRef, { images: initialImages }, { merge: true });
@@ -103,7 +103,7 @@ export default function ImageManagementPage() {
     };
 
     fetchImages();
-  }, [isAdmin, authLoading]);
+  }, [isAdmin, authLoading, docRef, toast]);
 
   const handleInputChange = (id: string, value: string) => {
     setImages((prev) => ({
@@ -192,7 +192,7 @@ export default function ImageManagementPage() {
             ) : Object.keys(images).sort().map((id) => (
                 <div key={id} className="space-y-2">
                 <Label htmlFor={id} className="text-sm font-medium capitalize">
-                    {id.replace(/[-_]/g, ' ')} <span className="text-xs text-muted-foreground">({images[id].description})</span>
+                    {images[id].description || id.replace(/[-_]/g, ' ')}
                 </Label>
                 <div className="flex items-center gap-4">
                     <Image
