@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
               setUserProfile({ ...docSnap.data(), uid: docSnap.id } as UserProfile);
             } else {
               setUserProfile(null); // User exists in auth, but not in db
-              console.error(`Profile not found in Firestore for user ${user.uid}`);
+              // console.error(`Profile not found in Firestore for user ${user.uid}`);
             }
             setProfileLoading(false); // Finished loading profile data
             setAuthLoading(false); // Finished loading auth and profile sequence
