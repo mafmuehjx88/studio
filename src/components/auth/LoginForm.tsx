@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -14,10 +15,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { loginUser } from "@/lib/actions";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address." }),
@@ -39,14 +40,18 @@ export default function LoginForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
     try {
-      const result = await loginUser(values);
-      
-      if (result.error) {
+      await signInWithEmailAndPassword(auth, values.email, values.password);
+      toast({
+        title: "Login Successful",
+        description: "Welcome back! Redirecting...",
+      });
+      // The redirect is now handled by the AuthContext, so we don't need to do it here.
+    } catch (error: any) {
         let description = "An unexpected error occurred. Please try again.";
-        if (typeof result.error === 'string') {
-          if (result.error.includes("auth/invalid-credential") || result.error.includes("auth/user-not-found") || result.error.includes("auth/wrong-password")) {
+        if (error.code) {
+          if (error.code.includes("auth/invalid-credential") || error.code.includes("auth/user-not-found") || error.code.includes("auth/wrong-password")) {
             description = "Incorrect email or password. Please try again.";
-          } else if (result.error.includes("auth/user-not-found")) {
+          } else if (error.code.includes("auth/user-not-found")) {
             description = "Account does not exist. Please register a new account.";
           }
         }
@@ -55,19 +60,6 @@ export default function LoginForm() {
           title: "Login Failed",
           description: description,
           variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Login Successful",
-          description: "Welcome back! Redirecting...",
-        });
-        // No more router.replace! The AuthContext will handle the redirect.
-      }
-    } catch (error) {
-        toast({
-            title: "Login Failed",
-            description: "An unexpected network error occurred.",
-            variant: "destructive",
         });
     } finally {
         setIsSubmitting(false);

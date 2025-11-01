@@ -1,30 +1,32 @@
+
 "use client";
 
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import { logoutUser } from "@/lib/actions";
+import { LogOut, Settings, Wallet } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { auth } from "@/lib/firebase";
+import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
-import { LogOut, Settings, Wallet, Loader2 } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ProfilePage() {
   const { userProfile, loading } = useAuth();
   const router = useRouter();
 
   const handleLogout = async () => {
-    await logoutUser();
-    // After logout, the middleware will automatically redirect to the login page.
-    // For a faster UX, we can preemptively push the user there.
+    await signOut(auth);
+    // The AuthContext will detect the sign-out and redirect via middleware logic.
+    // For a faster UX, we can preemptively push.
     router.replace("/login");
   };
 
   const avatar = PlaceHolderImages.find((img) => img.id === "default-avatar");
 
-  // The middleware protects this page, so we only need to handle the loading state
-  // for the user profile data.
+  // The middleware protects this page. We only need to handle the loading state
+  // for the user profile data itself.
   if (loading) {
     return (
         <div className="space-y-6">

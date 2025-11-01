@@ -1,12 +1,12 @@
+
 "use client";
 
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
-import { useAuthInstance, useFirestoreInstance } from "@/hooks/use-firebase";
+import { auth, db } from "@/lib/firebase";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,9 +18,7 @@ import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 export default function RegisterPage() {
   const { toast } = useToast();
-  const auth = useAuthInstance();
-  const db = useFirestoreInstance();
-
+  
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
