@@ -308,19 +308,19 @@ Order Time: ${new Date().toLocaleString('en-US', {
         open={!!selectedProduct}
         onOpenChange={(isOpen) => !isOpen && setSelectedProduct(null)}
       >
-        <DialogContent className="w-[90vw] max-w-sm rounded-xl p-0 shadow-xl">
+        <DialogContent className="w-[90vw] max-w-sm rounded-xl bg-white p-0 shadow-xl">
            <DialogHeader className="sr-only">
             <DialogTitle>Purchase Item</DialogTitle>
             <DialogDescription>Complete your purchase</DialogDescription>
           </DialogHeader>
-          <div className="p-5 space-y-4">
+          <div className="space-y-4 p-5">
             {!hasSufficientBalance && (
-              <div className="bg-[#FEE2E2] rounded-lg p-3 border-l-4 border-[#DC2626] text-sm text-[#B91C1C]">
+              <div className="rounded-lg border-l-4 border-[#DC2626] bg-[#FEE2E2] p-3 text-sm text-[#B91C1C]">
                 <p className="font-bold">ငွေလက်ကျန်မလုံလောက်ပါ</p>
                 <p>ဝယ်ယူမှုပြုလုပ်ရန် သင့် Wallet ထဲတွင် ငွေဖြည့်သွင်းပါ။{' '}
                   <Button
                     variant="link"
-                    className="p-0 text-[#B91C1C] h-auto"
+                    className="h-auto p-0 text-[#B91C1C]"
                     onClick={() => router.push('/wallet')}
                   >
                     ဖြည့်ရန်သွားမည်
@@ -333,7 +333,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
 
             <div className="space-y-2.5">
                <Input
-                  className="h-10 border-[#E5E7EB] rounded-md bg-gray-100"
+                  className="h-10 rounded-md border-[#E5E7EB] bg-gray-100"
                   value={userProfile?.username || ''}
                   readOnly
                   disabled
@@ -341,7 +341,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
                 />
               <div className="flex gap-2.5">
                 <Input
-                  className="h-10 border-[#E5E7EB] rounded-md"
+                  className="h-10 rounded-md border-[#E5E7EB]"
                   value={userGameId}
                   onChange={(e) => setUserGameId(e.target.value)}
                   placeholder="Game ID"
@@ -349,7 +349,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
                 />
                 {game.needsServerId && (
                   <Input
-                    className="h-10 border-[#E5E7EB] rounded-md"
+                    className="h-10 rounded-md border-[#E5E7EB]"
                     value={userServerId}
                     onChange={(e) => setUserServerId(e.target.value)}
                     placeholder="Server ID"
@@ -359,13 +359,13 @@ Order Time: ${new Date().toLocaleString('en-US', {
             </div>
 
 
-            <div className="bg-[#F3F4F6] rounded-md p-2.5 h-[45px] flex items-center justify-between text-sm">
+            <div className="flex h-[45px] items-center justify-between rounded-md bg-[#F3F4F6] p-2.5 text-sm">
                 <span className="text-[#111827]">{selectedProduct?.name}{isPassProduct || is2xProduct ? ` (x${quantity})` : ''}</span>
                 <span className="font-bold text-[#111827]">{finalPrice.toLocaleString()} Ks</span>
             </div>
 
             {(isPassProduct || is2xProduct) && (
-              <div className="flex justify-center items-center gap-2">
+              <div className="flex items-center justify-center gap-2">
                 <Button
                   variant="outline"
                   size="icon"
@@ -375,7 +375,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
                   <Minus className="h-4 w-4" />
                 </Button>
                 <Input
-                  className="w-16 h-9 text-center border-[#D1D5DB] rounded-md"
+                  className="h-9 w-16 rounded-md border-[#D1D5DB] text-center"
                   value={quantity}
                   readOnly
                 />
@@ -390,31 +390,31 @@ Order Time: ${new Date().toLocaleString('en-US', {
               </div>
             )}
             
-            <div className="bg-[#DBEAFE] rounded-md p-3 h-[45px] flex items-center border-l-4 border-[#3B82F6] text-sm">
-               <Info className="h-4 w-4 mr-2 text-[#3B82F6]" />
+            <div className="flex h-[45px] items-center rounded-md border-l-4 border-[#3B82F6] bg-[#DBEAFE] p-3 text-sm">
+               <Info className="mr-2 h-4 w-4 text-[#3B82F6]" />
                <span className="text-gray-600">Your Balance:</span>
-               <span className="font-semibold text-gray-800 ml-1">{userProfile?.walletBalance.toLocaleString() ?? 0} Ks</span>
+               <span className="ml-1 font-semibold text-gray-800">{userProfile?.walletBalance.toLocaleString() ?? 0} Ks</span>
             </div>
 
-            <div className="flex justify-between font-bold text-lg text-[#111827]">
+            <div className="flex justify-between text-lg font-bold text-[#111827]">
               <span>Total</span>
               <span>{finalPrice.toLocaleString()} Ks</span>
             </div>
             
           </div>
-          <div className="bg-gray-50 px-5 py-3 flex gap-2.5">
+          <div className="flex gap-2.5 bg-gray-50 px-5 py-3">
             <Button
               variant="outline"
               onClick={() => setSelectedProduct(null)}
               disabled={isPurchasing}
-              className="w-full h-[42px] rounded-md border-[#D1D5DB] bg-white text-[#111827] font-bold text-sm"
+              className="h-[42px] w-full rounded-md border-[#D1D5DB] bg-white text-sm font-bold text-[#111827]"
             >
               မဝယ်သေးပါ
             </Button>
             <Button
               onClick={handlePurchase}
               disabled={!hasSufficientBalance || isPurchasing}
-              className="w-full h-[42px] rounded-md bg-[#10B981] text-white font-bold text-sm hover:bg-green-600"
+              className="h-[42px] w-full rounded-md bg-[#10B981] text-sm font-bold text-white hover:bg-green-600"
             >
               {isPurchasing && (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -427,5 +427,3 @@ Order Time: ${new Date().toLocaleString('en-US', {
     </div>
   );
 }
-
-    
