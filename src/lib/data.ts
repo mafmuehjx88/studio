@@ -3,7 +3,7 @@ import type { Game, Product } from './types';
 export const games: Game[] = [
   { id: 'mlbb', name: 'MLBB', image: 'https://i.ibb.co/R47v6TDX/8255033248d018b6c5f3d460b2deec16.jpg', needsServerId: true },
   { id: 'pubg', name: 'PUBG', image: 'https://i.ibb.co/XMTZkvX/new3589-516a74d6d701c86c007f668d7cf2891a.jpg', needsServerId: false },
-  { id: 'hok', name: 'HOK', image: 'https://picsum.photos/seed/honor-of-kings/600/300', needsServerId: false },
+  { id: 'hok', name: 'HOK', image: 'https://i.ibb.co/PZj5t6PX/new3418-1cff9a1ebb8677d02e5c0d96199b5384.jpg', needsServerId: false },
 ];
 
 export const products: Product[] = [
