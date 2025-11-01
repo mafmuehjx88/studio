@@ -332,13 +332,6 @@ Order Time: ${new Date().toLocaleString('en-US', {
             <h3 className="font-bold text-base text-[#111827]">Account Info</h3>
 
             <div className="space-y-2.5">
-               <Input
-                  className="h-10 rounded-md border-[#E5E7EB] bg-gray-100"
-                  value={userProfile?.username || ''}
-                  readOnly
-                  disabled
-                  placeholder="Username"
-                />
               <div className="flex gap-2.5">
                 <Input
                   className="h-10 rounded-md border-[#E5E7EB]"

@@ -198,6 +198,14 @@ export default function TopUpPage() {
             </AlertDescription>
         </Alert>
 
+        <Alert variant="destructive">
+           <AlertTriangle className="h-4 w-4" />
+           <AlertTitle>အထူးသတိပေးချက်</AlertTitle>
+            <AlertDescription>
+            ဒီမှာ ငွေလွှဲနံပါတ်ကိုသေချာကြည့်ပြီးမှ ငွေလွဲပေးပါ။ ပမာဏက 5000ဆိုရင် လွဲတဲ့အခါ 5000အတိအကျလွဲပေးပါ။ သတိပေးချက်-ပြေစာအတုလုပ်ခြင်း/ ငွေလွဲပြီး 20minကြာမှပြေစာပြပါက Auto Ban!!
+           </AlertDescription>
+       </Alert>
+
       <form onSubmit={handleSubmit} className="space-y-4">
          <div className="space-y-2">
             <Label htmlFor="username">Username</Label>
