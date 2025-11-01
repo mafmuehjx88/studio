@@ -1,11 +1,11 @@
-import type { Timestamp } from "firebase/firestore";
+import type { Timestamp, FieldValue } from "firebase/firestore";
 
 export interface UserProfile {
   uid: string;
   username: string;
   email: string;
   walletBalance: number;
-  createdAt: Timestamp;
+  createdAt: Timestamp | FieldValue;
 }
 
 export interface Game {

@@ -18,7 +18,7 @@ import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { errorEmitter } from "@/firebase/error-emitter";
 import { FirestorePermissionError } from "@/firebase/errors";
-import { PlaceholderImage } from "@/lib/types";
+import type { PlaceholderImage, UserProfile } from "@/lib/types";
 
 
 export default function RegisterPage() {
@@ -88,10 +88,10 @@ export default function RegisterPage() {
       const user = userCredential.user;
 
       // 2. Prepare user profile data for Firestore
-      const userProfileData = {
+      const userProfileData: UserProfile = {
         uid: user.uid,
         username: username,
-        email: user.email,
+        email: user.email!,
         walletBalance: 0,
         createdAt: serverTimestamp(),
       };
