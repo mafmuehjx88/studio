@@ -10,6 +10,7 @@ import { db } from '@/lib/firebase';
 import type { Game } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from '@/components/ui/separator';
+import { Megaphone } from 'lucide-react';
 
 // Helper function to fetch data on the server
 async function getMarqueeText() {
@@ -59,13 +60,17 @@ export default async function Home() {
         </Button>
       </div>
 
-      <Card className="bg-secondary">
-        <Marquee>
-          <span className="px-4 text-xs font-medium text-primary">
-            {marqueeText}
-          </span>
-        </Marquee>
-      </Card>
+      <div className="flex items-center gap-2 rounded-lg bg-secondary px-3 py-1.5">
+          <Megaphone className="h-4 w-4 flex-shrink-0 text-primary" />
+          <div className="flex-1 overflow-hidden">
+            <Marquee>
+              <span className="px-4 text-xs font-medium text-primary">
+                {marqueeText}
+              </span>
+            </Marquee>
+          </div>
+      </div>
+
 
       <div>
         <h2 className="mb-4 text-center text-2xl font-bold">Games</h2>
