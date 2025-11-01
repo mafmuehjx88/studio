@@ -3,7 +3,8 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { auth } from './lib/firebase-admin'; // Using admin SDK for verification
 
-export async function middleware(request: NextRequest) {
+// This function can be marked `async` if using `await` inside
+export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const idToken = request.cookies.get('firebase-auth-token')?.value;
 
@@ -64,4 +65,5 @@ export const config = {
      */
     '/((?!api|_next/static|_next/image|favicon.ico|admin).*)',
   ],
+  runtime: 'nodejs', // Use Node.js runtime instead of edge
 }
