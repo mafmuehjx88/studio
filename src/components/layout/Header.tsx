@@ -30,13 +30,8 @@ export default function Header() {
           )}
         </div>
 
-        {/* Center Section */}
+        {/* Center Section - Title Removed */}
         <div className="flex-shrink-0">
-            <h1 className="text-xl font-bold tracking-tight">
-                <span className="bg-gradient-to-r from-red-500 to-yellow-500 bg-clip-text text-transparent">
-                AT Game HUB
-                </span>
-            </h1>
         </div>
 
         {/* Right Section */}
