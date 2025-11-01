@@ -29,7 +29,7 @@ export default function RootLayout({
         <AuthProvider>
           <div className="relative mx-auto flex min-h-screen w-full max-w-md flex-col bg-background">
             <Header />
-            <main className="flex-1 px-4 pb-24 pt-6">{children}</main>
+            <main className="flex-1 px-4 py-6">{children}</main>
             <Footer />
           </div>
           <Toaster />
