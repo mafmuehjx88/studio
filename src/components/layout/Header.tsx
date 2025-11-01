@@ -15,7 +15,7 @@ export default function Header() {
   
   return (
     <>
-      <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-border/50 bg-background/95 px-4 backdrop-blur-lg">
+      <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-border/50 bg-card px-4">
         {/* Left Section */}
         <div className="flex flex-1 items-center justify-start gap-2">
           <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsSidebarOpen(true)}>

@@ -25,7 +25,7 @@ export default function Footer() {
   
   if (loading) {
     return (
-        <footer className="fixed bottom-0 left-0 right-0 z-20 mx-auto h-14 w-full max-w-md border-t border-border/50 bg-background/95 backdrop-blur-lg">
+        <footer className="fixed bottom-0 left-0 right-0 z-20 mx-auto h-14 w-full max-w-md border-t border-border/50 bg-card">
             <div className="flex h-full items-center justify-around">
                 <div className="h-8 w-1/4 animate-pulse rounded-md bg-muted"></div>
                 <div className="h-8 w-1/4 animate-pulse rounded-md bg-muted"></div>
@@ -37,7 +37,7 @@ export default function Footer() {
   }
 
   return (
-    <footer className="fixed bottom-0 left-0 right-0 z-20 mx-auto h-14 w-full max-w-md border-t border-border/50 bg-background/95 backdrop-blur-lg">
+    <footer className="fixed bottom-0 left-0 right-0 z-20 mx-auto h-14 w-full max-w-md border-t border-border/50 bg-card">
       <nav className="flex h-full items-center justify-around">
         {navItems.map((item) => {
           // If user is not logged in, only show Home and Profile
