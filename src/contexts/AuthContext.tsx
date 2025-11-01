@@ -27,9 +27,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setLoading(true);
       if (firebaseUser) {
-        // User is signed in.
         setUser(firebaseUser);
         setIsAdmin(firebaseUser.email === 'ohshif5@gmail.com');
         const userDocRef = doc(db, 'users', firebaseUser.uid);
@@ -38,9 +38,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             if (docSnap.exists()) {
               setUserProfile({ uid: docSnap.id, ...docSnap.data() } as UserProfile);
             } else {
+              // This can happen if the user is created in Auth but the Firestore doc fails.
               setUserProfile(null);
             }
-            setLoading(false); 
+            setLoading(false);
           }, 
           (error) => {
             console.error("Error listening to user profile:", error);
@@ -62,22 +63,35 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    if (loading) return; // Wait until loading is finished
+    // This effect handles redirection based on auth state.
+    // It's the single source of truth for navigation logic.
+    if (loading) return; // Don't do anything while still loading
 
-    const isAuthPage = pathname === '/login' || pathname === '/register';
+    const authPages = ['/login', '/register'];
+    const isAuthPage = authPages.includes(pathname);
 
     if (user && isAuthPage) {
-      // If user is logged in and on an auth page, redirect to profile
+      // If user is logged in and on an auth page, redirect to home/profile.
       router.replace('/profile');
     } else if (!user && !isAuthPage) {
-      // If user is not logged in and not on an auth page, redirect to login
-      // This handles the logout case
+      // If user is not logged in and not on an auth page, redirect to login.
       router.replace('/login');
     }
-
   }, [user, loading, pathname, router]);
 
   const value = { user, userProfile, loading, isAdmin };
+
+  // While loading, we can show a blank screen or a global loader
+  // to prevent content flashing.
+  if (loading) {
+     const authPages = ['/login', '/register'];
+     const isAuthPage = authPages.includes(pathname);
+     // Don't show a blank screen for auth pages, let them render their own UI
+     if (!isAuthPage) {
+        return null; // Or a full-page loader
+     }
+  }
+
 
   return (
     <AuthContext.Provider value={value}>

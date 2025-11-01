@@ -97,7 +97,16 @@ export default function RegisterPage() {
       
       // 3. Create user document in Firestore
       const userDocRef = doc(db, "users", user.uid);
-      await setDoc(userDocRef, userProfileData);
+      setDoc(userDocRef, userProfileData).catch(err => {
+         const permissionError = new FirestorePermissionError({
+            path: userDocRef.path,
+            operation: 'create',
+            requestResourceData: userProfileData,
+          });
+          errorEmitter.emit('permission-error', permissionError);
+          // We throw this so it gets caught by the outer catch block
+          throw err;
+      });
       
       // 4. Show success and redirect (AuthContext will handle redirection)
       toast({
@@ -111,15 +120,10 @@ export default function RegisterPage() {
       // Handle Auth errors
       if (error.code === 'auth/email-already-in-use') {
         description = "This email is already registered. Please log in.";
-      } else if (error.name === 'FirestoreError') {
-        // This is a generic Firestore error, which might be a permission error.
-        // We'll construct our detailed error and emit it.
-         const permissionError = new FirestorePermissionError({
-            path: `users/${email}`, // Approximate path for context
-            operation: 'create',
-          });
-          errorEmitter.emit('permission-error', permissionError);
-          description = "Could not create user profile. Please check permissions.";
+      } else if (error.name === 'FirestorePermissionError' || error.code === 'permission-denied') {
+          // This is a generic Firestore error, which might be a permission error.
+          // We'll construct our detailed error and emit it.
+          description = "Could not create user profile due to a permissions issue.";
       }
       
       toast({

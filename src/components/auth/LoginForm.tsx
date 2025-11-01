@@ -19,6 +19,7 @@ import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address." }),
@@ -28,6 +29,7 @@ const formSchema = z.object({
 export default function LoginForm() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -46,13 +48,14 @@ export default function LoginForm() {
         description: "Welcome back! Redirecting...",
       });
       // The redirect is now handled by the AuthContext, so we don't need to do it here.
+      // router.replace('/profile');
     } catch (error: any) {
         let description = "An unexpected error occurred. Please try again.";
         if (error.code) {
           if (error.code.includes("auth/invalid-credential") || error.code.includes("auth/user-not-found") || error.code.includes("auth/wrong-password")) {
             description = "Incorrect email or password. Please try again.";
-          } else if (error.code.includes("auth/user-not-found")) {
-            description = "Account does not exist. Please register a new account.";
+          } else if (error.code.includes("auth/too-many-requests")) {
+            description = "Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later.";
           }
         }
         
