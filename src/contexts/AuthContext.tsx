@@ -26,49 +26,58 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
+    // This is the main listener for Firebase Auth state changes.
     const unsubscribeAuth = onAuthStateChanged(auth, async (firebaseUser) => {
-      setLoading(true); // Start loading whenever auth state might change
-      setUser(firebaseUser);
-
+      setLoading(true); // Always start loading when auth state might be changing.
+      
       if (firebaseUser) {
-        // Set cookie and admin status
+        setUser(firebaseUser);
         const token = await firebaseUser.getIdToken();
         setCookie(null, AUTH_COOKIE_NAME, token, { maxAge: 30 * 24 * 60 * 60, path: '/' });
         setIsAdmin(firebaseUser.email === 'ohshif5@gmail.com');
 
-        // Listen for profile changes
+        // Now, listen for this user's profile data from Firestore.
         const userDocRef = doc(db, 'users', firebaseUser.uid);
         const unsubscribeProfile = onSnapshot(userDocRef, (docSnap) => {
           if (docSnap.exists()) {
             setUserProfile({ uid: docSnap.id, ...docSnap.data() } as UserProfile);
           } else {
+            // This case might happen if the user record is deleted from Firestore but auth record still exists.
             setUserProfile(null);
           }
-          setLoading(false); // Stop loading once profile is fetched (or not found)
+          // IMPORTANT: Stop loading only AFTER we've attempted to fetch the profile.
+          setLoading(false);
         }, (error) => {
+          // Handle errors in fetching profile
           console.error("Error fetching user profile:", error);
           setUserProfile(null);
-          setLoading(false); // Stop loading on error
+          setLoading(false); // Also stop loading on error.
         });
-        
-        // Return the profile listener unsubscribe function to be called on cleanup
+
+        // This function will be called when the user logs out.
+        // It cleans up the Firestore listener.
         return () => unsubscribeProfile();
+
       } else {
-        // User is logged out
-        destroyCookie(null, AUTH_COOKIE_NAME, { path: '/' });
+        // User is logged out.
+        setUser(null);
         setUserProfile(null);
+        destroyCookie(null, AUTH_COOKIE_NAME, { path: '/' });
         setIsAdmin(false);
-        setLoading(false); // Stop loading on logout
+        setLoading(false); // Stop loading.
       }
     });
 
-    // Return the auth listener unsubscribe function to be called on component unmount
+    // This is the cleanup function for the main auth listener.
+    // It runs when the AuthProvider component unmounts.
     return () => unsubscribeAuth();
-  }, []);
+  }, []); // The empty dependency array means this effect runs only once on mount.
 
+
+  const value = { user, userProfile, loading, isAdmin };
 
   return (
-    <AuthContext.Provider value={{ user, userProfile, loading, isAdmin }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );
