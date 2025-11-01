@@ -7,11 +7,12 @@ import { logoutUser } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
-import { LogOut, User, Mail, Wallet } from "lucide-react";
+import { LogOut, Settings, Wallet } from "lucide-react";
 import AuthGuard from "@/components/auth/AuthGuard";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ProfilePage() {
-  const { userProfile, user } = useAuth();
+  const { userProfile, loading } = useAuth();
   const router = useRouter();
 
   const handleLogout = async () => {
@@ -21,50 +22,47 @@ export default function ProfilePage() {
 
   const avatar = PlaceHolderImages.find((img) => img.id === "default-avatar");
 
-  if (!userProfile || !user) return null;
-
   return (
     <AuthGuard>
       <div className="space-y-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>My Profile</CardTitle>
+        <Card className="overflow-hidden">
+          <CardHeader className="flex-row items-center gap-4 p-4">
+            <Avatar className="h-16 w-16 border-2 border-primary">
+              {avatar && <AvatarImage src={avatar.imageUrl} alt={userProfile?.username} />}
+              <AvatarFallback>
+                {userProfile ? userProfile.username.charAt(0).toUpperCase() : <Skeleton className="h-full w-full" />}
+              </AvatarFallback>
+            </Avatar>
+            <div className="space-y-1">
+              {loading || !userProfile ? (
+                <>
+                  <Skeleton className="h-6 w-32" />
+                  <Skeleton className="h-4 w-24" />
+                </>
+              ) : (
+                <>
+                  <CardTitle className="text-xl">{userProfile.username}</CardTitle>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Wallet className="h-4 w-4 text-primary" />
+                    <span className="font-semibold text-primary">{userProfile.walletBalance.toFixed(2)} Ks</span>
+                  </div>
+                </>
+              )}
+            </div>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center gap-4">
-              <Avatar className="h-16 w-16">
-                {avatar && <AvatarImage src={avatar.imageUrl} alt={userProfile.username} />}
-                <AvatarFallback>{userProfile.username.charAt(0).toUpperCase()}</AvatarFallback>
-              </Avatar>
-              <div>
-                <p className="text-xl font-bold">{userProfile.username}</p>
-                <p className="text-sm text-muted-foreground">{userProfile.email}</p>
-              </div>
-            </div>
-            <div className="space-y-2 pt-4">
-              <div className="flex items-center gap-3">
-                <User className="h-4 w-4 text-muted-foreground" />
-                <span className="font-medium">Username:</span>
-                <span>{userProfile.username}</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <Mail className="h-4 w-4 text-muted-foreground" />
-                <span className="font-medium">Email:</span>
-                <span>{userProfile.email}</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <Wallet className="h-4 w-4 text-muted-foreground" />
-                <span className="font-medium">Balance:</span>
-                <span className="font-semibold text-primary">{userProfile.walletBalance.toFixed(2)} Ks</span>
-              </div>
-            </div>
-          </CardContent>
         </Card>
 
-        <Button onClick={handleLogout} variant="destructive" className="w-full">
-          <LogOut className="mr-2 h-4 w-4" />
-          Logout
-        </Button>
+        <div className="grid grid-cols-1 gap-2">
+            <Button variant="outline" className="justify-start gap-3 text-base h-12">
+                <Settings className="h-5 w-5 text-muted-foreground" />
+                <span>Settings</span>
+            </Button>
+            <Button variant="outline" className="justify-start gap-3 text-base h-12 text-destructive hover:text-destructive hover:bg-destructive/10" onClick={handleLogout}>
+                <LogOut className="h-5 w-5" />
+                <span>Logout</span>
+            </Button>
+        </div>
+
       </div>
     </AuthGuard>
   );
