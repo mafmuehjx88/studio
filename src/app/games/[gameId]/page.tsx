@@ -37,7 +37,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 export default function GameItemsPage() {
   const params = useParams();
   const router = useRouter();
-  const { userProfile, user, loading: authLoading } = useAuth();
+  const { userProfile, user, loading } = useAuth();
   const { toast } = useToast();
 
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -227,6 +227,20 @@ Order Time: ${new Date().toLocaleString('en-US', {
     }
   };
 
+  if (loading) {
+      return (
+          <div className="space-y-6">
+              <Skeleton className="aspect-[2/1] w-full rounded-lg" />
+              <Skeleton className="h-8 w-1/3" />
+              <div className="grid grid-cols-3 gap-3">
+                  <Skeleton className="aspect-square w-full rounded-lg" />
+                  <Skeleton className="aspect-square w-full rounded-lg" />
+                  <Skeleton className="aspect-square w-full rounded-lg" />
+              </div>
+          </div>
+      )
+  }
+
   if (!game) {
     return (
       <div className="flex h-full flex-col items-center justify-center">
@@ -241,20 +255,6 @@ Order Time: ${new Date().toLocaleString('en-US', {
     );
   }
   
-  if (authLoading) {
-      return (
-          <div className="space-y-6">
-              <Skeleton className="aspect-[2/1] w-full rounded-lg" />
-              <Skeleton className="h-8 w-1/3" />
-              <div className="grid grid-cols-3 gap-3">
-                  <Skeleton className="aspect-square w-full rounded-lg" />
-                  <Skeleton className="aspect-square w-full rounded-lg" />
-                  <Skeleton className="aspect-square w-full rounded-lg" />
-              </div>
-          </div>
-      )
-  }
-
   return (
     <div className="space-y-6">
       {gameBanner && (

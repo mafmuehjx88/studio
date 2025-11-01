@@ -8,7 +8,6 @@ import { auth, db } from '@/lib/firebase';
 import type { UserProfile } from '@/lib/types';
 import { usePathname, useRouter } from 'next/navigation';
 import { FirebaseErrorListener } from '@/components/FirebaseErrorListener';
-import { Skeleton } from '@/components/ui/skeleton';
 
 interface AuthContextType {
   user: FirebaseUser | null;
@@ -35,10 +34,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
-      const isAdminUser = firebaseUser?.email === 'ohshif5@gmail.com';
-      setIsAdmin(isAdminUser);
-      
+      setIsAdmin(firebaseUser?.email === 'ohshif5@gmail.com');
       if (!firebaseUser) {
+        // If user logs out, we are no longer loading
         setUserProfile(null);
         setLoading(false);
       }
@@ -48,34 +46,37 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    if (!user) {
-      setLoading(false); // Ensure loading is false if there's no user.
-      return;
-    }
+    // This effect runs when the user's auth state changes.
+    // If we have a user, we fetch their profile. If not, we are done.
+    if (user) {
+        setLoading(true); // Start loading profile data
+        const userDocRef = doc(db, 'users', user.uid);
+        const unsubscribeProfile = onSnapshot(userDocRef, 
+          (docSnap) => {
+            if (docSnap.exists()) {
+              setUserProfile({ uid: docSnap.id, ...docSnap.data() } as UserProfile);
+            } else {
+              setUserProfile(null); // User exists in auth, but not in db
+            }
+            setLoading(false); // Finished loading profile data
+          }, 
+          (error) => {
+            console.error("Error listening to user profile:", error);
+            setUserProfile(null);
+            setLoading(false); // Finished loading, but with an error
+          }
+        );
 
-    setLoading(true); // Set loading to true when we start fetching the profile
-    const userDocRef = doc(db, 'users', user.uid);
-    const unsubscribeProfile = onSnapshot(userDocRef, 
-      (docSnap) => {
-        if (docSnap.exists()) {
-          setUserProfile({ uid: docSnap.id, ...docSnap.data() } as UserProfile);
-        } else {
-          setUserProfile(null);
-        }
-        setLoading(false); // Set loading to false after fetching profile
-      }, 
-      (error) => {
-        console.error("Error listening to user profile:", error);
+        return () => unsubscribeProfile();
+    } else {
+        // No user, so no profile to fetch. Not loading.
         setUserProfile(null);
-        setLoading(false); // Also set loading to false on error
-      }
-    );
-
-    return () => unsubscribeProfile();
-
+        setLoading(false);
+    }
   }, [user]);
 
   useEffect(() => {
+    // This effect handles redirection after loading is complete.
     if (loading) return;
 
     const isAuthPage = AUTH_PAGES.includes(pathname);
@@ -89,6 +90,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         router.replace('/');
       }
     } else {
+      // No user
       if (isProtectedRoute || isAdminRoute) {
         router.replace('/login');
       }
@@ -96,38 +98,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [user, loading, pathname, router, isAdmin]);
 
   const value = { user, userProfile, loading, isAdmin };
-
-  const isAuthPage = AUTH_PAGES.includes(pathname);
-  if (loading && !isAuthPage) {
-     return (
-        <div className="relative mx-auto flex min-h-screen w-full max-w-md flex-col bg-background">
-            <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-border/50 bg-background/95 px-4 backdrop-blur-lg">
-                <div className="flex items-center gap-2">
-                    <Skeleton className="h-8 w-8 rounded-md" />
-                    <Skeleton className="h-8 w-8 rounded-md" />
-                </div>
-                <Skeleton className="h-8 w-24 rounded-full" />
-            </header>
-            <main className="flex-1 px-4 pb-24 pt-6 space-y-6">
-                 <Skeleton className="h-48 w-full rounded-lg" />
-                 <div className="grid grid-cols-2 gap-4">
-                    <Skeleton className="h-14 w-full rounded-md" />
-                    <Skeleton className="h-14 w-full rounded-md" />
-                 </div>
-                 <Skeleton className="h-24 w-full rounded-lg" />
-            </main>
-            <footer className="fixed bottom-0 left-0 right-0 z-20 mx-auto h-16 w-full max-w-md border-t border-border/50 bg-background/95 backdrop-blur-lg">
-                <div className="flex h-full items-center justify-around">
-                    <Skeleton className="h-8 w-1/4 rounded-md" />
-                    <Skeleton className="h-8 w-1/4 rounded-md" />
-                    <Skeleton className="h-8 w-1/4 rounded-md" />
-                    <Skeleton className="h-8 w-1/4 rounded-md" />
-                </div>
-            </footer>
-        </div>
-     );
-  }
-
+  
   return (
     <AuthContext.Provider value={value}>
       <FirebaseErrorListener>
