@@ -19,7 +19,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertCircle, Loader2, Minus, Plus } from 'lucide-react';
+import { AlertTriangle, Info, Loader2, Minus, Plus } from 'lucide-react';
 import {
   doc,
   addDoc,
@@ -33,6 +33,7 @@ import { sendTelegramNotification } from '@/lib/actions';
 import { generateOrderId } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { Game, Product } from '@/lib/types';
+import { cn } from '@/lib/utils';
 
 export default function GameItemsPage() {
   const params = useParams();
@@ -54,30 +55,34 @@ export default function GameItemsPage() {
 
   useEffect(() => {
     if (!gameId) return;
-    
+
     setDataLoading(true);
     const currentGame = allGames.find((g) => g.id === gameId) || null;
     const gameProducts = allProducts.filter((p) => p.gameId === gameId);
-    
+
     setGame(currentGame);
     setProducts(gameProducts);
     setDataLoading(false);
-
   }, [gameId]);
 
-
   const isPassProduct = selectedProduct?.name.toLowerCase().includes('pass');
+  const is2xProduct = selectedProduct?.category === '2x';
 
-  const totalPrice = selectedProduct
-    ? isPassProduct
+  const finalPrice = selectedProduct
+    ? isPassProduct || is2xProduct
       ? selectedProduct.price * quantity
       : selectedProduct.price
     : 0;
+
   const hasSufficientBalance = userProfile
-    ? userProfile.walletBalance >= totalPrice
+    ? userProfile.walletBalance >= finalPrice
     : false;
 
   const handleProductClick = (product: Product) => {
+    if (!user) {
+      router.push('/login');
+      return;
+    }
     setSelectedProduct(product);
     setQuantity(1); // Reset quantity when a new product is selected
   };
@@ -110,7 +115,7 @@ export default function GameItemsPage() {
     try {
       // 1. Deduct balance first
       await updateDoc(userDocRef, {
-        walletBalance: increment(-totalPrice),
+        walletBalance: increment(-finalPrice),
       });
 
       // 2. Create order document
@@ -123,9 +128,9 @@ export default function GameItemsPage() {
         gameName: game.name,
         itemId: selectedProduct.id,
         itemName: `${selectedProduct.name}${
-          isPassProduct ? ` (x${quantity})` : ''
+          isPassProduct || is2xProduct ? ` (x${quantity})` : ''
         }`,
-        price: totalPrice,
+        price: finalPrice,
         gameUserId: userGameId,
         gameServerId: userServerId || '',
         paymentMethod: 'Wallet',
@@ -141,7 +146,7 @@ New Order Received!
 Order ID: \`${orderId}\`
 Game: *${orderData.gameName}*
 Item: *${orderData.itemName}*
-Price: *${totalPrice.toLocaleString()} Ks*
+Price: *${finalPrice.toLocaleString()} Ks*
 ----------------------
 Username: \`${userProfile.username}\`
 Game User ID: \`${userGameId}\`
@@ -178,8 +183,8 @@ Order Time: ${new Date().toLocaleString('en-US', {
       setIsPurchasing(false);
     }
   };
-
-  const renderProductGrids = () => {
+  
+    const renderProductGrids = () => {
     if (!game) return null;
 
     const passes = products.filter(p => p.category === 'pass');
@@ -253,19 +258,20 @@ Order Time: ${new Date().toLocaleString('en-US', {
     }
   };
 
+
   if (authLoading || dataLoading) {
-      return (
-          <div className="space-y-6">
-              <Skeleton className="aspect-[2/1] w-full rounded-lg" />
-              <Skeleton className="h-8 w-1/3" />
-              <div className="grid grid-cols-2 gap-4">
-                  <Skeleton className="h-32 w-full rounded-lg" />
-                  <Skeleton className="h-32 w-full rounded-lg" />
-                  <Skeleton className="h-32 w-full rounded-lg" />
-                  <Skeleton className="h-32 w-full rounded-lg" />
-              </div>
-          </div>
-      )
+    return (
+      <div className="space-y-6">
+        <Skeleton className="aspect-[2/1] w-full rounded-lg" />
+        <Skeleton className="h-8 w-1/3" />
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+          <Skeleton className="h-32 w-full rounded-lg" />
+          <Skeleton className="h-32 w-full rounded-lg" />
+          <Skeleton className="h-32 w-full rounded-lg" />
+          <Skeleton className="h-32 w-full rounded-lg" />
+        </div>
+      </div>
+    );
   }
 
   if (!game) {
@@ -281,7 +287,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
       </div>
     );
   }
-  
+
   return (
     <div className="space-y-6">
       {(game.bannerImage || game.image) && (
@@ -301,136 +307,110 @@ Order Time: ${new Date().toLocaleString('en-US', {
         open={!!selectedProduct}
         onOpenChange={(isOpen) => !isOpen && setSelectedProduct(null)}
       >
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>အချက်အလက်များဖြည့်သွင်းပါ</DialogTitle>
-            <DialogDescription>
-              ကျေးဇူးပြု၍ သင်၏ဂိမ်းအချက်အလက်များကို မှန်ကန်စွာ
-              ဖြည့်သွင်းပါ။
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-4 py-2">
+        <DialogContent className="w-[90vw] max-w-sm rounded-xl p-0 shadow-xl">
+          <div className="p-5 space-y-4">
             {!hasSufficientBalance && (
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertTitle>ငွေလက်ကျန်မလုံလောက်ပါ</AlertTitle>
-                <AlertDescription>
-                  ဝယ်ယူမှုပြုလုပ်ရန် သင့် Wallet ထဲတွင် ငွေဖြည့်သွင်းပါ။{' '}
+              <div className="bg-[#FEE2E2] rounded-lg p-3 border-l-4 border-[#DC2626] text-sm text-[#B91C1C]">
+                <p className="font-bold">ငွေလက်ကျန်မလုံလောက်ပါ</p>
+                <p>ဝယ်ယူမှုပြုလုပ်ရန် သင့် Wallet ထဲတွင် ငွေဖြည့်သွင်းပါ။{' '}
                   <Button
                     variant="link"
-                    className="p-0"
+                    className="p-0 text-[#B91C1C] h-auto"
                     onClick={() => router.push('/wallet')}
                   >
                     ဖြည့်ရန်သွားမည်
                   </Button>
-                </AlertDescription>
-              </Alert>
+                </p>
+              </div>
             )}
-
-            <div className="flex items-center justify-between rounded-md bg-muted p-3 text-sm">
-              <span className="text-muted-foreground">Your Balance:</span>
-              <span className="font-semibold text-primary">
-                {userProfile?.walletBalance.toLocaleString() ?? 0} Ks
-              </span>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
+            
+            <h3 className="font-bold text-base text-[#111827]">Account Info</h3>
+            
+            <div className="flex gap-2.5">
               <Input
-                id="username"
-                value={userProfile?.username || ''}
-                readOnly
-                disabled
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="game-id">Game ID</Label>
-              <Input
-                id="game-id"
+                className="h-10 border-[#E5E7EB] rounded-md"
                 value={userGameId}
                 onChange={(e) => setUserGameId(e.target.value)}
-                placeholder="Enter your game user ID"
+                placeholder="Game ID"
                 required
               />
-            </div>
-            {game.needsServerId && (
-              <div className="space-y-2">
-                <Label htmlFor="server-id">Server ID</Label>
+              {game.needsServerId && (
                 <Input
-                  id="server-id"
+                  className="h-10 border-[#E5E7EB] rounded-md"
                   value={userServerId}
                   onChange={(e) => setUserServerId(e.target.value)}
-                  placeholder="Enter server ID if needed"
+                  placeholder="Server ID"
                 />
-              </div>
-            )}
-
-            {isPassProduct && (
-              <div className="space-y-2">
-                <Label>Quantity</Label>
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                  >
-                    <Minus className="h-4 w-4" />
-                  </Button>
-                  <Input
-                    className="w-16 text-center"
-                    value={quantity}
-                    readOnly
-                  />
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => setQuantity((q) => q + 1)}
-                  >
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            )}
-
-            <div className="mt-4 space-y-2 rounded-lg border p-4">
-              <h3 className="font-semibold">Order Summary</h3>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">
-                  {selectedProduct?.name}
-                  {isPassProduct && ` (x${quantity})`}
-                </span>
-                <span className="font-medium">
-                  {totalPrice.toLocaleString()} Ks
-                </span>
-              </div>
-              <div className="flex justify-between font-bold">
-                <span>Total</span>
-                <span>{totalPrice.toLocaleString()} Ks</span>
-              </div>
+              )}
             </div>
-          </div>
 
-          <DialogFooter>
+            <div className="bg-[#F3F4F6] rounded-md p-2.5 h-[45px] flex items-center justify-between text-sm">
+                <span className="text-[#111827]">{selectedProduct?.name}{isPassProduct || is2xProduct ? ` (x${quantity})` : ''}</span>
+                <span className="font-bold text-[#111827]">{finalPrice.toLocaleString()} Ks</span>
+            </div>
+
+            {(isPassProduct || is2xProduct) && (
+              <div className="flex justify-center items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="h-9 w-9"
+                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                >
+                  <Minus className="h-4 w-4" />
+                </Button>
+                <Input
+                  className="w-16 h-9 text-center border-[#D1D5DB] rounded-md"
+                  value={quantity}
+                  readOnly
+                />
+                <Button
+                  variant="outline"
+                  size="icon"
+                   className="h-9 w-9"
+                  onClick={() => setQuantity((q) => q + 1)}
+                >
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </div>
+            )}
+            
+            <div className="bg-[#DBEAFE] rounded-md p-3 h-[45px] flex items-center border-l-4 border-[#3B82F6] text-sm">
+               <Info className="h-4 w-4 mr-2 text-[#3B82F6]" />
+               <span className="text-gray-600">Your Balance:</span>
+               <span className="font-semibold text-gray-800 ml-1">{userProfile?.walletBalance.toLocaleString() ?? 0} Ks</span>
+            </div>
+
+            <div className="flex justify-between font-bold text-lg text-[#111827]">
+              <span>Total</span>
+              <span>{finalPrice.toLocaleString()} Ks</span>
+            </div>
+            
+          </div>
+          <div className="bg-gray-50 px-5 py-3 flex gap-2.5">
             <Button
               variant="outline"
               onClick={() => setSelectedProduct(null)}
               disabled={isPurchasing}
+              className="w-full h-[42px] rounded-md border-[#D1D5DB] bg-white text-[#111827] font-bold text-sm"
             >
               မဝယ်သေးပါ
             </Button>
             <Button
               onClick={handlePurchase}
               disabled={!hasSufficientBalance || isPurchasing}
+              className="w-full h-[42px] rounded-md bg-[#10B981] text-white font-bold text-sm hover:bg-green-600"
             >
               {isPurchasing && (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               )}
               ဝယ်မည်
             </Button>
-          </DialogFooter>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
   );
 }
+
+    
