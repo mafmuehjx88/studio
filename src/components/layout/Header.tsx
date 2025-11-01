@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from 'next/link';
@@ -26,6 +27,13 @@ export default function Header() {
               <span className="sr-only">Notifications</span>
             </Button>
           )}
+        </div>
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+            <h1 className="text-xl font-bold tracking-tight">
+                <span className="bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
+                AT Game HUB
+                </span>
+            </h1>
         </div>
         <WalletBalance />
       </header>

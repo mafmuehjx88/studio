@@ -67,7 +67,7 @@ export default async function Home() {
       </Card>
 
       <div>
-        <h2 className="mb-4 text-2xl font-bold">Games</h2>
+        <h2 className="mb-4 text-center text-2xl font-bold">Games</h2>
         <div className="grid grid-cols-3 gap-4">
           {games.map((game) => (
             <Link href={`/games/${game.id}`} key={game.id}>
