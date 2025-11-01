@@ -30,7 +30,7 @@ export default function Header() {
         </div>
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
             <h1 className="text-xl font-bold tracking-tight">
-                <span className="bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-red-500 to-yellow-500 bg-clip-text text-transparent">
                 AT Game HUB
                 </span>
             </h1>
