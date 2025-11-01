@@ -16,6 +16,7 @@ import {
   LogOut,
   ShieldCheck,
   WalletCards,
+  CheckCircle,
 } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
@@ -39,6 +40,7 @@ const navItems = [
 const adminNavItems = [
     { href: "/admin", icon: ShieldCheck, label: "Admin Panel" },
     { href: "/admin/manual-top-up", icon: WalletCards, label: "Manual Top-Up" },
+    { href: "/admin/top-up-requests", icon: CheckCircle, label: "Top-Up Requests" },
 ]
 
 export function Sidebar({ isOpen, onOpenChange }: SidebarProps) {

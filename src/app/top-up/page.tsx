@@ -9,7 +9,8 @@ import {
   collection,
   serverTimestamp,
 } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { db, storage } from '@/lib/firebase';
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,6 +19,8 @@ import { useToast } from '@/hooks/use-toast';
 import { AlertTriangle, Copy, Loader2, UploadCloud } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { generateOrderId } from '@/lib/utils';
+import { sendTopUpTelegramNotification } from '@/lib/actions';
 
 const paymentAccounts = [
   {
@@ -89,56 +92,40 @@ export default function TopUpPage() {
     }
 
     setIsSubmitting(true);
-    const TELEGRAM_BOT_TOKEN = '7896614937:AAGixVOYkaS7wjDkD4TQJpKlFc2O_GdAENI';
-    const TELEGRAM_CHAT_ID = '-1003118744576';
-    const order_id = Math.random().toString(36).substring(2, 8).toUpperCase();
-    const current_time = new Date().toLocaleString('en-US', {
-      timeZone: 'Asia/Yangon',
-    });
-
-    const caption = `
-💰 New Top-Up Request!
-#${order_id}
-👤 User: ${userProfile.username}
-💵 Amount: ${amount} MMK
-🕒 Time: ${current_time}
-    `;
-
-    const formData = new FormData();
-    formData.append('chat_id', TELEGRAM_CHAT_ID);
-    formData.append('photo', screenshot);
-    formData.append('caption', caption);
-
+    
     try {
-      // 1. Send to Telegram
-      const response = await fetch(
-        `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`,
-        {
-          method: 'POST',
-          body: formData,
-        }
-      );
+      // 1. Upload screenshot to Firebase Storage
+      const requestId = generateOrderId();
+      const storageRef = ref(storage, `top-up-screenshots/${user.uid}/${requestId}-${screenshot.name}`);
+      const uploadResult = await uploadBytes(storageRef, screenshot);
+      const downloadURL = await getDownloadURL(uploadResult.ref);
 
-      if (!response.ok) {
-        throw new Error('Telegram API error');
-      }
-
-      // 2. Add to Firestore
-      await addDoc(collection(db, `users/${user.uid}/orders`), {
-        id: order_id,
+      // 2. Prepare data for Firestore and Telegram
+      const requestData = {
         userId: user.uid,
         username: userProfile.username,
-        type: 'Top-up',
-        itemName: 'Wallet Top-up',
-        price: parseFloat(amount),
-        status: 'Pending',
+        amount: parseFloat(amount),
+        screenshotUrl: downloadURL,
+        status: 'Pending' as const,
         createdAt: serverTimestamp(),
-      });
+      };
+
+       // 3. Add to Firestore collection
+      await addDoc(collection(db, 'topUpRequests'), { id: requestId, ...requestData });
+
+      // 4. Send notification to Telegram
+      const caption = `
+💰 New Top-Up Request!
+#${requestId}
+👤 User: ${userProfile.username}
+💵 Amount: ${amount} MMK
+🕒 Time: ${new Date().toLocaleString('en-US', { timeZone: 'Asia/Yangon' })}
+      `;
+      await sendTopUpTelegramNotification({ caption, photoUrl: downloadURL });
 
       toast({
         title: 'Request Submitted!',
-        description:
-          'Your top-up request has been sent. Please wait for confirmation.',
+        description: 'Your top-up request has been sent. Please wait for confirmation.',
       });
       
       router.push('/');

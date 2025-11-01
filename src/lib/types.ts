@@ -51,7 +51,7 @@ export interface TopUpRequest {
     status: 'Pending' | 'Approved' | 'Rejected';
     createdAt: Timestamp | FieldValue;
     paymentMethod: string;
-    transactionId: string;
+    transactionId: string; // Not used in current form, but good for future
 }
 
 export interface Announcement {
