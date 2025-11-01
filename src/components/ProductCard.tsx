@@ -15,7 +15,7 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
 
   return (
     <Card
-      className="group flex cursor-pointer flex-col overflow-hidden rounded-lg border-transparent bg-card text-white transition-all duration-300 hover:bg-card/80"
+      className="group flex cursor-pointer flex-col overflow-hidden rounded-lg border border-white/20 bg-card text-white transition-all duration-300 hover:border-white/40 hover:bg-card/80"
       onClick={() => onClick(product)}
     >
       <CardContent className="relative flex flex-1 flex-col justify-center p-2 text-center">
