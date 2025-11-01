@@ -23,7 +23,7 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
           မစောင့်ရပါ
         </Badge>
         {is2xProduct && (
-          <Badge className="absolute left-1/2 top-8 z-10 -translate-x-1/2 transform whitespace-nowrap rounded-sm border-none bg-red-600 px-1.5 py-0.5 text-[10px] font-medium text-white">
+          <Badge className="absolute left-1/2 top-1 z-10 -translate-x-1/2 transform whitespace-nowrap rounded-sm border-none bg-red-600 px-1.5 py-0.5 text-[10px] font-medium text-white">
             First Recharge
           </Badge>
         )}
