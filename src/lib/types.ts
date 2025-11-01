@@ -28,16 +28,17 @@ export interface Order {
     id: string;
     userId: string;
     username: string;
-    gameId: string;
-    gameName: string;
-    itemId: string;
+    gameId?: string;
+    gameName?: string;
+    itemId?: string;
     itemName: string;
     price: number;
-    gameUserId: string;
+    gameUserId?: string;
     gameServerId?: string;
-    paymentMethod: string;
+    paymentMethod?: string;
     status: 'Pending' | 'Completed' | 'Failed';
     createdAt: Timestamp;
+    type: 'Purchase' | 'Top-up'; // Added to distinguish order types
 }
 
 export interface TopUpRequest {
