@@ -2,19 +2,18 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, ClipboardList, Wallet, User, Shield } from "lucide-react";
+import { Home, ClipboardList, User, Shield, Wallet } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 
 const navItems = [
   { href: "/", icon: Home, label: "Home" },
   { href: "/orders", icon: ClipboardList, label: "Orders" },
-  { href: "/wallet", icon: Wallet, label: "Wallet" },
   { href: "/profile", icon: User, label: "Profile" },
 ];
 
 const adminNavItems = [
-    ...navItems.slice(0,1),
+    { href: "/", icon: Home, label: "Home" },
     { href: "/admin/top-ups", icon: ClipboardList, label: "Requests" },
     { href: "/admin/manual-top-up", icon: Wallet, label: "Top-up" },
     { href: "/admin", icon: Shield, label: "Admin" },
