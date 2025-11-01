@@ -2,7 +2,72 @@
 "use server";
 
 import { z } from "zod";
-// Removed firebase-admin imports as they are no longer needed and caused issues.
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import { products as staticProducts, games as staticGames } from "@/lib/data";
+import type { PlaceholderImage } from "@/lib/types";
+
+type ImagesMap = Record<string, PlaceholderImage>;
+
+
+export async function getOrCreatePlaceholderImages(): Promise<ImagesMap> {
+  const docRef = doc(db, 'settings', 'placeholderImages');
+  try {
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists() && docSnap.data().images) {
+      return docSnap.data().images;
+    } else {
+      // Document or images field doesn't exist, create it from static data
+      console.log("No image data found in Firestore. Initializing from static data.");
+      const initialImages: ImagesMap = {};
+      
+      // From products
+      staticProducts.forEach(product => {
+        if (!initialImages[product.image]) {
+          initialImages[product.image] = {
+            imageUrl: `https://picsum.photos/seed/${product.image}/200/200`,
+            description: `Image for ${product.name}`,
+            imageHint: product.category,
+          };
+        }
+      });
+      
+      // From games
+      staticGames.forEach(game => {
+          if (!initialImages[game.image]) {
+            initialImages[game.image] = {
+                imageUrl: `https://picsum.photos/seed/${game.image}/600/300`,
+                description: `Banner for ${game.name}`,
+                imageHint: `game ${game.name}`
+            }
+          }
+      });
+      
+      // Add other common images
+      const commonImages = ['logo', 'banner', 'default-avatar'];
+      commonImages.forEach(imgKey => {
+           if (!initialImages[imgKey]) {
+            initialImages[imgKey] = {
+                imageUrl: `https://picsum.photos/seed/${imgKey}/400/400`,
+                description: `${imgKey.replace('-', ' ')} image`,
+                imageHint: imgKey
+            }
+          }
+      });
+
+      // Save this initial structure to Firestore so it's there for next time
+      await setDoc(docRef, { images: initialImages }, { merge: true });
+      console.log("Initialized and saved image data to Firestore.");
+      
+      return initialImages;
+    }
+  } catch (err) {
+    console.error("Error in getOrCreatePlaceholderImages:", err);
+    // In case of error, return an empty map to prevent crashes
+    return {};
+  }
+}
+
 
 export async function sendTelegramNotification(message: string) {
   const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || "7896614937:AAGixVOYkaS7wjDkD4TQJpKlFc2O_GdAENI";
