@@ -37,7 +37,7 @@ export const products: Product[] = [
 
 export const staticImages = {
     'banner': {
-        imageUrl: `https://picsum.photos/seed/banner/1200/400`,
+        imageUrl: `https://i.ibb.co/rGbVtRFm/IMG-20251101-154555-872.jpg`,
         description: `Banner for the app`,
         imageHint: `game collage`
     },
