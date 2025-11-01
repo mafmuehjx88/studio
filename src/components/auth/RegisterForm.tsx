@@ -21,7 +21,7 @@ import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   username: z.string()
-    .min(4, "Username must be at least 4 characters.")
+    .min(8, "Username must be at least 8 characters.")
     .regex(/^(?=(?:[^a-zA-Z]*[a-zA-Z]){4,})(?=(?:[^\d]*\d){4,}).*$/, "Username must contain at least 4 letters and 4 numbers"),
   email: z.string().email("Invalid email address."),
   password: z.string().min(6, "Password must be at least 6 characters."),
