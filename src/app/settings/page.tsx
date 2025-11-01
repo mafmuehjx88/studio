@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/contexts/AuthContext';
 import { ChevronRight, Shield, Bell, Lock } from 'lucide-react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
@@ -13,22 +14,22 @@ const settingsOptions = [
     icon: Lock,
     title: 'Change Password',
     description: 'Update your account password.',
-    action: () => {},
+    href: '#',
     disabled: true,
   },
   {
     icon: Bell,
     title: 'Notification Preferences',
     description: 'Manage how you receive notifications.',
-    action: () => {},
+    href: '#',
     disabled: true,
   },
     {
     icon: Shield,
     title: 'Privacy Policy',
     description: 'Read our privacy policy.',
-    action: () => {},
-    disabled: true,
+    href: '/privacy',
+    disabled: false,
   },
 ];
 
@@ -62,17 +63,19 @@ export default function SettingsPage() {
                 key={option.title}
                 variant="ghost"
                 className="flex h-auto w-full items-center justify-between p-4 text-left"
-                onClick={option.action}
                 disabled={option.disabled}
+                asChild={!option.disabled}
               >
-                <div className="flex items-center gap-4">
-                  <option.icon className="h-6 w-6 text-muted-foreground" />
-                  <div className="flex flex-col">
-                    <span className="font-semibold text-foreground">{option.title}</span>
-                    <span className="text-sm text-muted-foreground">{option.description}</span>
+                <Link href={option.disabled ? '#' : option.href}>
+                  <div className="flex items-center gap-4">
+                    <option.icon className="h-6 w-6 text-muted-foreground" />
+                    <div className="flex flex-col">
+                      <span className="font-semibold text-foreground">{option.title}</span>
+                      <span className="text-sm text-muted-foreground">{option.description}</span>
+                    </div>
                   </div>
-                </div>
-                <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                  <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                </Link>
               </Button>
             ))}
           </div>
