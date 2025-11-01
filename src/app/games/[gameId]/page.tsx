@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -65,7 +66,7 @@ export default function GameItemsPage() {
     setDataLoading(false);
   }, [gameId]);
 
-  const isPassProduct = selectedProduct?.name.toLowerCase().includes('pass');
+  const isPassProduct = selectedProduct?.category === 'pass';
   const is2xProduct = selectedProduct?.category === '2x';
 
   const finalPrice = selectedProduct
@@ -308,6 +309,10 @@ Order Time: ${new Date().toLocaleString('en-US', {
         onOpenChange={(isOpen) => !isOpen && setSelectedProduct(null)}
       >
         <DialogContent className="w-[90vw] max-w-sm rounded-xl p-0 shadow-xl">
+           <DialogHeader className="sr-only">
+            <DialogTitle>Purchase Item</DialogTitle>
+            <DialogDescription>Complete your purchase</DialogDescription>
+          </DialogHeader>
           <div className="p-5 space-y-4">
             {!hasSufficientBalance && (
               <div className="bg-[#FEE2E2] rounded-lg p-3 border-l-4 border-[#DC2626] text-sm text-[#B91C1C]">
@@ -422,3 +427,5 @@ Order Time: ${new Date().toLocaleString('en-US', {
     </div>
   );
 }
+
+    
