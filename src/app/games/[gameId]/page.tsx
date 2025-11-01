@@ -325,24 +325,34 @@ Order Time: ${new Date().toLocaleString('en-US', {
             )}
             
             <h3 className="font-bold text-base text-[#111827]">Account Info</h3>
-            
-            <div className="flex gap-2.5">
-              <Input
-                className="h-10 border-[#E5E7EB] rounded-md"
-                value={userGameId}
-                onChange={(e) => setUserGameId(e.target.value)}
-                placeholder="Game ID"
-                required
-              />
-              {game.needsServerId && (
+
+            <div className="space-y-2.5">
+               <Input
+                  className="h-10 border-[#E5E7EB] rounded-md bg-gray-100"
+                  value={userProfile?.username || ''}
+                  readOnly
+                  disabled
+                  placeholder="Username"
+                />
+              <div className="flex gap-2.5">
                 <Input
                   className="h-10 border-[#E5E7EB] rounded-md"
-                  value={userServerId}
-                  onChange={(e) => setUserServerId(e.target.value)}
-                  placeholder="Server ID"
+                  value={userGameId}
+                  onChange={(e) => setUserGameId(e.target.value)}
+                  placeholder="Game ID"
+                  required
                 />
-              )}
+                {game.needsServerId && (
+                  <Input
+                    className="h-10 border-[#E5E7EB] rounded-md"
+                    value={userServerId}
+                    onChange={(e) => setUserServerId(e.target.value)}
+                    placeholder="Server ID"
+                  />
+                )}
+              </div>
             </div>
+
 
             <div className="bg-[#F3F4F6] rounded-md p-2.5 h-[45px] flex items-center justify-between text-sm">
                 <span className="text-[#111827]">{selectedProduct?.name}{isPassProduct || is2xProduct ? ` (x${quantity})` : ''}</span>
@@ -412,5 +422,3 @@ Order Time: ${new Date().toLocaleString('en-US', {
     </div>
   );
 }
-
-    
