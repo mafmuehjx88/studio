@@ -18,6 +18,7 @@ import { loginUser } from "@/lib/actions";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { FirebaseError } from "firebase/app";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address." }),
@@ -43,9 +44,14 @@ export default function LoginForm() {
     const result = await loginUser(values);
     
     if (result.error) {
+      let description = result.error;
+      if (result.error.includes("auth/invalid-credential") || result.error.includes("auth/user-not-found")) {
+        description = "Incorrect email or password. Please try again or register a new account.";
+      }
+      
       toast({
         title: "Login Failed",
-        description: result.error,
+        description: description,
         variant: "destructive",
       });
       setIsSubmitting(false);
