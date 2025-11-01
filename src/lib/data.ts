@@ -1,14 +1,14 @@
 import type { Game, Product } from './types';
 
 export const games: Game[] = [
-  { id: 'mlbb', name: 'MLBB', image: 'https://i.ibb.co/R47v6TDX/8255033248d018b6c5f3d460b2deec16.jpg', bannerImage: 'https://i.ibb.co/zHJ8MzMk/IMG-20251101-154952-589.jpg', needsServerId: true },
+  { id: 'mlbb', name: 'MLBB', image: 'https://i.ibb.co/R47v6TDX/8255033248d018b6c5f3d460b2deec16.jpg', bannerImage: 'https://i.ibb.co/NnNMr8gq/New-Project-85-E9-F449-A.png', needsServerId: true },
   { id: 'pubg', name: 'PUBG', image: 'https://i.ibb.co/XMTZkvX/new3589-516a74d6d701c86c007f668d7cf2891a.jpg', needsServerId: false },
   { id: 'hok', name: 'HOK', image: 'https://i.ibb.co/PZj5t6PX/new3418-1cff9a1ebb8677d02e5c0d96199b5384.jpg', needsServerId: false },
 ];
 
 export const products: Product[] = [
   // Mobile Legends - New Data
-  { id: 'weekly-pass', gameId: 'mlbb', name: 'Weekly Pass', category: 'weekly', price: 5850, image: 'https://picsum.photos/seed/weekly-pass/200/200' },
+  { id: 'weekly-pass', gameId: 'mlbb', name: 'Weekly Pass', category: 'weekly', price: 5850, image: 'https://i.ibb.co/NnNMr8gq/New-Project-85-E9-F449-A.png' },
   { id: 'twilight-pass', gameId: 'mlbb', name: 'Twilight Pass', category: 'weekly', price: 32900, image: 'https://picsum.photos/seed/twilight-pass/200/200' },
   { id: '2x-50', gameId: 'mlbb', name: '50+55💎', category: '2x', price: 2400, image: 'https://picsum.photos/seed/2x-50/200/200' },
   { id: '2x-100', gameId: 'mlbb', name: '100+115💎', category: '2x', price: 4900, image: 'https://picsum.photos/seed/2x-100/200/200' },
