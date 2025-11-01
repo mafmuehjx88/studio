@@ -332,6 +332,12 @@ Order Time: ${new Date().toLocaleString('en-US', {
             <h3 className="font-bold text-base text-[#111827]">Account Info</h3>
 
             <div className="space-y-2.5">
+               <Input
+                  className="h-10 rounded-md border-[#E5E7EB] bg-gray-100"
+                  value={userProfile?.username || ''}
+                  readOnly
+                  disabled
+                />
               <div className="flex gap-2.5">
                 <Input
                   className="h-10 rounded-md border-[#E5E7EB]"
@@ -388,6 +394,10 @@ Order Time: ${new Date().toLocaleString('en-US', {
                <span className="text-gray-600">Your Balance:</span>
                <span className="ml-1 font-semibold text-gray-800">{userProfile?.walletBalance.toLocaleString() ?? 0} Ks</span>
             </div>
+
+            <p className="text-center text-sm font-semibold text-green-600">
+                AT Game Hubတွင် ဝယ်ယူအားပေးသည့် Customersများအားလုံးကို ကျေးဇူးတင်ပါတယ် ခင်ဗျာ။
+            </p>
 
             <div className="flex justify-between text-lg font-bold text-[#111827]">
               <span>Total</span>
