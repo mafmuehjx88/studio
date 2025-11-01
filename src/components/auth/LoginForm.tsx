@@ -39,32 +39,41 @@ export default function LoginForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
-    const result = await loginUser(values);
-    
-    if (result.error) {
-      let description = "An unexpected error occurred. Please try again.";
-      if (typeof result.error === 'string') {
-        if (result.error.includes("auth/invalid-credential") || result.error.includes("auth/user-not-found") || result.error.includes("auth/wrong-password")) {
-          description = "Incorrect email or password. Please try again.";
-        } else if (result.error.includes("auth/user-not-found")) {
-          description = "Account does not exist. Please register a new account.";
-        }
-      }
+    try {
+      const result = await loginUser(values);
       
-      toast({
-        title: "Login Failed",
-        description: description,
-        variant: "destructive",
-      });
-      setIsSubmitting(false);
-    } else {
-      toast({
-        title: "Login Successful",
-        description: "Welcome back! Redirecting...",
-      });
-      // The middleware will eventually redirect, but we can make the UX faster
-      // by navigating immediately on success.
-      router.replace('/profile');
+      if (result.error) {
+        let description = "An unexpected error occurred. Please try again.";
+        if (typeof result.error === 'string') {
+          if (result.error.includes("auth/invalid-credential") || result.error.includes("auth/user-not-found") || result.error.includes("auth/wrong-password")) {
+            description = "Incorrect email or password. Please try again.";
+          } else if (result.error.includes("auth/user-not-found")) {
+            description = "Account does not exist. Please register a new account.";
+          }
+        }
+        
+        toast({
+          title: "Login Failed",
+          description: description,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Login Successful",
+          description: "Welcome back! Redirecting...",
+        });
+        // The middleware will eventually redirect, but we can make the UX faster
+        // by navigating immediately on success.
+        router.replace('/profile');
+      }
+    } catch (error) {
+        toast({
+            title: "Login Failed",
+            description: "An unexpected network error occurred.",
+            variant: "destructive",
+        });
+    } finally {
+        setIsSubmitting(false);
     }
   }
 
