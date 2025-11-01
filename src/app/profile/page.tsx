@@ -4,7 +4,7 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { LogOut, Settings, Wallet, ShoppingCart } from "lucide-react";
+import { LogOut, Settings } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { auth, db } from "@/lib/firebase";
 import { signOut } from "firebase/auth";
