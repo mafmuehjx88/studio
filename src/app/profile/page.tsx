@@ -16,8 +16,6 @@ export default function ProfilePage() {
 
   const handleLogout = async () => {
     await logoutUser();
-    // After logout, the middleware will automatically handle redirecting to /login.
-    // We can also push it here to make it feel faster.
     router.replace("/login");
   };
 

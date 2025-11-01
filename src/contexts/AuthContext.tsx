@@ -41,7 +41,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       } else {
         // Destroy the cookie on logout
         destroyCookie(null, AUTH_COOKIE_NAME, { path: '/' });
-        setProfileLoading(false);
+        setUserProfile(null);
+        setProfileLoading(false); // Explicitly set profile loading to false on logout
+        setIsAdmin(false);
       }
     });
 
@@ -49,12 +51,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    let unsubscribeProfile: () => void = () => {};
     if (user) {
       setProfileLoading(true);
       setIsAdmin(user.email === 'ohshif5@gmail.com');
       const userDocRef = doc(db, 'users', user.uid);
-      unsubscribeProfile = onSnapshot(userDocRef, (docSnap) => {
+      const unsubscribeProfile = onSnapshot(userDocRef, (docSnap) => {
         if (docSnap.exists()) {
           setUserProfile({ uid: docSnap.id, ...docSnap.data() } as UserProfile);
         } else {
@@ -66,15 +67,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUserProfile(null);
         setProfileLoading(false);
       });
-    } else {
-      setUserProfile(null);
-      setIsAdmin(false);
-      setProfileLoading(false);
+      return () => unsubscribeProfile();
     }
-    return () => unsubscribeProfile();
   }, [user]);
 
-  const loading = authLoading || (user && profileLoading);
+  // Combined loading state. True if either auth state is loading,
+  // or if we have a user but their profile is still loading.
+  const loading = authLoading || (user != null && profileLoading);
 
   return (
     <AuthContext.Provider value={{ user, userProfile, loading, isAdmin }}>
