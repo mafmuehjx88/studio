@@ -6,8 +6,9 @@ import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 import { doc, onSnapshot, DocumentData } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
 import type { UserProfile } from '@/lib/types';
-import { setCookie, destroyCookie } from 'nookies';
+import { setCookie, destroyCookie, parseCookies } from 'nookies';
 import { usePathname, useRouter } from 'next/navigation';
+import { FirebaseErrorListener } from '@/components/FirebaseErrorListener';
 
 const AUTH_COOKIE_NAME = 'firebase-auth-token';
 
@@ -32,26 +33,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       setLoading(true);
       if (firebaseUser) {
-        // User is signed in.
         setUser(firebaseUser);
         const token = await firebaseUser.getIdToken();
         setCookie(null, AUTH_COOKIE_NAME, token, { maxAge: 30 * 24 * 60 * 60, path: '/' });
         setIsAdmin(firebaseUser.email === 'ohshif5@gmail.com');
 
         const userDocRef = doc(db, 'users', firebaseUser.uid);
-        const unsubscribeProfile = onSnapshot(userDocRef, (docSnap) => {
-          if (docSnap.exists()) {
-            setUserProfile({ uid: docSnap.id, ...docSnap.data() } as UserProfile);
-          } else {
+        const unsubscribeProfile = onSnapshot(userDocRef, 
+          (docSnap) => {
+            if (docSnap.exists()) {
+              setUserProfile({ uid: docSnap.id, ...docSnap.data() } as UserProfile);
+            } else {
+              setUserProfile(null);
+            }
+            setLoading(false); // Profile loaded or not found, stop loading
+          }, 
+          (error) => {
+            console.error("Error listening to user profile:", error);
             setUserProfile(null);
+            setLoading(false); // Stop loading on error
           }
-          // This is the definitive point where auth flow is complete
-          setLoading(false);
-        }, (error) => {
-          console.error("Error listening to user profile:", error);
-          setUserProfile(null);
-          setLoading(false);
-        });
+        );
         
         return () => unsubscribeProfile();
       } else {
@@ -67,14 +69,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => unsubscribe();
   }, []);
 
-  // Effect to handle redirection after authentication state is resolved.
   useEffect(() => {
     if (loading) {
-      return; // Do nothing while loading
+      return; 
     }
     const isAuthPage = pathname === '/login' || pathname === '/register';
     if (user && isAuthPage) {
-        // User is logged in and on an auth page, redirect to profile.
         router.replace('/profile');
     }
   }, [user, loading, pathname, router]);
@@ -83,7 +83,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AuthContext.Provider value={value}>
-      {children}
+      <FirebaseErrorListener>
+        {children}
+      </FirebaseErrorListener>
     </AuthContext.Provider>
   );
 };

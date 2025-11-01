@@ -15,9 +15,15 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { loginUser } from "@/lib/actions";
+import { useRouter } from "next/navigation";
+import { errorEmitter } from "@/firebase/error-emitter";
+import { FirestorePermissionError } from "@/firebase/errors";
+
 
 export default function RegisterPage() {
   const { toast } = useToast();
+  const router = useRouter();
   
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -83,21 +89,34 @@ export default function RegisterPage() {
       );
       const user = userCredential.user;
 
-      await setDoc(doc(db, "users", user.uid), {
+      const userProfileData = {
         uid: user.uid,
         username: username,
         email: user.email,
         walletBalance: 0,
         createdAt: serverTimestamp(),
-      });
+      };
       
-      toast({
-        title: "Registration Successful",
-        description: "Your account has been created. Redirecting...",
-      });
-      
-      // On success, the AuthContext will detect the new auth state and
-      // redirect to the profile page automatically. No need for router.replace here.
+      const userDocRef = doc(db, "users", user.uid);
+
+      setDoc(userDocRef, userProfileData)
+        .then(async () => {
+            await loginUser({ email, password });
+            toast({
+              title: "Registration Successful",
+              description: "Your account has been created. Redirecting...",
+            });
+            router.replace('/profile');
+        })
+        .catch(async (serverError) => {
+          const permissionError = new FirestorePermissionError({
+            path: userDocRef.path,
+            operation: 'create',
+            requestResourceData: userProfileData,
+          });
+          errorEmitter.emit('permission-error', permissionError);
+          // We don't toast here because the listener will show an overlay
+        });
       
     } catch (error: any) {
       let description = "An unexpected error occurred.";
@@ -110,12 +129,11 @@ export default function RegisterPage() {
         variant: "destructive",
       });
     } finally {
-      setIsRegistering(false);
+      // We don't set isRegistering to false here because if setDoc is successful,
+      // we will be redirecting. If it fails, the error overlay will appear.
     }
   };
   
-  // The middleware prevents this page from being shown if logged in.
-  // No need for a top-level loading check here.
   return (
     <div className="flex min-h-full flex-col items-center justify-center">
       <div className="w-full max-w-sm space-y-6">
