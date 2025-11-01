@@ -1,7 +1,6 @@
 'use client';
 
 import { Product } from '@/lib/data';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import Image from 'next/image';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
@@ -12,9 +11,7 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, onClick }: ProductCardProps) {
-  // Using a generic placeholder for now
-  const productImage = PlaceHolderImages.find(img => img.id === 'default-avatar');
-  const isSpecial = product.category === '2x Diamonds';
+  const isSpecial = product.category === '2x';
 
   return (
     <Card
@@ -22,9 +19,9 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
       onClick={() => onClick(product)}
     >
       <CardContent className="relative p-0">
-        {productImage && (
+        {product.image && (
           <Image
-            src={productImage.imageUrl}
+            src={product.image}
             alt={product.name}
             width={200}
             height={200}

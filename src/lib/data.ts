@@ -11,6 +11,7 @@ export interface Product {
   name: string;
   category: string;
   price: number;
+  image: string;
 }
 
 export const games: Game[] = [
@@ -20,36 +21,30 @@ export const games: Game[] = [
 ];
 
 export const products: Product[] = [
-  // Mobile Legends - Updated Price List
-  { id: 'ml-wp', gameId: 'mlbb', name: 'Weekly Pass', category: 'Weekly Pass', price: 5850 },
-  { id: 'ml-tp', gameId: 'mlbb', name: 'Twilight Pass', category: 'Twilight Pass', price: 32900 },
-  { id: 'ml-2x-50', gameId: 'mlbb', name: '50 (2x50) 💎', category: '2x Diamonds', price: 3400 },
-  { id: 'ml-2x-150', gameId: 'mlbb', name: '150 (2x150) 💎', category: '2x Diamonds', price: 10200 },
-  { id: 'ml-2x-250', gameId: 'mlbb', name: '250 (2x250) 💎', category: '2x Diamonds', price: 17000 },
-  { id: 'ml-2x-500', gameId: 'mlbb', name: '500 (2x500) 💎', category: '2x Diamonds', price: 34000 },
-  { id: 'ml-d-11', gameId: 'mlbb', name: '11 💎', category: 'Other Diamonds', price: 870 },
-  { id: 'ml-d-22', gameId: 'mlbb', name: '22 💎', category: 'Other Diamonds', price: 1740 },
-  { id: 'ml-d-33', gameId: 'mlbb', name: '33 💎', category: 'Other Diamonds', price: 2610 },
-  { id: 'ml-d-44', gameId: 'mlbb', name: '44 💎', category: 'Other Diamonds', price: 3480 },
-  { id: 'ml-d-86', gameId: 'mlbb', name: '86 💎', category: 'Other Diamonds', price: 4900 },
-  { id: 'ml-d-172', gameId: 'mlbb', name: '172 💎', category: 'Other Diamonds', price: 9800 },
-  { id: 'ml-d-257', gameId: 'mlbb', name: '257 💎', category: 'Other Diamonds', price: 14000 },
-  { id: 'ml-d-343', gameId: 'mlbb', name: '343 💎', category: 'Other Diamonds', price: 18800 },
-  { id: 'ml-d-429', gameId: 'mlbb', name: '429 💎', category: 'Other Diamonds', price: 23600 },
-  { id: 'ml-d-514', gameId: 'mlbb', name: '514 💎', category: 'Other Diamonds', price: 28500 },
-  { id: 'ml-d-600', gameId: 'mlbb', name: '600 💎', category: 'Other Diamonds', price: 32888 },
-  { id: 'ml-d-706', gameId: 'mlbb', name: '706 💎', category: 'Other Diamonds', price: 37700 },
-  { id: 'ml-d-963', gameId: 'mlbb', name: '963 💎', category: 'Other Diamonds', price: 51500 },
-  { id: 'ml-d-1049', gameId: 'mlbb', name: '1049 💎', category: 'Other Diamonds', price: 57268 },
+  // Mobile Legends - New Data
+  { id: 'weekly-pass', gameId: 'mlbb', name: 'Weekly Pass', category: 'weekly', price: 5850, image: 'https://i.ibb.co/XF3C29w/OIP.jpg' },
+  { id: 'twilight-pass', gameId: 'mlbb', name: 'Twilight Pass', category: 'weekly', price: 32900, image: 'https://i.ibb.co/XF3C29w/OIP.jpg' },
+  { id: '2x-50', gameId: 'mlbb', name: '50+55💎', category: '2x', price: 2400, image: 'https://i.ibb.co/FmJ4c07/a6f698be9a15c30b252069b17c2f6645.jpg' },
+  { id: '2x-100', gameId: 'mlbb', name: '100+115💎', category: '2x', price: 4900, image: 'https://i.ibb.co/FmJ4c07/a6f698be9a15c30b252069b17c2f6645.jpg' },
+  { id: 'dm-12', gameId: 'mlbb', name: '12💎', category: 'diamonds', price: 500, image: 'https://i.ibb.co/FmJ4c07/a6f698be9a15c30b252069b17c2f6645.jpg' },
+  { id: 'dm-28', gameId: 'mlbb', name: '28💎', category: 'diamonds', price: 1000, image: 'https://i.ibb.co/FmJ4c07/a6f698be9a15c30b252069b17c2f6645.jpg' },
+  { id: 'dm-44', gameId: 'mlbb', name: '44💎', category: 'diamonds', price: 1500, image: 'https://i.ibb.co/FmJ4c07/a6f698be9a15c30b252069b17c2f6645.jpg' },
+  { id: 'dm-59', gameId: 'mlbb', name: '59💎', category: 'diamonds', price: 2000, image: 'https://i.ibb.co/FmJ4c07/a6f698be9a15c30b252069b17c2f6645.jpg' },
+  { id: 'dm-86', gameId: 'mlbb', name: '86💎', category: 'diamonds', price: 2900, image: 'https://i.ibb.co/FmJ4c07/a6f698be9a15c30b252069b17c2f6645.jpg' },
+  { id: 'dm-172', gameId: 'mlbb', name: '172💎', category: 'diamonds', price: 5700, image: 'https://i.ibb.co/FmJ4c07/a6f698be9a15c30b252069b17c2f6645.jpg' },
+  { id: 'dm-257', gameId: 'mlbb', name: '257💎', category: 'diamonds', price: 8600, image: 'https://i.ibb.co/FmJ4c07/a6f698be9a15c30b252069b17c2f6645.jpg' },
+  { id: 'dm-344', gameId: 'mlbb', name: '344💎', category: 'diamonds', price: 11400, image: 'https://i.ibb.co/FmJ4c07/a6f698be9a15c30b252069b17c2f6645.jpg' },
+  { id: 'dm-429', gameId: 'mlbb', name: '429💎', category: 'diamonds', price: 14300, image: 'https://i.ibb.co/FmJ4c07/a6f698be9a15c30b252069b17c2f6645.jpg' },
+  { id: 'dm-514', gameId: 'mlbb', name: '514💎', category: 'diamonds', price: 17200, image: 'https://i.ibb.co/FmJ4c07/a6f698be9a15c30b252069b17c2f6645.jpg' },
 
   // PUBG Mobile
-  { id: 'pubg-600uc', gameId: 'pubg', name: '600 UC', category: 'UC', price: 15000 },
-  { id: 'pubg-1800uc', gameId: 'pubg', name: '1800 UC', category: 'UC', price: 45000 },
-  { id: 'pubg-3850uc', gameId: 'pubg', name: '3850 UC', category: 'UC', price: 90000 },
+  { id: 'pubg-600uc', gameId: 'pubg', name: '600 UC', category: 'UC', price: 15000, image: '' },
+  { id: 'pubg-1800uc', gameId: 'pubg', name: '1800 UC', category: 'UC', price: 45000, image: '' },
+  { id: 'pubg-3850uc', gameId: 'pubg', name: '3850 UC', category: 'UC', price: 90000, image: '' },
 
   // Honor of Kings
-  { id: 'hok-weekly', gameId: 'hok', name: 'Weekly Pass', category: 'Weekly Passes', price: 3000 },
-  { id: 'hok-monthly', gameId: 'hok', name: 'Monthly Card', category: 'Weekly Passes', price: 10000 },
-  { id: 'hok-500t', gameId: 'hok', name: '500 Tokens', category: 'Tokens', price: 10000 },
-  { id: 'hok-1000t', gameId: 'hok', name: '1000 Tokens', category: 'Tokens', price: 20000 },
+  { id: 'hok-weekly', gameId: 'hok', name: 'Weekly Pass', category: 'Weekly Passes', price: 3000, image: '' },
+  { id: 'hok-monthly', gameId: 'hok', name: 'Monthly Card', category: 'Weekly Passes', price: 10000, image: '' },
+  { id: 'hok-500t', gameId: 'hok', name: '500 Tokens', category: 'Tokens', price: 10000, image: '' },
+  { id: 'hok-1000t', gameId: 'hok', name: '1000 Tokens', category: 'Tokens', price: 20000, image: '' },
 ];

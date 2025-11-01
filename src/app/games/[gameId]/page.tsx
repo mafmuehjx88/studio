@@ -60,7 +60,8 @@ export default function GameItemsPage() {
 
   const isPassProduct =
     selectedProduct?.category.toLowerCase().includes('pass') ||
-    selectedProduct?.category.toLowerCase().includes('card');
+    selectedProduct?.category.toLowerCase().includes('card') ||
+    selectedProduct?.category.toLowerCase().includes('weekly');
 
   const totalPrice = selectedProduct
     ? isPassProduct
@@ -182,17 +183,17 @@ Order Time: ${new Date().toLocaleString('en-US', {
           <>
             <ProductGrid
               title="Passes"
-              products={products.filter((p) => p.category.toLowerCase().includes('pass'))}
+              products={products.filter((p) => p.category === 'weekly')}
               onProductClick={handleProductClick}
             />
             <ProductGrid
-              title="2x Diamonds"
-              products={products.filter((p) => p.category === '2x Diamonds')}
+              title="First Recharge Bonus"
+              products={products.filter((p) => p.category === '2x')}
               onProductClick={handleProductClick}
             />
              <ProductGrid
-              title="Other Diamonds"
-              products={products.filter((p) => p.category === 'Other Diamonds')}
+              title="Diamonds"
+              products={products.filter((p) => p.category === 'diamonds')}
               onProductClick={handleProductClick}
             />
           </>
