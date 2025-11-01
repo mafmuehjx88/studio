@@ -10,11 +10,14 @@ service cloud.firestore {
       allow read, update: if request.auth.uid == userId || isAdmin();
       // Allow user creation if the user is creating their own document
       allow create: if request.auth.uid == userId;
+      // Allow admin to list all users
+      allow list: if isAdmin();
     }
     
     match /users/{userId}/orders/{orderId} {
       allow read, create: if request.auth.uid == userId;
-      // Admin access via collection group query
+      // Allow admin to update any order
+      allow update: if isAdmin();
     }
     
     match /topUpRequests/{requestId} {
@@ -39,5 +42,3 @@ service cloud.firestore {
     }
   }
 }
-
-    
