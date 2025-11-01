@@ -12,6 +12,7 @@ export interface Game {
   id: string;
   name: string;
   image: string; // This is now a direct URL
+  bannerImage?: string; // Optional banner for the game page
   needsServerId: boolean;
 }
 

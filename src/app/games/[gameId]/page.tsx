@@ -271,9 +271,9 @@ Order Time: ${new Date().toLocaleString('en-US', {
   
   return (
     <div className="space-y-6">
-      {game.image && (
+      {(game.bannerImage || game.image) && (
         <Image
-          src={game.image}
+          src={game.bannerImage || game.image}
           alt={game.name}
           width={600}
           height={300}
