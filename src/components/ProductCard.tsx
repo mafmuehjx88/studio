@@ -34,8 +34,8 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
         {isSpecial && (
             <Badge className="absolute left-1 top-1 bg-green-500 text-white">First Recharge</Badge>
         )}
-        <div className="p-2 text-center">
-            <p className="truncate text-xs font-bold">{product.name}</p>
+        <div className="p-2 text-center min-h-[56px] flex flex-col justify-center">
+            <p className="text-xs font-bold whitespace-normal">{product.name}</p>
             <p className="text-xs font-bold text-primary">{product.price.toLocaleString()} Ks</p>
         </div>
       </CardContent>
