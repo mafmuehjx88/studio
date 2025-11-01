@@ -17,7 +17,6 @@ import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 export default function RegisterPage() {
-  const router = useRouter();
   const { toast } = useToast();
   const auth = useAuthInstance();
   const db = useFirestoreInstance();
@@ -99,9 +98,8 @@ export default function RegisterPage() {
         description: "Your account has been created. Redirecting...",
       });
       
-      // On success, the middleware will detect the new auth state on the next navigation
-      // and redirect to the profile page automatically.
-      router.replace('/profile');
+      // On success, the AuthContext will detect the new auth state and
+      // redirect to the profile page automatically. No need for router.replace here.
       
     } catch (error: any) {
       let description = "An unexpected error occurred.";

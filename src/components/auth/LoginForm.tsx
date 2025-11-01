@@ -26,7 +26,6 @@ const formSchema = z.object({
 
 export default function LoginForm() {
   const { toast } = useToast();
-  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -62,7 +61,7 @@ export default function LoginForm() {
           title: "Login Successful",
           description: "Welcome back! Redirecting...",
         });
-        // The middleware will handle the redirect. No need for router.replace here.
+        // No more router.replace! The AuthContext will handle the redirect.
       }
     } catch (error) {
         toast({

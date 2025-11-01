@@ -5,7 +5,8 @@ import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 import { doc, onSnapshot, DocumentData } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
 import type { UserProfile } from '@/lib/types';
-import { setCookie, destroyCookie, parseCookies } from 'nookies';
+import { setCookie, destroyCookie } from 'nookies';
+import { usePathname, useRouter } from 'next/navigation';
 
 const AUTH_COOKIE_NAME = 'firebase-auth-token';
 
@@ -23,51 +24,59 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
-    const unsubscribeAuth = onAuthStateChanged(auth, async (firebaseUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      setLoading(true);
       if (firebaseUser) {
         // User is signed in.
         setUser(firebaseUser);
-        
-        // Asynchronously get the token and set the cookie.
-        firebaseUser.getIdToken().then(token => {
-          setCookie(null, AUTH_COOKIE_NAME, token, { maxAge: 30 * 24 * 60 * 60, path: '/' });
-        });
-        
+        const token = await firebaseUser.getIdToken();
+        setCookie(null, AUTH_COOKIE_NAME, token, { maxAge: 30 * 24 * 60 * 60, path: '/' });
         setIsAdmin(firebaseUser.email === 'ohshif5@gmail.com');
 
-        // Listen for real-time profile updates.
         const userDocRef = doc(db, 'users', firebaseUser.uid);
         const unsubscribeProfile = onSnapshot(userDocRef, (docSnap) => {
           if (docSnap.exists()) {
             setUserProfile({ uid: docSnap.id, ...docSnap.data() } as UserProfile);
           } else {
-            // This case can happen briefly after registration before the doc is created.
             setUserProfile(null);
           }
-          // Once we get the first profile snapshot (or lack thereof), auth flow is complete.
+          // This is the definitive point where auth flow is complete
           setLoading(false);
         }, (error) => {
           console.error("Error listening to user profile:", error);
           setUserProfile(null);
-          setLoading(false); // Also stop loading on error.
+          setLoading(false);
         });
         
         return () => unsubscribeProfile();
-
       } else {
         // User is signed out.
         setUser(null);
         setUserProfile(null);
         destroyCookie(null, AUTH_COOKIE_NAME, { path: '/' });
         setIsAdmin(false);
-        setLoading(false); // Stop loading.
+        setLoading(false);
       }
     });
 
-    return () => unsubscribeAuth();
+    return () => unsubscribe();
   }, []);
+
+  // Effect to handle redirection after authentication state is resolved.
+  useEffect(() => {
+    if (loading) {
+      return; // Do nothing while loading
+    }
+    const isAuthPage = pathname === '/login' || pathname === '/register';
+    if (user && isAuthPage) {
+        // User is logged in and on an auth page, redirect to profile.
+        router.replace('/profile');
+    }
+  }, [user, loading, pathname, router]);
 
   const value = { user, userProfile, loading, isAdmin };
 

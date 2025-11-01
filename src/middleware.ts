@@ -19,7 +19,9 @@ export function middleware(request: NextRequest) {
 
   // If user is trying to access a protected path without an auth cookie, redirect to login
   if (isProtectedPath && !hasAuthCookie) {
-    return NextResponse.redirect(new URL('/login', request.url));
+    const url = new URL('/login', request.url);
+    url.searchParams.set('redirectedFrom', pathname);
+    return NextResponse.redirect(url);
   }
 
   // If user is trying to access an auth page with an auth cookie, redirect to profile
