@@ -62,9 +62,7 @@ export default function LoginForm() {
           title: "Login Successful",
           description: "Welcome back! Redirecting...",
         });
-        // The middleware will eventually redirect, but we can make the UX faster
-        // by navigating immediately on success.
-        router.replace('/profile');
+        // The middleware will handle the redirect. No need for router.replace here.
       }
     } catch (error) {
         toast({
