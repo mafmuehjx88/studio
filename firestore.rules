@@ -8,7 +8,8 @@ service cloud.firestore {
     
     match /users/{userId} {
       allow read, update: if request.auth.uid == userId || isAdmin();
-      allow create: if request.auth.uid != null;
+      // Allow user creation if the user is creating their own document
+      allow create: if request.auth.uid == userId;
     }
     
     match /users/{userId}/orders/{orderId} {
@@ -38,3 +39,5 @@ service cloud.firestore {
     }
   }
 }
+
+    

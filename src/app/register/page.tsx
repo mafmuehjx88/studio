@@ -15,10 +15,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { loginUser } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { errorEmitter } from "@/firebase/error-emitter";
 import { FirestorePermissionError } from "@/firebase/errors";
+import { loginUser } from "@/lib/actions";
 
 
 export default function RegisterPage() {
@@ -38,8 +38,7 @@ export default function RegisterPage() {
   
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsRegistering(true);
-
+    
     const usernameRegex = /^(?=(?:[^a-zA-Z]*[a-zA-Z]){4,})(?=(?:[^\d]*\d){4,}).*$/;
     if (!usernameRegex.test(username)) {
       toast({
@@ -47,7 +46,6 @@ export default function RegisterPage() {
         description: "Username must contain at least 4 letters and 4 numbers.",
         variant: "destructive",
       });
-      setIsRegistering(false);
       return;
     }
 
@@ -57,7 +55,6 @@ export default function RegisterPage() {
         description: "Password must be at least 6 characters.",
         variant: "destructive",
       });
-       setIsRegistering(false);
        return;
     }
 
@@ -67,7 +64,6 @@ export default function RegisterPage() {
         description: "Please make sure your passwords match.",
         variant: "destructive",
       });
-      setIsRegistering(false);
       return;
     }
 
@@ -77,11 +73,13 @@ export default function RegisterPage() {
         description: "You must agree to the terms and conditions.",
         variant: "destructive",
       });
-      setIsRegistering(false);
       return;
     }
 
+    setIsRegistering(true);
+
     try {
+      // 1. Create user in Firebase Auth
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -89,6 +87,7 @@ export default function RegisterPage() {
       );
       const user = userCredential.user;
 
+      // 2. Prepare user profile data for Firestore
       const userProfileData = {
         uid: user.uid,
         username: username,
@@ -97,40 +96,43 @@ export default function RegisterPage() {
         createdAt: serverTimestamp(),
       };
       
+      // 3. Create user document in Firestore
       const userDocRef = doc(db, "users", user.uid);
+      await setDoc(userDocRef, userProfileData);
 
-      setDoc(userDocRef, userProfileData)
-        .then(async () => {
-            await loginUser({ email, password });
-            toast({
-              title: "Registration Successful",
-              description: "Your account has been created. Redirecting...",
-            });
-            router.replace('/profile');
-        })
-        .catch(async (serverError) => {
-          const permissionError = new FirestorePermissionError({
-            path: userDocRef.path,
-            operation: 'create',
-            requestResourceData: userProfileData,
-          });
-          errorEmitter.emit('permission-error', permissionError);
-          // We don't toast here because the listener will show an overlay
-        });
+      // 4. Log the user in via server action to set the cookie
+      await loginUser({ email, password });
       
+      // 5. Show success and redirect
+      toast({
+        title: "Registration Successful",
+        description: "Your account has been created. Redirecting...",
+      });
+      router.replace('/profile');
+
     } catch (error: any) {
       let description = "An unexpected error occurred.";
+      // Handle Auth errors
       if (error.code === 'auth/email-already-in-use') {
         description = "This email is already registered. Please log in.";
+      } else if (error.name === 'FirestoreError') {
+        // This is a generic Firestore error, which might be a permission error.
+        // We'll construct our detailed error and emit it.
+         const permissionError = new FirestorePermissionError({
+            path: `users/${email}`, // Approximate path for context
+            operation: 'create',
+          });
+          errorEmitter.emit('permission-error', permissionError);
+          description = "Could not create user profile. Please check permissions.";
       }
+      
       toast({
         title: "Registration Failed",
         description,
         variant: "destructive",
       });
     } finally {
-      // We don't set isRegistering to false here because if setDoc is successful,
-      // we will be redirecting. If it fails, the error overlay will appear.
+      setIsRegistering(false);
     }
   };
   
@@ -270,3 +272,5 @@ export default function RegisterPage() {
     </div>
   );
 }
+
+    
