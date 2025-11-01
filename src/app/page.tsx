@@ -41,17 +41,17 @@ export default async function Home() {
       </Card>
 
       <div className="grid grid-cols-2 gap-4">
-        <Button asChild>
+        <Button asChild size="sm">
           <Link href="/top-up">ငွေဖြည့်မည်</Link>
         </Button>
-        <Button asChild variant="secondary">
+        <Button asChild variant="secondary" size="sm">
           <Link href="/orders">အော်ဒါများ</Link>
         </Button>
       </div>
 
       <Card className="bg-secondary">
         <Marquee>
-          <span className="px-4 text-sm font-medium text-primary">
+          <span className="px-4 text-xs font-medium text-primary">
             {marqueeText}
           </span>
         </Marquee>
