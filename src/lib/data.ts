@@ -20,14 +20,27 @@ export const games: Game[] = [
 ];
 
 export const products: Product[] = [
-  // Mobile Legends
-  { id: 'ml-weekly', gameId: 'mlbb', name: 'Weekly Pass', category: 'Weekly Pass', price: 5000 },
-  { id: 'ml-100d', gameId: 'mlbb', name: '100 Diamonds', category: '2x Diamonds', price: 3000 },
-  { id: 'ml-200d', gameId: 'mlbb', name: '200 Diamonds', category: '2x Diamonds', price: 6000 },
-  { id: 'ml-300d', gameId: 'mlbb', name: '300 Diamonds', category: '2x Diamonds', price: 9000 },
-  { id: 'ml-500d', gameId: 'mlbb', name: '500 Diamonds', category: 'Other Diamonds', price: 15000 },
-  { id: 'ml-1000d', gameId: 'mlbb', name: '1000 Diamonds', category: 'Other Diamonds', price: 30000 },
-
+  // Mobile Legends - Updated Price List
+  { id: 'ml-wp', gameId: 'mlbb', name: 'Weekly Pass', category: 'Weekly Pass', price: 5850 },
+  { id: 'ml-tp', gameId: 'mlbb', name: 'Twilight Pass', category: 'Twilight Pass', price: 32900 },
+  { id: 'ml-2x-50', gameId: 'mlbb', name: '50 (2x50) Diamonds', category: '2x Diamonds', price: 3400 },
+  { id: 'ml-2x-150', gameId: 'mlbb', name: '150 (2x150) Diamonds', category: '2x Diamonds', price: 10200 },
+  { id: 'ml-2x-250', gameId: 'mlbb', name: '250 (2x250) Diamonds', category: '2x Diamonds', price: 17000 },
+  { id: 'ml-2x-500', gameId: 'mlbb', name: '500 (2x500) Diamonds', category: '2x Diamonds', price: 34000 },
+  { id: 'ml-d-11', gameId: 'mlbb', name: '11 Diamonds', category: 'Other Diamonds', price: 870 },
+  { id: 'ml-d-22', gameId: 'mlbb', name: '22 Diamonds', category: 'Other Diamonds', price: 1740 },
+  { id: 'ml-d-33', gameId: 'mlbb', name: '33 Diamonds', category: 'Other Diamonds', price: 2610 },
+  { id: 'ml-d-44', gameId: 'mlbb', name: '44 Diamonds', category: 'Other Diamonds', price: 3480 },
+  { id: 'ml-d-86', gameId: 'mlbb', name: '86 Diamonds', category: 'Other Diamonds', price: 4900 },
+  { id: 'ml-d-172', gameId: 'mlbb', name: '172 Diamonds', category: 'Other Diamonds', price: 9800 },
+  { id: 'ml-d-257', gameId: 'mlbb', name: '257 Diamonds', category: 'Other Diamonds', price: 14000 },
+  { id: 'ml-d-343', gameId: 'mlbb', name: '343 Diamonds', category: 'Other Diamonds', price: 18800 },
+  { id: 'ml-d-429', gameId: 'mlbb', name: '429 Diamonds', category: 'Other Diamonds', price: 23600 },
+  { id: 'ml-d-514', gameId: 'mlbb', name: '514 Diamonds', category: 'Other Diamonds', price: 28500 },
+  { id: 'ml-d-600', gameId: 'mlbb', name: '600 Diamonds', category: 'Other Diamonds', price: 32888 },
+  { id: 'ml-d-706', gameId: 'mlbb', name: '706 Diamonds', category: 'Other Diamonds', price: 37700 },
+  { id: 'ml-d-963', gameId: 'mlbb', name: '963 Diamonds', category: 'Other Diamonds', price: 51500 },
+  { id: 'ml-d-1049', gameId: 'mlbb', name: '1049 Diamonds', category: 'Other Diamonds', price: 57268 },
 
   // PUBG Mobile
   { id: 'pubg-600uc', gameId: 'pubg', name: '600 UC', category: 'UC', price: 15000 },

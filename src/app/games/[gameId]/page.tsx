@@ -181,8 +181,8 @@ Order Time: ${new Date().toLocaleString('en-US', {
         return (
           <>
             <ProductGrid
-              title="Weekly Pass"
-              products={products.filter((p) => p.category === 'Weekly Pass')}
+              title="Passes"
+              products={products.filter((p) => p.category.toLowerCase().includes('pass'))}
               onProductClick={handleProductClick}
             />
             <ProductGrid
