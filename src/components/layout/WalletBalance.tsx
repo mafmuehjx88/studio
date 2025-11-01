@@ -1,9 +1,10 @@
 "use client";
 
 import { useAuth } from "@/contexts/AuthContext";
-import { Wallet } from "lucide-react";
+import { PlusCircle, Wallet } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
+import { Button } from "../ui/button";
 
 export default function WalletBalance() {
   const { userProfile, loading, user } = useAuth();
@@ -13,7 +14,7 @@ export default function WalletBalance() {
   }
 
   if (loading) {
-    return <Skeleton className="h-8 w-24 rounded-md" />;
+    return <Skeleton className="h-8 w-32 rounded-full" />;
   }
 
   if (!userProfile) {
@@ -21,11 +22,13 @@ export default function WalletBalance() {
   }
 
   return (
-    <Link href="/wallet" className="flex items-center gap-2 rounded-full border border-primary/50 bg-secondary px-3 py-1.5 text-sm font-semibold text-primary transition-colors hover:bg-primary/10">
-      <Wallet className="h-4 w-4" />
-      <span>
-        {userProfile.walletBalance.toFixed(2)} Ks
-      </span>
-    </Link>
+    <Button asChild variant="outline" size="sm" className="h-8 rounded-full border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+      <Link href="/wallet">
+        <span>
+          {userProfile.walletBalance.toFixed(2)} Ks
+        </span>
+        <PlusCircle className="h-4 w-4" />
+      </Link>
+    </Button>
   );
 }
