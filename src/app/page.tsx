@@ -9,6 +9,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import type { Game } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Separator } from '@/components/ui/separator';
 
 // Helper function to fetch data on the server
 async function getMarqueeText() {
@@ -89,6 +90,18 @@ export default async function Home() {
               </Card>
             </Link>
           ))}
+        </div>
+      </div>
+      
+      <div className="pt-8">
+        <Separator />
+        <div className="flex justify-center gap-4 py-4">
+            <Link href="/terms" className="text-xs text-muted-foreground hover:text-primary">
+                Terms & Conditions
+            </Link>
+            <Link href="/privacy" className="text-xs text-muted-foreground hover:text-primary">
+                Privacy Policy
+            </Link>
         </div>
       </div>
     </div>
