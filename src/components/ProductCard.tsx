@@ -1,7 +1,6 @@
 'use client';
 
 import type { Product } from '@/lib/types';
-import Image from 'next/image';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
 import { cn } from '@/lib/utils';
@@ -16,31 +15,21 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
 
   return (
     <Card
-      className="group flex aspect-square cursor-pointer flex-col overflow-hidden rounded-lg border-gray-700 bg-gray-800/50 text-white transition-all duration-300 hover:bg-gray-700/60"
+      className="group flex cursor-pointer flex-col overflow-hidden rounded-lg border-transparent bg-card text-white transition-all duration-300 hover:bg-card/80"
       onClick={() => onClick(product)}
     >
-      <CardContent className="relative flex flex-1 flex-col justify-between p-2">
-         <Badge className="absolute right-0 top-0 z-10 m-1 rounded-sm border-none bg-green-500 px-1.5 py-0.5 text-[10px] text-white">
-            မစောင့်ရပါ
+      <CardContent className="relative flex flex-1 flex-col justify-center p-2 text-center">
+        <Badge className="absolute right-1 top-1 z-10 rounded-sm border-none bg-green-500 px-1.5 py-0.5 text-[10px] font-medium text-white">
+          မစောင့်ရပါ
         </Badge>
         {is2xProduct && (
-             <Badge className="absolute right-0 top-8 z-10 m-1 -rotate-15 transform rounded-sm border-none bg-red-600 px-1.5 py-0.5 text-[10px] text-white">
-                First Recharge
-            </Badge>
+          <Badge className="absolute left-1/2 top-8 z-10 -translate-x-1/2 transform whitespace-nowrap rounded-sm border-none bg-red-600 px-1.5 py-0.5 text-[10px] font-medium text-white">
+            First Recharge
+          </Badge>
         )}
-        <div className="flex flex-1 items-center justify-center">
-            <div className="relative aspect-square w-3/4">
-                <Image
-                    src={product.image}
-                    alt={product.name}
-                    fill
-                    className={cn("object-contain transition-transform group-hover:scale-110", product.id === 'twilight-pass' ? 'rounded-full' : '')}
-                />
-            </div>
-        </div>
-        <div className="text-center">
-            <p className="whitespace-normal text-xs font-semibold">{product.name}</p>
-            <p className="mt-1 text-xs font-semibold text-yellow-400">{product.price.toLocaleString()} Ks</p>
+        <div className="flex flex-1 flex-col items-center justify-center gap-1 pt-8">
+            <p className="text-xs font-semibold">{product.name}</p>
+            <p className="text-xs font-bold text-yellow-400">{product.price.toLocaleString()} Ks</p>
         </div>
       </CardContent>
     </Card>
