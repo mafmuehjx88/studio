@@ -2,12 +2,11 @@
 
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
-import { doc, getDoc, onSnapshot } from 'firebase/firestore';
+import { doc, onSnapshot } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
 import type { UserProfile } from '@/lib/types';
 import { setCookie, destroyCookie } from 'nookies';
 
-// The cookie name for the Firebase auth token
 const AUTH_COOKIE_NAME = 'firebase-auth-token';
 
 interface AuthContextType {
@@ -34,25 +33,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setCookie(null, AUTH_COOKIE_NAME, token, { maxAge: 30 * 24 * 60 * 60, path: '/' });
         setIsAdmin(firebaseUser.email === 'ohshif5@gmail.com');
 
-        // Listen for realtime updates on the user profile for things like walletBalance
         const userDocRef = doc(db, 'users', firebaseUser.uid);
         const unsubscribeProfile = onSnapshot(userDocRef, (docSnap) => {
           if (docSnap.exists()) {
             setUserProfile({ uid: docSnap.id, ...docSnap.data() } as UserProfile);
           } else {
-            // This could happen if the user record in Firestore is deleted
             setUserProfile(null);
           }
-           // Once we get the first snapshot, we can consider the initial loading complete.
+          // Once we get the first profile snapshot (or lack thereof), auth flow is complete.
           setLoading(false);
         }, (error) => {
           console.error("Error listening to user profile:", error);
           setUserProfile(null);
-          setLoading(false);
+          setLoading(false); // Also stop loading on error.
         });
         
-        // Return the profile listener's unsubscribe function.
-        // It will be called when the user logs out.
         return () => unsubscribeProfile();
 
       } else {
@@ -61,13 +56,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUserProfile(null);
         destroyCookie(null, AUTH_COOKIE_NAME, { path: '/' });
         setIsAdmin(false);
-        setLoading(false);
+        setLoading(false); // Stop loading.
       }
     });
 
     return () => unsubscribeAuth();
   }, []);
-
 
   const value = { user, userProfile, loading, isAdmin };
 

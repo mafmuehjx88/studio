@@ -7,7 +7,7 @@ import { logoutUser } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
-import { LogOut, Settings, Wallet } from "lucide-react";
+import { LogOut, Settings, Wallet, Loader2 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ProfilePage() {
@@ -20,6 +20,14 @@ export default function ProfilePage() {
   };
 
   const avatar = PlaceHolderImages.find((img) => img.id === "default-avatar");
+
+  if (loading) {
+    return (
+        <div className="flex h-screen w-full items-center justify-center">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
