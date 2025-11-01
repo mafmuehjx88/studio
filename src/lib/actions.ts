@@ -2,14 +2,11 @@
 "use server";
 
 import { z } from "zod";
-import { auth, db, storage } from "@/lib/firebase";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-} from "firebase/auth";
+import { auth as adminAuth } from "@/lib/firebase-admin"; // Use admin auth
+import { db } from "@/lib/firebase"; // Keep client db for user doc creation
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { revalidatePath } from "next/cache";
+import { cookies } from 'next/headers'
 
 // --- Form Schemas ---
 const registerSchema = z.object({
@@ -27,45 +24,54 @@ const loginSchema = z.object({
 
 export async function registerUser(values: z.infer<typeof registerSchema>) {
   try {
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      values.email,
-      values.password
-    );
-    const user = userCredential.user;
+    const userRecord = await adminAuth.createUser({
+        email: values.email,
+        password: values.password,
+        displayName: values.username,
+    });
+    
+    await adminAuth.setCustomUserClaims(userRecord.uid, { role: 'user' });
 
-    await setDoc(doc(db, "users", user.uid), {
-      uid: user.uid,
+    await setDoc(doc(db, "users", userRecord.uid), {
+      uid: userRecord.uid,
       username: values.username,
       email: values.email,
       walletBalance: 0,
       createdAt: serverTimestamp(),
     });
 
+    // NOTE: We do not set cookies here. The client will handle auth state.
     return { success: true };
   } catch (error: any) {
-    return { error: error.message };
+    console.error("Registration Error:", error);
+    let message = "An unexpected error occurred.";
+    if (error.code === 'auth/email-already-exists') {
+        message = "This email is already in use by another account.";
+    }
+    return { error: message };
   }
 }
 
+// This action is NOT used by the client anymore.
+// Client uses Firebase SDK directly. Keeping for potential future server-side use.
 export async function loginUser(values: z.infer<typeof loginSchema>) {
-  try {
-    await signInWithEmailAndPassword(auth, values.email, values.password);
-    return { success: true };
-  } catch (error: any) {
-    return { error: error.message };
-  }
+    // This function is problematic for setting cookies.
+    // The client-side sign-in flow is more reliable.
+    // We will let the client-side Firebase SDK handle sign-in.
+    // This function can remain as a placeholder.
+    return { error: "This function is deprecated. Client handles login." };
 }
 
 export async function logoutUser() {
   try {
-    await signOut(auth);
+    cookies().delete('firebase-auth-token');
     revalidatePath("/", "layout");
     return { success: true };
   } catch (error: any) {
     return { error: error.message };
   }
 }
+
 
 // --- Telegram Notification Actions ---
 
@@ -116,6 +122,3 @@ export async function sendTopUpTelegramNotification({ caption, photoUrl }: { cap
     console.error('Failed to send Telegram photo notification:', error);
   }
 }
-
-// Placeholder for other actions to be added later
-// e.g., createPurchaseOrder, createTopUpRequest, approveTopUp, etc.

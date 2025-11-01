@@ -8,6 +8,7 @@ import { auth, db } from '@/lib/firebase';
 import type { UserProfile } from '@/lib/types';
 import { usePathname, useRouter } from 'next/navigation';
 import { FirebaseErrorListener } from '@/components/FirebaseErrorListener';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface AuthContextType {
   user: FirebaseUser | null;
@@ -27,54 +28,60 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      setLoading(true);
-      if (firebaseUser) {
-        setUser(firebaseUser);
-        setIsAdmin(firebaseUser.email === 'ohshif5@gmail.com');
-        const userDocRef = doc(db, 'users', firebaseUser.uid);
-        const unsubscribeProfile = onSnapshot(userDocRef, 
-          (docSnap) => {
-            if (docSnap.exists()) {
-              setUserProfile({ uid: docSnap.id, ...docSnap.data() } as UserProfile);
-            } else {
-              // This can happen if the user is created in Auth but the Firestore doc fails.
-              setUserProfile(null);
-            }
-            setLoading(false);
-          }, 
-          (error) => {
-            console.error("Error listening to user profile:", error);
-            setUserProfile(null);
-            setLoading(false);
-          }
-        );
-        return () => unsubscribeProfile();
-      } else {
-        // User is signed out.
-        setUser(null);
+    const unsubscribeAuth = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser);
+      setIsAdmin(firebaseUser?.email === 'ohshif5@gmail.com');
+      
+      if (!firebaseUser) {
+        // User is signed out
         setUserProfile(null);
-        setIsAdmin(false);
         setLoading(false);
       }
     });
-
-    return () => unsubscribe();
+    
+    return () => unsubscribeAuth();
   }, []);
 
   useEffect(() => {
-    // This effect handles redirection based on auth state.
-    // It's the single source of truth for navigation logic.
-    if (loading) return; // Don't do anything while still loading
+    if (!user) {
+      // If user is signed out, no need to listen to profile.
+      return;
+    }
+    // We are definitely logged in if we get here. Start loading profile.
+    setLoading(true);
+    const userDocRef = doc(db, 'users', user.uid);
+    const unsubscribeProfile = onSnapshot(userDocRef, 
+      (docSnap) => {
+        if (docSnap.exists()) {
+          setUserProfile({ uid: docSnap.id, ...docSnap.data() } as UserProfile);
+        } else {
+          setUserProfile(null); // Profile doesn't exist in DB
+        }
+        setLoading(false); // Finished loading profile
+      }, 
+      (error) => {
+        console.error("Error listening to user profile:", error);
+        setUserProfile(null);
+        setLoading(false); // Finished loading (with error)
+      }
+    );
+
+    return () => unsubscribeProfile();
+
+  }, [user]); // This effect depends only on the user object.
+
+  useEffect(() => {
+    // This effect handles ALL redirection logic.
+    if (loading) return; // Don't redirect while loading
 
     const authPages = ['/login', '/register'];
     const isAuthPage = authPages.includes(pathname);
 
     if (user && isAuthPage) {
-      // If user is logged in and on an auth page, redirect to home/profile.
+      // Logged-in user on an auth page -> redirect to profile
       router.replace('/profile');
     } else if (!user && !isAuthPage) {
-      // If user is not logged in and not on an auth page, redirect to login.
+      // Logged-out user not on an auth page -> redirect to login
       router.replace('/login');
     }
   }, [user, loading, pathname, router]);
@@ -82,14 +89,37 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const value = { user, userProfile, loading, isAdmin };
 
   // While loading, we can show a blank screen or a global loader
-  // to prevent content flashing.
-  if (loading) {
-     const authPages = ['/login', '/register'];
-     const isAuthPage = authPages.includes(pathname);
-     // Don't show a blank screen for auth pages, let them render their own UI
-     if (!isAuthPage) {
-        return null; // Or a full-page loader
-     }
+  // to prevent content flashing, especially on protected routes.
+  const authPages = ['/login', '/register'];
+  const isAuthPage = authPages.includes(pathname);
+  if (loading && !isAuthPage) {
+     return (
+        <div className="relative mx-auto flex min-h-screen w-full max-w-md flex-col bg-background">
+            <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-border/50 bg-background/95 px-4 backdrop-blur-lg">
+                <div className="flex items-center gap-2">
+                    <Skeleton className="h-8 w-8 rounded-md" />
+                    <Skeleton className="h-8 w-8 rounded-md" />
+                </div>
+                <Skeleton className="h-8 w-24 rounded-full" />
+            </header>
+            <main className="flex-1 px-4 pb-24 pt-6 space-y-6">
+                 <Skeleton className="h-48 w-full rounded-lg" />
+                 <div className="grid grid-cols-2 gap-4">
+                    <Skeleton className="h-14 w-full rounded-md" />
+                    <Skeleton className="h-14 w-full rounded-md" />
+                 </div>
+                 <Skeleton className="h-24 w-full rounded-lg" />
+            </main>
+            <footer className="fixed bottom-0 left-0 right-0 z-20 mx-auto h-16 w-full max-w-md border-t border-border/50 bg-background/95 backdrop-blur-lg">
+                <div className="flex h-full items-center justify-around">
+                    <Skeleton className="h-8 w-1/4 rounded-md" />
+                    <Skeleton className="h-8 w-1/4 rounded-md" />
+                    <Skeleton className="h-8 w-1/4 rounded-md" />
+                    <Skeleton className="h-8 w-1/4 rounded-md" />
+                </div>
+            </footer>
+        </div>
+     );
   }
 
 

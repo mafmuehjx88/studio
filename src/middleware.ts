@@ -1,29 +1,53 @@
+
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { auth } from './lib/firebase-admin'; // Using admin SDK for verification
 
-// This middleware is now simplified.
-// Its only job is to protect routes for users who are NOT logged in.
-// Redirection for already-logged-in users is handled in AuthContext.
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const idToken = request.cookies.get('firebase-auth-token')?.value;
+
+  const authPages = ['/login', '/register'];
+  const isAuthPage = authPages.includes(pathname);
   
-  // This is a placeholder for a real auth token.
-  // In a real app, this would be a secure, HTTP-only cookie.
-  const hasAuthCookie = request.cookies.has('firebase-auth-token');
-
-  // Define paths that require authentication
   const protectedPaths = ['/profile', '/wallet', '/orders', '/top-up', '/games'];
-
   const isProtectedPath = protectedPaths.some(p => pathname.startsWith(p));
-
-  // If user is trying to access a protected path without an auth cookie, redirect to login
-  if (isProtectedPath && !hasAuthCookie) {
-    const url = new URL('/login', request.url);
-    url.searchParams.set('redirectedFrom', pathname);
-    return NextResponse.redirect(url);
+  
+  let user = null;
+  if (idToken) {
+    try {
+        // We don't use the result, we just want to know if it's valid.
+        // If it's invalid, it will throw.
+        await auth.verifyIdToken(idToken);
+        user = { idToken }; // represents a logged-in user
+    } catch (error) {
+        // Token is invalid or expired
+        user = null;
+    }
+  }
+  
+  // Scenario 1: User is logged in
+  if (user) {
+    if (isAuthPage) {
+        // Logged-in user trying to access login/register, redirect to profile
+        return NextResponse.redirect(new URL('/profile', request.url));
+    }
+    // Otherwise, allow access to any other page
+    return NextResponse.next();
   }
 
-  // Otherwise, allow the request to proceed
+  // Scenario 2: User is NOT logged in
+  if (!user) {
+    if (isProtectedPath) {
+        // Not-logged-in user trying to access a protected page, redirect to login
+        const url = new URL('/login', request.url);
+        url.searchParams.set('redirectedFrom', pathname);
+        return NextResponse.redirect(url);
+    }
+    // Otherwise, allow access to public pages (like login, register, home)
+    return NextResponse.next();
+  }
+  
   return NextResponse.next();
 }
 
@@ -36,7 +60,8 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
+     * - admin (admin pages, if any)
      */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|admin).*)',
   ],
 }

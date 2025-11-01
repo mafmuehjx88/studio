@@ -19,7 +19,6 @@ import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
-import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address." }),
@@ -29,7 +28,6 @@ const formSchema = z.object({
 export default function LoginForm() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -47,8 +45,8 @@ export default function LoginForm() {
         title: "Login Successful",
         description: "Welcome back! Redirecting...",
       });
-      // The redirect is now handled by the AuthContext, so we don't need to do it here.
-      // router.replace('/profile');
+      // Redirection is now handled by AuthContext.
+      // No router.replace() needed here.
     } catch (error: any) {
         let description = "An unexpected error occurred. Please try again.";
         if (error.code) {

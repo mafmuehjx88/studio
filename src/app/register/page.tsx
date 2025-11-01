@@ -78,7 +78,7 @@ export default function RegisterPage() {
     setIsRegistering(true);
 
     try {
-      // 1. Create user in Firebase Auth
+      // 1. Create user in Firebase Auth using the CLIENT SDK
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -97,33 +97,27 @@ export default function RegisterPage() {
       
       // 3. Create user document in Firestore
       const userDocRef = doc(db, "users", user.uid);
-      setDoc(userDocRef, userProfileData).catch(err => {
-         const permissionError = new FirestorePermissionError({
-            path: userDocRef.path,
-            operation: 'create',
-            requestResourceData: userProfileData,
-          });
-          errorEmitter.emit('permission-error', permissionError);
-          // We throw this so it gets caught by the outer catch block
-          throw err;
-      });
+      await setDoc(userDocRef, userProfileData);
       
-      // 4. Show success and redirect (AuthContext will handle redirection)
+      // 4. Show success. Redirection is handled by AuthContext.
       toast({
         title: "Registration Successful",
         description: "Your account has been created. Redirecting...",
       });
-      // The redirect is now handled by the AuthContext, so we don't need to do it here.
 
     } catch (error: any) {
       let description = "An unexpected error occurred.";
-      // Handle Auth errors
+      // Handle known errors
       if (error.code === 'auth/email-already-in-use') {
         description = "This email is already registered. Please log in.";
-      } else if (error.name === 'FirestorePermissionError' || error.code === 'permission-denied') {
-          // This is a generic Firestore error, which might be a permission error.
-          // We'll construct our detailed error and emit it.
-          description = "Could not create user profile due to a permissions issue.";
+      } else if (error.code === 'permission-denied') {
+          description = "Could not create user profile due to a permissions issue. Please contact support.";
+          const permissionError = new FirestorePermissionError({
+            path: `users/${email}`, // Best guess for path
+            operation: 'create',
+            requestResourceData: { email, username },
+          });
+          errorEmitter.emit('permission-error', permissionError);
       }
       
       toast({
