@@ -34,13 +34,13 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
           </div>
         )}
         
-        {isPassProduct && product.image && (
+        {product.image && (
              <Image
                 src={product.image}
                 alt={product.name}
                 width={150}
-                height={80}
-                className="w-full rounded-md object-cover"
+                height={150}
+                className="w-full rounded-md object-cover aspect-square"
               />
         )}
         
