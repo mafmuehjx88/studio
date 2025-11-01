@@ -7,25 +7,29 @@ export const games: Game[] = [
 ];
 
 export const products: Product[] = [
-  // Mobile Legends - New Data based on screenshot
-  { id: 'twilight-pass', gameId: 'mlbb', name: 'Twilight Pass', category: 'pass', price: 30342, image: 'https://i.ibb.co/C0qP8b0/twilight-pass.png' },
-  { id: 'weekly-pass', gameId: 'mlbb', name: 'Weekly Pass', category: 'pass', price: 5740, image: 'https://i.ibb.co/9vVw2mX/weekly-pass.png' },
+  // Mobile Legends - New Data based on user request
+  { id: 'twilight-pass', gameId: 'mlbb', name: 'Twilight Pass', category: 'pass', price: 32900, image: 'https://i.ibb.co/C0qP8b0/twilight-pass.png' },
+  { id: 'weekly-pass', gameId: 'mlbb', name: '💎1 weekly Pass', category: 'pass', price: 5850, image: 'https://i.ibb.co/9vVw2mX/weekly-pass.png' },
   
-  { id: '2x-50', gameId: 'mlbb', name: '50+50 အပိုရ', category: '2x', price: 3243, image: 'https://i.ibb.co/VvZv7gM/diamond-pile-1.png' },
-  { id: '2x-150', gameId: 'mlbb', name: '150+150 အပိုရ', category: '2x', price: 9372, image: 'https://i.ibb.co/Rbm5y1V/diamond-pile-2.png' },
-  { id: '2x-250', gameId: 'mlbb', name: '250+250 အပိုရ', category: '2x', price: 14969, image: 'https://i.ibb.co/Rbm5y1V/diamond-pile-2.png' },
-  { id: '2x-500', gameId: 'mlbb', name: '500+500 အပိုရ', category: '2x', price: 30567, image: 'https://i.ibb.co/Q8Q0p6j/diamond-pile-3.png' },
+  { id: '2x-50', gameId: 'mlbb', name: '🩵50 (2x50)', category: '2x', price: 3400, image: 'https://i.ibb.co/VvZv7gM/diamond-pile-1.png' },
+  { id: '2x-150', gameId: 'mlbb', name: '🩵150 (2x150)', category: '2x', price: 10200, image: 'https://i.ibb.co/Rbm5y1V/diamond-pile-2.png' },
+  { id: '2x-250', gameId: 'mlbb', name: '🩵250 (2x250)', category: '2x', price: 17000, image: 'https://i.ibb.co/Rbm5y1V/diamond-pile-2.png' },
+  { id: '2x-500', gameId: 'mlbb', name: '🩵500 (2x500)', category: '2x', price: 34000, image: 'https://i.ibb.co/Q8Q0p6j/diamond-pile-3.png' },
 
-  { id: 'dm-11', gameId: 'mlbb', name: '11 💎 Diamond', category: 'diamonds', price: 500, image: 'https://i.ibb.co/GtnS1gS/diamond-1.png' },
-  { id: 'dm-22', gameId: 'mlbb', name: '22 💎 Diamond', category: 'diamonds', price: 1000, image: 'https://i.ibb.co/GtnS1gS/diamond-1.png' },
-  { id: 'dm-44', gameId: 'mlbb', name: '44 💎 Diamond', category: 'diamonds', price: 1500, image: 'https://i.ibb.co/GtnS1gS/diamond-1.png' },
-  { id: 'dm-59', gameId: 'mlbb', name: '59 💎 Diamond', category: 'diamonds', price: 2000, image: 'https://i.ibb.co/VvZv7gM/diamond-pile-1.png' },
-  { id: 'dm-86', gameId: 'mlbb', name: '86 💎 Diamond', category: 'diamonds', price: 2900, image: 'https://i.ibb.co/VvZv7gM/diamond-pile-1.png' },
-  { id: 'dm-172', gameId: 'mlbb', name: '172 💎 Diamond', category: 'diamonds', price: 5700, image: 'https://i.ibb.co/Rbm5y1V/diamond-pile-2.png' },
-  { id: 'dm-257', gameId: 'mlbb', name: '257 💎 Diamond', category: 'diamonds', price: 8600, image: 'https://i.ibb.co/Rbm5y1V/diamond-pile-2.png' },
-  { id: 'dm-344', gameId: 'mlbb', name: '344 💎 Diamond', category: 'diamonds', price: 11400, image: 'https://i.ibb.co/Q8Q0p6j/diamond-pile-3.png' },
-  { id: 'dm-429', gameId: 'mlbb', name: '429 💎 Diamond', category: 'diamonds', price: 14300, image: 'https://i.ibb.co/Q8Q0p6j/diamond-pile-3.png' },
-  { id: 'dm-514', gameId: 'mlbb', name: '514 💎 Diamond', category: 'diamonds', price: 17200, image: 'https://i.ibb.co/Q8Q0p6j/diamond-pile-3.png' },
+  { id: 'dm-11', gameId: 'mlbb', name: '11 💎 Diamond', category: 'diamonds', price: 870, image: 'https://i.ibb.co/GtnS1gS/diamond-1.png' },
+  { id: 'dm-22', gameId: 'mlbb', name: '22 💎 Diamond', category: 'diamonds', price: 1740, image: 'https://i.ibb.co/GtnS1gS/diamond-1.png' },
+  { id: 'dm-33', gameId: 'mlbb', name: '33 💎 Diamond', category: 'diamonds', price: 2610, image: 'https://i.ibb.co/GtnS1gS/diamond-1.png' },
+  { id: 'dm-44', gameId: 'mlbb', name: '44 💎 Diamond', category: 'diamonds', price: 3480, image: 'https://i.ibb.co/GtnS1gS/diamond-1.png' },
+  { id: 'dm-86', gameId: 'mlbb', name: '86 💎 Diamond', category: 'diamonds', price: 4900, image: 'https://i.ibb.co/VvZv7gM/diamond-pile-1.png' },
+  { id: 'dm-172', gameId: 'mlbb', name: '172 💎 Diamond', category: 'diamonds', price: 9800, image: 'https://i.ibb.co/Rbm5y1V/diamond-pile-2.png' },
+  { id: 'dm-257', gameId: 'mlbb', name: '257 💎 Diamond', category: 'diamonds', price: 14000, image: 'https://i.ibb.co/Rbm5y1V/diamond-pile-2.png' },
+  { id: 'dm-343', gameId: 'mlbb', name: '343 💎 Diamond', category: 'diamonds', price: 18800, image: 'https://i.ibb.co/Q8Q0p6j/diamond-pile-3.png' },
+  { id: 'dm-429', gameId: 'mlbb', name: '429 💎 Diamond', category: 'diamonds', price: 23600, image: 'https://i.ibb.co/Q8Q0p6j/diamond-pile-3.png' },
+  { id: 'dm-514', gameId: 'mlbb', name: '514 💎 Diamond', category: 'diamonds', price: 28500, image: 'https://i.ibb.co/Q8Q0p6j/diamond-pile-3.png' },
+  { id: 'dm-600', gameId: 'mlbb', name: '600 💎 Diamond', category: 'diamonds', price: 32888, image: 'https://i.ibb.co/2dHyk5j/diamond-pile-4.png' },
+  { id: 'dm-706', gameId: 'mlbb', name: '706 💎 Diamond', category: 'diamonds', price: 37700, image: 'https://i.ibb.co/2dHyk5j/diamond-pile-4.png' },
+  { id: 'dm-963', gameId: 'mlbb', name: '963 💎 Diamond', category: 'diamonds', price: 51500, image: 'https://i.ibb.co/2dHyk5j/diamond-pile-4.png' },
+  { id: 'dm-1049', gameId: 'mlbb', name: '1049 💎 Diamond', category: 'diamonds', price: 57268, image: 'https://i.ibb.co/2dHyk5j/diamond-pile-4.png' },
 
 
   // PUBG Mobile
