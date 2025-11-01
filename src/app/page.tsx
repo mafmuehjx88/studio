@@ -51,12 +51,15 @@ export default async function Home() {
         )}
       </Card>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-3 gap-4">
         <Button asChild size="sm">
           <Link href="/top-up">ငွေဖြည့်မည်</Link>
         </Button>
         <Button asChild variant="secondary" size="sm">
           <Link href="/orders">အော်ဒါများ</Link>
+        </Button>
+        <Button asChild variant="secondary" size="sm">
+          <Link href="#">အကောင့်ဝယ်ရန်</Link>
         </Button>
       </div>
 
