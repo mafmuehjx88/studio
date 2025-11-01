@@ -161,8 +161,8 @@ Order Time: ${new Date().toLocaleString('en-US', {
       await sendTelegramNotification(notificationMessage);
 
       toast({
-        title: 'Purchase Successful!',
-        description: `Your order for ${orderData.itemName} has been placed.`,
+        title: "အောင်မြင်ပါတယ်",
+        description: "Stock ကုန်နေလို့ ခနစောင့်ပေးပါ 10 မိနစ်အတွင်းအကောင့်ထဲရောက်ပါမယ်",
       });
 
       setSelectedProduct(null);
