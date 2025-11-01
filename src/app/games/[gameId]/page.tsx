@@ -177,7 +177,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
     if (!game) return <p>Game not found.</p>;
 
     switch (game.id) {
-      case 'mobile-legends':
+      case 'mlbb':
         return (
           <>
             <ProductGrid
@@ -190,9 +190,14 @@ Order Time: ${new Date().toLocaleString('en-US', {
               products={products.filter((p) => p.category === '2x Diamonds')}
               onProductClick={handleProductClick}
             />
+             <ProductGrid
+              title="Other Diamonds"
+              products={products.filter((p) => p.category === 'Other Diamonds')}
+              onProductClick={handleProductClick}
+            />
           </>
         );
-      case 'pubg-mobile':
+      case 'pubg':
         return (
           <>
             <ProductGrid
@@ -200,19 +205,14 @@ Order Time: ${new Date().toLocaleString('en-US', {
               products={products.filter((p) => p.category === 'UC')}
               onProductClick={handleProductClick}
             />
-             <ProductGrid
-              title="Passes"
-              products={products.filter((p) => p.category === 'Passes')}
-              onProductClick={handleProductClick}
-            />
           </>
         );
-      case 'honor-of-kings':
+      case 'hok':
         return (
           <>
              <ProductGrid
-              title="Passes"
-              products={products.filter((p) => p.category === 'Passes')}
+              title="Weekly Passes"
+              products={products.filter((p) => p.category === 'Weekly Passes')}
               onProductClick={handleProductClick}
             />
             <ProductGrid
