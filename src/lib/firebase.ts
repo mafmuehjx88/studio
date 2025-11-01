@@ -7,9 +7,10 @@ const firebaseConfig: FirebaseOptions = {
   apiKey: "AIzaSyA93FWGsO63Q8xGprgue4rhJ0Xkqu0vN2A",
   authDomain: "marioapp-a39c5.firebaseapp.com",
   projectId: "marioapp-a39c5",
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  storageBucket: "marioapp-a39c5.appspot.com",
   messagingSenderId: "861023932769",
   appId: "1:861023932769:web:28052061e0a9fdc106f520",
+  measurementId: "G-TH3MXQ0HDM"
 };
 
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
