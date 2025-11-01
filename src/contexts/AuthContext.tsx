@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const unsubscribeAuth = onAuthStateChanged(auth, (firebaseUser) => {
       setAuthLoading(true);
       setUser(firebaseUser);
-      setIsAdmin(firebaseUser?.email === 'ohshif5@gmail.com');
+      setIsAdmin(firebaseUser?.email === 'marrci448@gmail.com');
       if (!firebaseUser) {
         // If user logs out or is not logged in, we are done loading.
         setUserProfile(null);
