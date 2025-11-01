@@ -13,7 +13,8 @@ const firebaseConfig: FirebaseOptions = {
   measurementId: "G-TH3MXQ0HDM"
 };
 
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+// The `useFetchStreams` is a temporary flag to deal with a known issue in the Firestore SDK.
+const app = !getApps().length ? initializeApp(firebaseConfig, { useFetchStreams: false }) : getApp();
 const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
