@@ -24,13 +24,13 @@ const paymentAccounts = [
     name: 'Pyae Sone Hein',
     phone: '09769181524',
     type: 'KBZ Pay',
-    logo: 'https://i.ibb.co/LXWdbmsx/11f074fe04271ca1f562331d873344f8-1.jpg',
+    logo: 'https://i.ibb.co/CprjLC99/11f074fe04271ca1f562331d873344f8-1.jpg',
   },
   {
     name: 'Aent Phone Khant',
     phone: '09961034354',
     type: 'KBZ Pay',
-    logo: 'https://i.ibb.co/LXWdbmsx/11f074fe04271ca1f562331d873344f8-1.jpg',
+    logo: 'https://i.ibb.co/CprjLC99/11f074fe04271ca1f562331d873344f8-1.jpg',
   },
   {
     name: 'Than Htay',
