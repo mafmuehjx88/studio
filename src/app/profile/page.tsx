@@ -13,7 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { staticImages } from "@/lib/data";
 import Link from 'next/link';
 import { useEffect, useState } from "react";
-import { collection, getDocs, query } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { Order } from "@/lib/types";
 
 export default function ProfilePage() {
@@ -32,16 +32,17 @@ export default function ProfilePage() {
     }
 
     const fetchTotalSpent = async () => {
+      setSpentLoading(true);
       try {
-        const ordersQuery = query(collection(db, `users/${user.uid}/orders`));
+        const ordersQuery = query(
+          collection(db, `users/${user.uid}/orders`),
+          where("status", "==", "Completed")
+        );
         const querySnapshot = await getDocs(ordersQuery);
         let total = 0;
         querySnapshot.forEach((doc) => {
           const order = doc.data() as Order;
-          // Only add to total if order is completed to reflect actual spending
-          if (order.status === 'Completed') {
-            total += order.price;
-          }
+          total += order.price;
         });
         setTotalSpent(total);
       } catch (error) {
@@ -87,7 +88,7 @@ export default function ProfilePage() {
 
   if (!userProfile) {
     return (
-        <div className="flex flex-col items-center justify-center text-center">
+        <div className="flex h-[60vh] flex-col items-center justify-center text-center">
             <h2 className="text-2xl font-bold">Could Not Load Profile</h2>
             <p className="text-muted-foreground">Your profile data could not be found.</p>
             <Button onClick={handleLogout} variant="destructive" className="mt-4">
@@ -111,7 +112,7 @@ export default function ProfilePage() {
                 <CardTitle className="text-xl">{userProfile.username}</CardTitle>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Wallet className="h-4 w-4 text-primary" />
-                  <span className="font-semibold text-primary">{userProfile.walletBalance.toFixed(2)} Ks</span>
+                  <span className="font-semibold text-primary">{userProfile.walletBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} Ks</span>
                 </div>
           </div>
         </CardHeader>
