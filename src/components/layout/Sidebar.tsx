@@ -15,6 +15,7 @@ import {
   User,
   LogOut,
   ShieldCheck,
+  WalletCards,
 } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
@@ -34,6 +35,11 @@ const navItems = [
   { href: "/wallet", icon: Wallet, label: "Wallet" },
   { href: "/profile", icon: User, label: "Profile" },
 ];
+
+const adminNavItems = [
+    { href: "/admin", icon: ShieldCheck, label: "Admin Panel" },
+    { href: "/admin/manual-top-up", icon: WalletCards, label: "Manual Top-Up" },
+]
 
 export function Sidebar({ isOpen, onOpenChange }: SidebarProps) {
   const { user, isAdmin } = useAuth();
@@ -76,16 +82,19 @@ export function Sidebar({ isOpen, onOpenChange }: SidebarProps) {
             {isAdmin && (
               <>
                 <Separator className="my-2" />
-                <Button
-                  variant="ghost"
-                  className="h-12 justify-start gap-3 text-base"
-                  asChild
-                >
-                  <Link href="/admin" onClick={handleLinkClick}>
-                    <ShieldCheck className="h-5 w-5 text-muted-foreground" />
-                    <span>Admin Panel</span>
-                  </Link>
-                </Button>
+                {adminNavItems.map((item) => (
+                    <Button
+                        key={item.href}
+                        variant="ghost"
+                        className="h-12 justify-start gap-3 text-base"
+                        asChild
+                    >
+                        <Link href={item.href} onClick={handleLinkClick}>
+                        <item.icon className="h-5 w-5 text-muted-foreground" />
+                        <span>{item.label}</span>
+                        </Link>
+                    </Button>
+                ))}
               </>
             )}
           </nav>

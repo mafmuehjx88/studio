@@ -20,7 +20,9 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const AUTH_PAGES = ['/login', '/register'];
-const PROTECTED_PAGES = ['/profile', '/wallet', '/orders', '/top-up', '/games', '/admin'];
+const PROTECTED_PAGES = ['/profile', '/wallet', '/orders', '/top-up', '/games'];
+const ADMIN_PAGES = ['/admin'];
+
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<FirebaseUser | null>(null);
@@ -77,7 +79,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const isAuthPage = AUTH_PAGES.includes(pathname);
     const isProtectedRoute = PROTECTED_PAGES.some(p => pathname.startsWith(p));
-    const isAdminRoute = pathname.startsWith('/admin');
+    const isAdminRoute = ADMIN_PAGES.some(p => pathname.startsWith(p));
 
     if (user) {
       if (isAuthPage) {
@@ -86,7 +88,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         router.replace('/');
       }
     } else {
-      if (isProtectedRoute) {
+      if (isProtectedRoute || isAdminRoute) {
         router.replace('/login');
       }
     }
