@@ -4,19 +4,33 @@ import LoginForm from "@/components/auth/LoginForm";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function LoginPage() {
-  const { loading, user } = useAuth();
+    const { user } = useAuth();
+    const router = useRouter();
 
-  // The middleware handles redirection, but we can show a loading state 
-  // while the initial auth state is being determined.
-  if (loading || user) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
-  }
+    useEffect(() => {
+        if (user) {
+            router.replace('/profile');
+        }
+    }, [user, router]);
+    
+    // The middleware handles redirection for non-logged-in users trying to access protected routes.
+    // If a logged-in user hits this page, the useEffect above will redirect them.
+    // So we can just render the form. If the user state is not yet determined, they'll see the form briefly
+    // before redirection, which is acceptable.
+    
+    if (user) {
+        // While redirecting, show a loader
+        return (
+          <div className="flex h-screen w-full items-center justify-center">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          </div>
+        );
+    }
+
 
   return (
     <div className="flex min-h-full flex-col items-center justify-center">

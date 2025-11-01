@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -19,7 +19,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
 
 export default function RegisterPage() {
-  const { loading, user } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
   const auth = useAuthInstance();
@@ -35,6 +35,13 @@ export default function RegisterPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const logo = PlaceHolderImages.find((img) => img.id === "logo");
+  
+  useEffect(() => {
+    if (user) {
+        router.replace('/profile');
+    }
+  }, [user, router]);
+
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -118,7 +125,7 @@ export default function RegisterPage() {
     }
   };
   
-  if (loading || user) {
+  if (user) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
