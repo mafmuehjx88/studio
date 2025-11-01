@@ -20,7 +20,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const AUTH_PAGES = ['/login', '/register'];
-const PROTECTED_PAGES = ['/profile', '/wallet', '/orders', '/top-up', '/games']; // Add any other protected routes here
+const PROTECTED_PAGES = ['/profile', '/wallet', '/orders', '/top-up', '/games', '/admin'];
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<FirebaseUser | null>(null);
@@ -32,12 +32,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (firebaseUser) => {
-      setLoading(true); // Start loading whenever auth state changes
+      setLoading(true);
       setUser(firebaseUser);
-      setIsAdmin(firebaseUser?.email === 'ohshif5@gmail.com');
+      const isAdminUser = firebaseUser?.email === 'ohshif5@gmail.com';
+      setIsAdmin(isAdminUser);
       
       if (!firebaseUser) {
-        // User is signed out, no profile to fetch.
         setUserProfile(null);
         setLoading(false);
       }
@@ -48,11 +48,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (!user) {
-      // User is signed out, no need to listen to profile.
       return;
     }
 
-    // User is logged in, start listening for profile changes.
     const userDocRef = doc(db, 'users', user.uid);
     const unsubscribeProfile = onSnapshot(userDocRef, 
       (docSnap) => {
@@ -61,38 +59,41 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         } else {
           setUserProfile(null);
         }
-        setLoading(false); // Finished loading profile
+        setLoading(false);
       }, 
       (error) => {
         console.error("Error listening to user profile:", error);
         setUserProfile(null);
-        setLoading(false); // Finished loading (with error)
+        setLoading(false);
       }
     );
 
     return () => unsubscribeProfile();
 
-  }, [user]); // This effect re-runs only when the user object itself changes.
+  }, [user]);
 
   useEffect(() => {
-    // This effect handles ALL redirection logic after loading is complete.
     if (loading) return;
 
     const isAuthPage = AUTH_PAGES.includes(pathname);
     const isProtectedRoute = PROTECTED_PAGES.some(p => pathname.startsWith(p));
+    const isAdminRoute = pathname.startsWith('/admin');
 
-    if (user && isAuthPage) {
-      // Logged-in user on an auth page (e.g., /login) -> redirect to profile
-      router.replace('/profile');
-    } else if (!user && isProtectedRoute) {
-      // Logged-out user trying to access a protected page -> redirect to login
-      router.replace('/login');
+    if (user) {
+      if (isAuthPage) {
+        router.replace('/profile');
+      } else if (isAdminRoute && !isAdmin) {
+        router.replace('/');
+      }
+    } else {
+      if (isProtectedRoute) {
+        router.replace('/login');
+      }
     }
-  }, [user, loading, pathname, router]);
+  }, [user, loading, pathname, router, isAdmin]);
 
   const value = { user, userProfile, loading, isAdmin };
 
-  // While loading, we can show a global skeleton loader to prevent content flashing.
   const isAuthPage = AUTH_PAGES.includes(pathname);
   if (loading && !isAuthPage) {
      return (
