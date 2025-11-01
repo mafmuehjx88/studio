@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
-import { doc, onSnapshot } from 'firebase/firestore';
+import { doc, getDoc, onSnapshot } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
 import type { UserProfile } from '@/lib/types';
 import { setCookie, destroyCookie } from 'nookies';
@@ -22,40 +22,37 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-  const [loading, setLoading] = useState(true); // Single loading state
+  const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    // This is the main listener for Firebase Auth state changes.
     const unsubscribeAuth = onAuthStateChanged(auth, async (firebaseUser) => {
-      setLoading(true); // Always start loading when auth state might be changing.
-      
       if (firebaseUser) {
+        // User is logged in.
         setUser(firebaseUser);
         const token = await firebaseUser.getIdToken();
         setCookie(null, AUTH_COOKIE_NAME, token, { maxAge: 30 * 24 * 60 * 60, path: '/' });
         setIsAdmin(firebaseUser.email === 'ohshif5@gmail.com');
 
-        // Now, listen for this user's profile data from Firestore.
+        // Listen for realtime updates on the user profile for things like walletBalance
         const userDocRef = doc(db, 'users', firebaseUser.uid);
         const unsubscribeProfile = onSnapshot(userDocRef, (docSnap) => {
           if (docSnap.exists()) {
             setUserProfile({ uid: docSnap.id, ...docSnap.data() } as UserProfile);
           } else {
-            // This case might happen if the user record is deleted from Firestore but auth record still exists.
+            // This could happen if the user record in Firestore is deleted
             setUserProfile(null);
           }
-          // IMPORTANT: Stop loading only AFTER we've attempted to fetch the profile.
+           // Once we get the first snapshot, we can consider the initial loading complete.
           setLoading(false);
         }, (error) => {
-          // Handle errors in fetching profile
-          console.error("Error fetching user profile:", error);
+          console.error("Error listening to user profile:", error);
           setUserProfile(null);
-          setLoading(false); // Also stop loading on error.
+          setLoading(false);
         });
-
-        // This function will be called when the user logs out.
-        // It cleans up the Firestore listener.
+        
+        // Return the profile listener's unsubscribe function.
+        // It will be called when the user logs out.
         return () => unsubscribeProfile();
 
       } else {
@@ -64,14 +61,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUserProfile(null);
         destroyCookie(null, AUTH_COOKIE_NAME, { path: '/' });
         setIsAdmin(false);
-        setLoading(false); // Stop loading.
+        setLoading(false);
       }
     });
 
-    // This is the cleanup function for the main auth listener.
-    // It runs when the AuthProvider component unmounts.
     return () => unsubscribeAuth();
-  }, []); // The empty dependency array means this effect runs only once on mount.
+  }, []);
 
 
   const value = { user, userProfile, loading, isAdmin };

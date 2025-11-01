@@ -17,19 +17,14 @@ export function middleware(request: NextRequest) {
   const isProtectedPath = protectedPaths.some(p => pathname.startsWith(p));
   const isAuthPage = authPages.includes(pathname);
 
-  // If user is logged in (has cookie)
-  if (hasAuthCookie) {
-    // and tries to access login/register page, redirect to profile
-    if (isAuthPage) {
-      return NextResponse.redirect(new URL('/profile', request.url));
-    }
-  } 
-  // If user is not logged in (no cookie)
-  else {
-    // and tries to access a protected page, redirect to login
-    if (isProtectedPath) {
-      return NextResponse.redirect(new URL('/login', request.url));
-    }
+  // If user is trying to access a protected path without an auth cookie, redirect to login
+  if (isProtectedPath && !hasAuthCookie) {
+    return NextResponse.redirect(new URL('/login', request.url));
+  }
+
+  // If user is trying to access an auth page with an auth cookie, redirect to profile
+  if (isAuthPage && hasAuthCookie) {
+    return NextResponse.redirect(new URL('/profile', request.url));
   }
 
   // Otherwise, allow the request to proceed

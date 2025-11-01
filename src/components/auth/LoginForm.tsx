@@ -60,10 +60,10 @@ export default function LoginForm() {
     } else {
       toast({
         title: "Login Successful",
-        description: "Welcome back!",
+        description: "Welcome back! Redirecting...",
       });
-      // On success, the middleware will handle the redirect.
-      // We can optimistically navigate to make the UX feel faster.
+      // The middleware will eventually redirect, but we can make the UX faster
+      // by navigating immediately on success.
       router.replace('/profile');
     }
   }

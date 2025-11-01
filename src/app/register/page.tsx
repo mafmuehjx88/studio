@@ -19,7 +19,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
 
 export default function RegisterPage() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
   const auth = useAuthInstance();
@@ -37,10 +37,10 @@ export default function RegisterPage() {
   const logo = PlaceHolderImages.find((img) => img.id === "logo");
   
   useEffect(() => {
-    if (user) {
+    if (!loading && user) {
         router.replace('/profile');
     }
-  }, [user, router]);
+  }, [user, loading, router]);
 
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -108,8 +108,10 @@ export default function RegisterPage() {
         title: "Registration Successful",
         description: "Your account has been created. Redirecting...",
       });
-      // On success, the middleware will handle the redirect automatically
-      // when the auth state changes. No need to call router.push here.
+      
+      // On success, AuthContext will detect the new user. 
+      // The useEffect will then handle the redirect to /profile.
+      // We don't need to push the router here anymore.
       
     } catch (error: any) {
       let description = "An unexpected error occurred.";
@@ -121,11 +123,12 @@ export default function RegisterPage() {
         description,
         variant: "destructive",
       });
+    } finally {
       setIsRegistering(false);
     }
   };
   
-  if (user) {
+  if (loading) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -133,139 +136,148 @@ export default function RegisterPage() {
     );
   }
 
-  return (
-    <div className="flex min-h-full flex-col items-center justify-center">
-      <div className="w-full max-w-sm space-y-6">
-        <div className="flex flex-col items-center text-center">
-          {logo && (
-             <div className="relative mb-4 h-16 w-16">
-               <div className="absolute -inset-1 animate-pulse rounded-full bg-primary/50 blur-lg"></div>
-               <Image
-                 src={logo.imageUrl}
-                 alt={logo.description}
-                 width={64}
-                 height={64}
-                 className="relative rounded-full"
-                 data-ai-hint={logo.imageHint}
-               />
-             </div>
-          )}
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">
-            Create Your Account
-          </h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Join AT Game HUB and start buying game items securely.
+  if (!user) {
+    return (
+      <div className="flex min-h-full flex-col items-center justify-center">
+        <div className="w-full max-w-sm space-y-6">
+          <div className="flex flex-col items-center text-center">
+            {logo && (
+               <div className="relative mb-4 h-16 w-16">
+                 <div className="absolute -inset-1 animate-pulse rounded-full bg-primary/50 blur-lg"></div>
+                 <Image
+                   src={logo.imageUrl}
+                   alt={logo.description}
+                   width={64}
+                   height={64}
+                   className="relative rounded-full"
+                   data-ai-hint={logo.imageHint}
+                 />
+               </div>
+            )}
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">
+              Create Your Account
+            </h1>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Join AT Game HUB and start buying game items securely.
+            </p>
+          </div>
+  
+          <form onSubmit={handleRegister} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="username">Username</Label>
+              <Input
+                id="username"
+                type="text"
+                placeholder="user1234"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+                disabled={isRegistering}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="email">Email address</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                disabled={isRegistering}
+              />
+            </div>
+            <div className="relative space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                disabled={isRegistering}
+                className="pr-10"
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="absolute right-1 top-7 h-7 w-7 text-muted-foreground"
+                onClick={() => setShowPassword(!showPassword)}
+                disabled={isRegistering}
+              >
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </Button>
+            </div>
+            <div className="relative space-y-2">
+              <Label htmlFor="confirm-password">Confirm Password</Label>
+              <Input
+                id="confirm-password"
+                type={showConfirmPassword ? "text" : "password"}
+                placeholder="••••••••"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                disabled={isRegistering}
+                className="pr-10"
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="absolute right-1 top-7 h-7 w-7 text-muted-foreground"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                disabled={isRegistering}
+              >
+                {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </Button>
+            </div>
+            <div className="flex items-center space-x-2 pt-2">
+              <Checkbox 
+                  id="terms" 
+                  checked={agreed}
+                  onCheckedChange={(checked) => setAgreed(checked as boolean)}
+                  disabled={isRegistering}
+              />
+              <Label htmlFor="terms" className="text-sm font-normal text-muted-foreground">
+                I agree to{" "}
+                <Link href="/terms" className="text-primary hover:underline">
+                  Terms & Conditions
+                </Link>
+              </Label>
+            </div>
+  
+            <Button type="submit" className="w-full" disabled={isRegistering}>
+              {isRegistering ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Registering...
+                </>
+              ) : (
+                "Create Account"
+              )}
+            </Button>
+          </form>
+  
+          <p className="text-center text-sm text-muted-foreground">
+            Already have an account?{" "}
+            <Link
+              href="/login"
+              className="font-medium text-primary hover:underline"
+            >
+              Log In
+            </Link>
           </p>
         </div>
-
-        <form onSubmit={handleRegister} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="username">Username</Label>
-            <Input
-              id="username"
-              type="text"
-              placeholder="user1234"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-              disabled={isRegistering}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="email">Email address</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              disabled={isRegistering}
-            />
-          </div>
-          <div className="relative space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type={showPassword ? "text" : "password"}
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              disabled={isRegistering}
-              className="pr-10"
-            />
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              className="absolute right-1 top-7 h-7 w-7 text-muted-foreground"
-              onClick={() => setShowPassword(!showPassword)}
-              disabled={isRegistering}
-            >
-              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-            </Button>
-          </div>
-          <div className="relative space-y-2">
-            <Label htmlFor="confirm-password">Confirm Password</Label>
-            <Input
-              id="confirm-password"
-              type={showConfirmPassword ? "text" : "password"}
-              placeholder="••••••••"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              disabled={isRegistering}
-              className="pr-10"
-            />
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              className="absolute right-1 top-7 h-7 w-7 text-muted-foreground"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              disabled={isRegistering}
-            >
-              {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-            </Button>
-          </div>
-          <div className="flex items-center space-x-2 pt-2">
-            <Checkbox 
-                id="terms" 
-                checked={agreed}
-                onCheckedChange={(checked) => setAgreed(checked as boolean)}
-                disabled={isRegistering}
-            />
-            <Label htmlFor="terms" className="text-sm font-normal text-muted-foreground">
-              I agree to{" "}
-              <Link href="/terms" className="text-primary hover:underline">
-                Terms & Conditions
-              </Link>
-            </Label>
-          </div>
-
-          <Button type="submit" className="w-full" disabled={isRegistering}>
-            {isRegistering ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Registering...
-              </>
-            ) : (
-              "Create Account"
-            )}
-          </Button>
-        </form>
-
-        <p className="text-center text-sm text-muted-foreground">
-          Already have an account?{" "}
-          <Link
-            href="/login"
-            className="font-medium text-primary hover:underline"
-          >
-            Log In
-          </Link>
-        </p>
       </div>
+    );
+  }
+  
+  // This is shown while the redirect is in flight after registering.
+  return (
+    <div className="flex h-screen w-full items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
     </div>
   );
 }
