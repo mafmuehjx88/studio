@@ -23,9 +23,13 @@ export default function Footer() {
   const pathname = usePathname();
   const { isAdmin, user, loading } = useAuth();
   
+  // Do not render the footer if the user is not logged in or if it's still loading.
   if (loading || !user) return null;
 
   const items = isAdmin ? adminNavItems : navItems;
+
+  // The footer should not be visible on login/register pages
+  if (pathname === '/login' || pathname === '/register') return null;
 
   return (
     <footer className="fixed bottom-0 left-0 right-0 z-20 mx-auto h-16 w-full max-w-md border-t border-border/50 bg-background/80 backdrop-blur-lg">
