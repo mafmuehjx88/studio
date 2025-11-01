@@ -28,7 +28,6 @@ const formSchema = z.object({
 export default function LoginForm() {
   const { toast } = useToast();
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -64,7 +63,8 @@ export default function LoginForm() {
         title: "Login Successful",
         description: "Welcome back!",
       });
-      // The AuthGuard will handle the redirection.
+      // Redirect immediately on success instead of waiting for AuthGuard
+      router.replace('/profile');
     }
   }
 
