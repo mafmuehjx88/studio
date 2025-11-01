@@ -19,7 +19,7 @@ export default function ProductGrid({ title, products, onProductClick, gridCols 
 
   return (
     <div>
-      <div className="mb-3 flex items-center gap-2">
+      <div className={cn("mb-3 flex items-center gap-2", !titleNumber && "justify-center")}>
         {titleNumber && (
             <span className="flex h-6 w-6 items-center justify-center rounded-full bg-green-600 text-white text-sm font-bold">
                 {titleNumber}
