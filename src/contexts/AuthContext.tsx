@@ -34,7 +34,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (firebaseUser) => {
-      setLoading(true);
       setUser(firebaseUser);
       const isAdminUser = firebaseUser?.email === 'ohshif5@gmail.com';
       setIsAdmin(isAdminUser);
@@ -50,9 +49,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (!user) {
+      setLoading(false); // Ensure loading is false if there's no user.
       return;
     }
 
+    setLoading(true); // Set loading to true when we start fetching the profile
     const userDocRef = doc(db, 'users', user.uid);
     const unsubscribeProfile = onSnapshot(userDocRef, 
       (docSnap) => {
@@ -61,12 +62,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         } else {
           setUserProfile(null);
         }
-        setLoading(false);
+        setLoading(false); // Set loading to false after fetching profile
       }, 
       (error) => {
         console.error("Error listening to user profile:", error);
         setUserProfile(null);
-        setLoading(false);
+        setLoading(false); // Also set loading to false on error
       }
     );
 
