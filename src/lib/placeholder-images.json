@@ -1,3 +1,52 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "logo",
+      "description": "AT Game HUB Logo",
+      "imageUrl": "https://images.unsplash.com/photo-1624138149925-6c1dd2d60460?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxnYW1lJTIwbG9nb3xlbnwwfHx8fDE3NjE4OTg0NzV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "game logo"
+    },
+    {
+      "id": "banner",
+      "description": "Promotional banner for game top-ups",
+      "imageUrl": "https://images.unsplash.com/photo-1585324119228-c9bf1885c7ec?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxnYW1lJTIwYmFubmVyfGVufDB8fHx8MTc2MTg4ODIzNXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "game banner"
+    },
+    {
+      "id": "mobile-legends",
+      "description": "Mobile Legends game cover",
+      "imageUrl": "https://images.unsplash.com/photo-1529981188441-8a2e6fe30103?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8ZmFudGFzeSUyMGJhdHRsZXxlbnwwfHx8fDE3NjE5MjU3MTh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "fantasy battle"
+    },
+    {
+      "id": "pubg-mobile",
+      "description": "PUBG Mobile game cover",
+      "imageUrl": "https://images.unsplash.com/photo-1690040673682-39b068511b59?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxzb2xkaWVyJTIwYWN0aW9ufGVufDB8fHx8MTc2MTk2NzYxM3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "soldier action"
+    },
+    {
+      "id": "honor-of-kings",
+      "description": "Honor of Kings game cover",
+      "imageUrl": "https://images.unsplash.com/photo-1758798460230-2f92954c2096?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxjaGluZXNlJTIwd2FycmlvcnxlbnwwfHx8fDE3NjE5Njc2MTN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "chinese warrior"
+    },
+    {
+      "id": "default-avatar",
+      "description": "Default user avatar",
+      "imageUrl": "https://images.unsplash.com/photo-1590086782792-42dd2350140d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwZXJzb24lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NjE4ODIwMzV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person portrait"
+    },
+    {
+      "id": "kpay",
+      "description": "KBZ Pay Logo",
+      "imageUrl": "https://images.unsplash.com/photo-1705123898140-11c516829f4c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxwYXltZW50JTIwbG9nb3xlbnwwfHx8fDE3NjE5Njc2MTN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "payment logo"
+    },
+    {
+      "id": "wavepay",
+      "description": "Wave Pay Logo",
+      "imageUrl": "https://images.unsplash.com/photo-1596248675029-bd9b0c7dc479?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxwYXltZW50JTIwbG9nb3xlbnwwfHx8fDE3NjE5Njc2MTN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "payment logo"
+    }
+  ]
 }
