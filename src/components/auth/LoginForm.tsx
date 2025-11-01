@@ -44,11 +44,13 @@ export default function LoginForm() {
     const result = await loginUser(values);
     
     if (result.error) {
-      let description = result.error;
-      if (result.error.includes("auth/invalid-credential")) {
-        description = "Incorrect email or password. Please try again.";
-      } else if (result.error.includes("auth/user-not-found")) {
-        description = "Account does not exist. Please register a new account.";
+      let description = "An unexpected error occurred. Please try again.";
+      if (typeof result.error === 'string') {
+        if (result.error.includes("auth/invalid-credential") || result.error.includes("auth/user-not-found") || result.error.includes("auth/wrong-password")) {
+          description = "Incorrect email or password. Please try again.";
+        } else if (result.error.includes("auth/user-not-found")) {
+          description = "Account does not exist. Please register a new account.";
+        }
       }
       
       toast({
@@ -62,8 +64,7 @@ export default function LoginForm() {
         title: "Login Successful",
         description: "Welcome back!",
       });
-      const redirectUrl = searchParams.get("redirect") || "/";
-      router.replace(redirectUrl);
+      // The AuthGuard will handle the redirection.
     }
   }
 

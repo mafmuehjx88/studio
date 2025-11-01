@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuth } from "@/contexts/AuthContext";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { Loader2 } from "lucide-react";
 
@@ -17,39 +17,44 @@ export default function AuthGuard({
   const { user, loading, isAdmin } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
-    // Don't do anything while loading, useEffect will re-run when loading changes.
     if (loading) {
-      return;
+      return; // Wait until the auth state is loaded
     }
 
     const isUserLoggedIn = !!user;
+    const redirectUrl = searchParams.get("redirect") || (isAdmin ? "/admin" : "/");
 
-    // Logic for auth pages (login, register)
+    // Logic for auth pages (e.g., /login, /register)
     if (isAuthPage) {
       if (isUserLoggedIn) {
-        // If user is logged in, redirect away from auth pages.
-        const targetRoute = isAdmin ? "/admin" : "/";
-        router.replace(targetRoute);
+        // If user is logged in, redirect them away from auth pages
+        router.replace(redirectUrl);
       }
-      // If not logged in, do nothing and show the auth page.
+      // If not logged in, show the auth page content (the children)
     } 
     // Logic for protected pages
     else {
       if (!isUserLoggedIn) {
-        // If user is not logged in, redirect to login.
+        // If user is not logged in, redirect to login page
         router.replace(`/login?redirect=${pathname}`);
       } else if (isAdminPage && !isAdmin) {
-        // If it's an admin page and the user is not an admin, redirect.
+        // If it's an admin page and user is not an admin, redirect to home
         router.replace("/");
       }
-      // If user is logged in (and is admin if required), do nothing and show the protected page.
+      // If user is logged in (and has permissions), show the protected page content
     }
-  }, [user, loading, router, isAuthPage, isAdminPage, isAdmin, pathname]);
+  }, [user, loading, router, isAuthPage, isAdminPage, isAdmin, pathname, searchParams]);
 
-  // Show a loading spinner if auth state is loading, or if a redirect is imminent.
-  if (loading || (!isAuthPage && !user) || (isAuthPage && user)) {
+  // Determine if a loading spinner should be shown
+  const showLoader = 
+    loading || // Always show loader while auth state is loading
+    (isAuthPage && !!user) || // Show loader on auth page if user is logged in (while redirecting)
+    (!isAuthPage && !user); // Show loader on protected page if user is not logged in (while redirecting)
+
+  if (showLoader) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -57,6 +62,6 @@ export default function AuthGuard({
     );
   }
 
-  // Otherwise, render the children.
+  // Render the page content
   return <>{children}</>;
 }

@@ -57,7 +57,7 @@ export default function RegisterForm() {
         title: "Registration Successful",
         description: "Your account has been created.",
       });
-      router.replace("/");
+      // The AuthGuard will handle the redirection.
     }
   }
 
