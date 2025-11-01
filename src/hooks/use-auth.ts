@@ -5,7 +5,7 @@ import { onAuthStateChanged, User } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
 
-export function useAuth() {
+export function useAuthHook() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -22,7 +22,7 @@ export function useAuth() {
 }
 
 export function useRequireAuth(redirectUrl = '/login') {
-    const { user, loading } = useAuth();
+    const { user, loading } = useAuthHook();
     const router = useRouter();
 
     useEffect(() => {
@@ -35,7 +35,7 @@ export function useRequireAuth(redirectUrl = '/login') {
 }
 
 export function useRedirectIfAuth(redirectUrl = '/profile') {
-    const { user, loading } = useAuth();
+    const { user, loading } = useAuthHook();
     const router = useRouter();
 
     useEffect(() => {

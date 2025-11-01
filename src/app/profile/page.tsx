@@ -23,7 +23,7 @@ export default function ProfilePage() {
 
   const avatar = PlaceHolderImages.find((img) => img.id === "default-avatar");
 
-  if (authLoading || !user) {
+  if (authLoading || profileLoading || !user) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -38,11 +38,11 @@ export default function ProfilePage() {
           <Avatar className="h-16 w-16 border-2 border-primary">
             {avatar && <AvatarImage src={avatar.imageUrl} alt={userProfile?.username} />}
             <AvatarFallback>
-              {profileLoading || !userProfile ? <Skeleton className="h-full w-full" /> : userProfile.username.charAt(0).toUpperCase()}
+              {!userProfile ? <Skeleton className="h-full w-full" /> : userProfile.username.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
           <div className="space-y-1">
-            {profileLoading || !userProfile ? (
+            {!userProfile ? (
               <>
                 <Skeleton className="h-6 w-32" />
                 <Skeleton className="h-4 w-24" />
