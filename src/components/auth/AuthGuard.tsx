@@ -17,30 +17,31 @@ export default function AuthGuard({
   const pathname = usePathname();
 
   useEffect(() => {
-    // Don't do anything while loading to prevent premature redirects.
     if (loading) {
+      // While loading, we don't know the auth state, so don't do anything.
+      // The loading spinner below will be shown.
       return;
     }
 
     const isUserLoggedIn = !!user;
 
-    // For auth pages (like /login, /register)
-    if (isAuthPage) {
-      // If the user is logged in, redirect them away from auth pages to the profile page.
-      if (isUserLoggedIn) {
-        router.replace("/profile");
-      }
-    } 
-    // For protected pages (most other pages)
-    else {
-      // If the user is not logged in, redirect them to the login page.
-      if (!isUserLoggedIn) {
-        router.replace(`/login?redirect=${pathname}`);
-      }
+    // After loading, if the user is on an auth page (login/register) but is already logged in,
+    // redirect them to the profile page.
+    if (isAuthPage && isUserLoggedIn) {
+      router.replace("/profile");
+      return; // Stop further execution
+    }
+
+    // After loading, if the user is on a protected page but is NOT logged in,
+    // redirect them to the login page.
+    if (!isAuthPage && !isUserLoggedIn) {
+      router.replace(`/login?redirect=${pathname}`);
+      return; // Stop further execution
     }
   }, [user, loading, router, pathname, isAuthPage]);
-  
-  // While the authentication state is loading, always show a spinner.
+
+  // Case 1: The authentication state is still being determined.
+  // Show a full-screen loader.
   if (loading) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
@@ -49,8 +50,9 @@ export default function AuthGuard({
     );
   }
 
-  // If on an auth page and a user is logged in, they are being redirected.
-  // Show a spinner during the redirect.
+  // Case 2: We have the auth state.
+  // If the user is on an auth page but is logged in, they are being redirected.
+  // Show a loader during the redirect to avoid a flash of the login/register page.
   if (isAuthPage && user) {
      return (
       <div className="flex h-screen w-full items-center justify-center">
@@ -59,8 +61,9 @@ export default function AuthGuard({
     );
   }
 
-  // If on a protected page and no user is logged in, they are being redirected.
-  // Show a spinner during the redirect.
+  // Case 3: We have the auth state.
+  // If the user is on a protected page but is not logged in, they are being redirected.
+  // Show a loader during the redirect.
   if (!isAuthPage && !user) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
@@ -69,6 +72,7 @@ export default function AuthGuard({
     );
   }
 
-  // If we've passed all checks, the user is in the right place. Render the page.
+  // If none of the above conditions are met, the user is in the right place.
+  // Render the page content.
   return <>{children}</>;
 }
