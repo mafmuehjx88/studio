@@ -73,8 +73,8 @@ export default async function Home() {
                         src={gameImage.imageUrl}
                         alt={game.name}
                         width={400}
-                        height={500}
-                        className="aspect-[4/5] object-cover"
+                        height={400}
+                        className="aspect-square object-cover"
                         data-ai-hint={gameImage.imageHint}
                       />
                     )}

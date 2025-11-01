@@ -14,9 +14,9 @@ export interface Product {
 }
 
 export const games: Game[] = [
-  { id: 'mobile-legends', name: 'Mobile Legends', image: 'mobile-legends', needsServerId: true },
-  { id: 'pubg-mobile', name: 'PUBG Mobile', image: 'pubg-mobile', needsServerId: false },
-  { id: 'honor-of-kings', name: 'Honor of Kings', image: 'honor-of-kings', needsServerId: false },
+  { id: 'mobile-legends', name: 'MLBB', image: 'mobile-legends', needsServerId: true },
+  { id: 'pubg-mobile', name: 'PUBG', image: 'pubg-mobile', needsServerId: false },
+  { id: 'honor-of-kings', name: 'HOK', image: 'honor-of-kings', needsServerId: false },
 ];
 
 export const products: Product[] = [
