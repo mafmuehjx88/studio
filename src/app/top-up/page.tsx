@@ -189,14 +189,6 @@ export default function TopUpPage() {
                 <p className="text-sm text-muted-foreground">{account.name}</p>
               </div>
             </div>
-            <Button
-              size="sm"
-              variant="link"
-              className="mt-2 w-full justify-center gap-2 rounded-md bg-yellow-400 text-black hover:bg-yellow-500"
-            >
-              <Image src={account.logo} alt="" width={16} height={16} className="rounded-full" />
-              ငွေလွှဲနည်း
-            </Button>
           </div>
         ))}
       </div>
@@ -280,5 +272,3 @@ export default function TopUpPage() {
     </div>
   );
 }
-
-    
