@@ -26,13 +26,6 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
             မစောင့်ရပါ
           </Badge>
         )}
-        {is2xProduct && (
-          <div className="absolute left-0 top-0 z-10">
-            <span className="inline-block rounded-br-md rounded-tl-md bg-red-600 px-2 py-0.5 text-[10px] font-medium text-white">
-              First Recharge
-            </span>
-          </div>
-        )}
         
         {product.image && (
              <Image
