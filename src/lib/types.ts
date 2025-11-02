@@ -43,7 +43,7 @@ export interface Order {
 }
 
 export interface TopUpRequest {
-    id: string;
+    id?: string;
     userId: string;
     username: string;
     amount: number;

@@ -7,10 +7,12 @@ service cloud.firestore {
     }
     
     match /users/{userId} {
+      // A user can read or update their own profile, or an admin can.
       allow read, update: if request.auth.uid == userId || isAdmin();
-      // Allow user creation if the user is creating their own document
+      // A user can create their own document when they sign up.
+      // The `request.auth.uid` must match the `userId` in the path.
       allow create: if request.auth.uid == userId;
-      // Allow admin to list all users
+      // An admin can list all users.
       allow list: if isAdmin();
     }
     

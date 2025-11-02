@@ -18,7 +18,7 @@ import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { errorEmitter } from "@/firebase/error-emitter";
 import { FirestorePermissionError } from "@/firebase/errors";
-import type { PlaceholderImage, UserProfile } from "@/lib/types";
+import type { UserProfile } from "@/lib/types";
 
 
 export default function RegisterPage() {
@@ -88,37 +88,52 @@ export default function RegisterPage() {
       const user = userCredential.user;
 
       // 2. Prepare user profile data for Firestore
-      const userProfileData: UserProfile = {
-        uid: user.uid,
+      const userProfileData: Omit<UserProfile, 'uid'> & { createdAt: any } = {
         username: username,
         email: user.email!,
         walletBalance: 0,
         createdAt: serverTimestamp(),
       };
       
-      // 3. Create user document in Firestore
+      // 3. Create user document in Firestore, with proper error handling
       const userDocRef = doc(db, "users", user.uid);
-      await setDoc(userDocRef, userProfileData);
-      
-      // 4. Show success. Redirection is handled by AuthContext.
-      toast({
-        title: "Registration Successful",
-        description: "Your account has been created. Redirecting...",
-      });
+      setDoc(userDocRef, userProfileData)
+        .then(() => {
+          // 4. Show success. Redirection is handled by AuthContext.
+          toast({
+            title: "Registration Successful",
+            description: "Your account has been created. Redirecting...",
+          });
+        })
+        .catch((error) => {
+          // This catch block is for the setDoc operation
+          console.error("Firestore Error:", error);
+          
+          let description = "Could not save your profile. Please contact support.";
+          if (error.code === 'permission-denied') {
+              const permissionError = new FirestorePermissionError({
+                path: userDocRef.path,
+                operation: 'create',
+                requestResourceData: userProfileData,
+              });
+              errorEmitter.emit('permission-error', permissionError);
+              description = "You don't have permission to create a user profile.";
+          }
+           toast({
+            title: "Registration Failed",
+            description: description,
+            variant: "destructive",
+          });
+        })
+        .finally(() => {
+            setIsRegistering(false);
+        });
 
     } catch (error: any) {
-      let description = "An unexpected error occurred.";
-      // Handle known errors
+      // This catch block is mainly for createUserWithEmailAndPassword
+      let description = "An unexpected error occurred during sign-up.";
       if (error.code === 'auth/email-already-in-use') {
         description = "This email is already registered. Please log in.";
-      } else if (error.code === 'permission-denied') {
-          description = "Could not create user profile due to a permissions issue. Please contact support.";
-          const permissionError = new FirestorePermissionError({
-            path: `users/${email}`, // Best guess for path
-            operation: 'create',
-            requestResourceData: { email, username },
-          });
-          errorEmitter.emit('permission-error', permissionError);
       }
       
       toast({
@@ -126,7 +141,6 @@ export default function RegisterPage() {
         description,
         variant: "destructive",
       });
-    } finally {
       setIsRegistering(false);
     }
   };
