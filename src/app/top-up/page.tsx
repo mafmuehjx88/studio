@@ -21,13 +21,13 @@ const paymentAccounts = [
     name: 'Pyae Sone Hein',
     phone: '09769181524',
     type: 'KBZ Pay',
-    logo: 'https://i.ibb.co/7tdxdMP0/new355-ab76bb0483ac7c445251c650cc7c1227-1.jpg', // Changed to working URL
+    logo: 'https://i.ibb.co/sv95LBKN/11f074fe04271ca1f562331d873344f8-1.jpg',
   },
   {
     name: 'Aent Phone Khant',
     phone: '09961034354',
     type: 'KBZ Pay',
-    logo: 'https://i.ibb.co/7tdxdMP0/new355-ab76bb0483ac7c445251c650cc7c1227-1.jpg', // Changed to working URL
+    logo: 'https://i.ibb.co/sv95LBKN/11f074fe04271ca1f562331d873344f8-1.jpg',
   },
   {
     name: 'Than Htay',
@@ -43,7 +43,7 @@ const paymentAccounts = [
   },
 ];
 
-const attentionText = `သတိပြုရန်- ငွေလွဲနည်း ဆိုတဲ့ဟာကို နှိပ်ပြီးတော့ စာကိုအရင်ဖတ်ပေးပါဗျ။ ငွေဖြည့် စည်းမျဉ်းအနေနဲ့ငွေလွဲပြီးတာနဲ့ 20min အတွင်းပြေစာတင်ရန်/ပြေစာတစ်ခုကို နှစ်ခါမတင်ရန်/ပြေစာအတု နဲ့Scam မလုပ်ရပါဘူး။ အထက်ပါအချက်များကိုချိုးဖောက်ပါက ရာသက်ပန် Banပါမယ်။ငွေပြန်မအမ်းပါ။`;
+const attentionText = `သတိပြုရန်- ငွေလွဲပြီးတာနဲ့ 20min အတွင်းပြေစာတင်ရန်/ပြေစာတစ်ခုကို နှစ်ခါမတင်ရန်/ပြေစာအတု နဲ့Scam မလုပ်ရပါဘူး။ အထက်ပါအချက်များကိုချိုးဖောက်ပါက ရာသက်ပန် Banပါမယ်။ငွေပြန်မအမ်းပါ။`;
 
 
 export default function TopUpPage() {
