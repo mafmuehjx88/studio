@@ -1,6 +1,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { games, staticImages } from '@/lib/data';
@@ -78,27 +79,38 @@ export default async function Home() {
         <div className="grid grid-cols-3 gap-3">
           {games.map((game) => {
               const isComingSoon = game.id === 'hok';
-              const Wrapper = isComingSoon ? 'div' : Link;
-              const props = isComingSoon ? {} : { href: `/games/${game.id}` };
+              const commonContent = (
+                <>
+                  <Card className={cn("overflow-hidden transition-transform", !isComingSoon && "group-hover:scale-105")}>
+                      <Image
+                      src={game.image}
+                      alt={game.name}
+                      width={400}
+                      height={400}
+                      className={cn("aspect-square w-full rounded-lg object-cover", isComingSoon && "grayscale opacity-50")}
+                      />
+                  </Card>
+                    <p className="truncate text-sm font-semibold text-foreground">
+                      {game.name}
+                  </p>
+                  <Button variant="secondary" size="sm" className="h-8 w-full text-xs" disabled={isComingSoon}>
+                      {isComingSoon ? "မကြာမီလာမည်" : "ဝယ်မည်"}
+                  </Button>
+                </>
+              );
+              
+              if (isComingSoon) {
+                  return (
+                    <div key={`game-${game.id}`} className="group flex flex-col gap-2 text-center">
+                        {commonContent}
+                    </div>
+                  )
+              }
 
               return (
-                <Wrapper {...props} key={`game-${game.id}`} className="group flex flex-col gap-2 text-center">
-                    <Card className={cn("overflow-hidden transition-transform", !isComingSoon && "group-hover:scale-105")}>
-                        <Image
-                        src={game.image}
-                        alt={game.name}
-                        width={400}
-                        height={400}
-                        className={cn("aspect-square w-full rounded-lg object-cover", isComingSoon && "grayscale opacity-50")}
-                        />
-                    </Card>
-                     <p className="truncate text-sm font-semibold text-foreground">
-                        {game.name}
-                    </p>
-                    <Button variant="secondary" size="sm" className="h-8 w-full text-xs" disabled={isComingSoon}>
-                        {isComingSoon ? "မကြာမီလာမည်" : "ဝယ်မည်"}
-                    </Button>
-                </Wrapper>
+                <Link key={`game-${game.id}`} href={`/games/${game.id}`} className="group flex flex-col gap-2 text-center">
+                    {commonContent}
+                </Link>
               )
           })}
         </div>
