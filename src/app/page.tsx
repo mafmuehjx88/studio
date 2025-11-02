@@ -11,6 +11,7 @@ import type { Game } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from '@/components/ui/separator';
 import { Megaphone } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 // Helper function to fetch data on the server
 async function getMarqueeText() {
@@ -75,39 +76,49 @@ export default async function Home() {
       <div>
         <h2 className="mb-4 text-center text-2xl font-bold">Games</h2>
         <div className="grid grid-cols-3 gap-3">
-          {games.map((game) => (
-            <Link href={`/games/${game.id}`} key={game.id} className="group flex flex-col gap-2 text-center">
-                <Card className="overflow-hidden transition-transform group-hover:scale-105">
-                    <Image
-                    src={game.image}
-                    alt={game.name}
-                    width={400}
-                    height={400}
-                    className="aspect-square w-full rounded-lg object-cover"
-                    />
-                </Card>
-                 <p className="truncate text-sm font-semibold text-foreground">
-                    {game.name}
-                </p>
-                <Button variant="secondary" size="sm" className="h-8 w-full text-xs">ဝယ်မည်</Button>
-            </Link>
-          ))}
-            <Link href="#" className="group flex flex-col gap-2 text-center">
-                <Card className="overflow-hidden transition-transform group-hover:scale-105">
+          {games.map((game) => {
+              const isComingSoon = game.id === 'hok';
+              const Wrapper = isComingSoon ? 'div' : Link;
+              const props = isComingSoon ? {} : { href: `/games/${game.id}` };
+
+              return (
+                <Wrapper {...props} key={game.id} className="group flex flex-col gap-2 text-center">
+                    <Card className={cn("overflow-hidden transition-transform", !isComingSoon && "group-hover:scale-105")}>
+                        <Image
+                        src={game.image}
+                        alt={game.name}
+                        width={400}
+                        height={400}
+                        className={cn("aspect-square w-full rounded-lg object-cover", isComingSoon && "grayscale opacity-50")}
+                        />
+                    </Card>
+                     <p className="truncate text-sm font-semibold text-foreground">
+                        {game.name}
+                    </p>
+                    <Button variant="secondary" size="sm" className="h-8 w-full text-xs" disabled={isComingSoon}>
+                        {isComingSoon ? "မကြာမီလာမည်" : "ဝယ်မည်"}
+                    </Button>
+                </Wrapper>
+              )
+          })}
+            <div className="group flex flex-col gap-2 text-center">
+                <Card className="overflow-hidden transition-transform">
                     <Image
                     src="https://picsum.photos/seed/buy-account/400/400"
                     alt="အကောင့်ဝယ်ရန်"
                     width={400}
                     height={400}
                     data-ai-hint="user key"
-                    className="aspect-square w-full rounded-lg object-cover"
+                    className="aspect-square w-full rounded-lg object-cover grayscale opacity-50"
                     />
                 </Card>
                  <p className="truncate text-sm font-semibold text-foreground">
                     အကောင့်ဝယ်ရန်
                 </p>
-                <Button variant="secondary" size="sm" className="h-8 w-full text-xs">ဝယ်မည်</Button>
-            </Link>
+                <Button variant="secondary" size="sm" className="h-8 w-full text-xs" disabled>
+                    မကြာမီလာမည်
+                </Button>
+            </div>
         </div>
       </div>
       
