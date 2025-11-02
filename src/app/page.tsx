@@ -81,16 +81,20 @@ export default function Home() {
       
       <div className="space-y-4 pt-8">
         {logoImage && (
-             <Card className="overflow-hidden border-none">
-                <Image
-                    src={logoImage.imageUrl}
-                    alt={logoImage.description}
-                    width={400}
-                    height={400}
-                    className="aspect-square w-full object-cover"
-                    data-ai-hint={logoImage.imageHint}
-                />
-            </Card>
+            <div className="flex justify-center">
+                <div className="w-1/3">
+                    <Card className="overflow-hidden border-none bg-transparent shadow-none">
+                        <Image
+                            src={logoImage.imageUrl}
+                            alt={logoImage.description}
+                            width={400}
+                            height={400}
+                            className="aspect-square w-full object-cover"
+                            data-ai-hint={logoImage.imageHint}
+                        />
+                    </Card>
+                </div>
+            </div>
         )}
         <Separator />
         <div className="flex justify-center gap-4 py-4">
