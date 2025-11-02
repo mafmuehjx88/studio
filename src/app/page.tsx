@@ -101,7 +101,7 @@ export default async function Home() {
                 </Wrapper>
               )
           })}
-            <div className="group flex flex-col gap-2 text-center">
+            <div key="buy-account" className="group flex flex-col gap-2 text-center">
                 <Card className="overflow-hidden transition-transform">
                     <Image
                     src="https://i.ibb.co/d4z5MQ1x/New-Project-107-3-ADF212.png"
