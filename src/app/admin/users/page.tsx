@@ -33,7 +33,7 @@ export default function AdminUsersPage() {
       (querySnapshot) => {
         const usersData: UserProfile[] = [];
         querySnapshot.forEach((doc) => {
-          usersData.push({ ...doc.data() } as UserProfile);
+          usersData.push({ uid: doc.id, ...doc.data() } as UserProfile);
         });
         setUsers(usersData);
         setLoading(false);
