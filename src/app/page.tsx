@@ -82,7 +82,7 @@ export default async function Home() {
               const props = isComingSoon ? {} : { href: `/games/${game.id}` };
 
               return (
-                <Wrapper {...props} key={game.id} className="group flex flex-col gap-2 text-center">
+                <Wrapper {...props} key={`game-${game.id}`} className="group flex flex-col gap-2 text-center">
                     <Card className={cn("overflow-hidden transition-transform", !isComingSoon && "group-hover:scale-105")}>
                         <Image
                         src={game.image}
