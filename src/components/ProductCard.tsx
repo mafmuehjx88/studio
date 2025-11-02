@@ -38,8 +38,8 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
              <Image
                 src={product.image}
                 alt={product.name}
-                width={150}
-                height={150}
+                width={100}
+                height={100}
                 className="w-full rounded-md object-cover aspect-square"
               />
         )}
