@@ -5,33 +5,14 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { games, staticImages } from '@/lib/data';
-import { Marquee } from '@/components/ui/marquee';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
 import type { Game } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from '@/components/ui/separator';
-import { Megaphone } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import MarqueeText from '@/components/MarqueeText';
 
-// Helper function to fetch data on the server
-async function getMarqueeText() {
-  try {
-    const settingsDoc = await getDoc(doc(db, "settings", "marquee"));
-    const marqueeText = settingsDoc.exists() 
-      ? settingsDoc.data().text 
-      : "Welcome to AT Game HUB! Your trusted partner for game top-ups.";
-    
-    return marqueeText;
-  } catch (error) {
-    console.error("Error fetching marquee data:", error);
-    // Return default values in case of an error
-    return "Welcome to AT Game HUB!";
-  }
-}
 
-export default async function Home() {
-  const marqueeText = await getMarqueeText();
+export default function Home() {
   
   const bannerImage = staticImages['banner'];
 
@@ -62,55 +43,34 @@ export default async function Home() {
         </Button>
       </div>
 
-      <div className="flex items-center gap-2 rounded-lg bg-card px-2 py-1">
-          <Megaphone className="h-4 w-4 flex-shrink-0 text-primary" />
-          <div className="flex-1 overflow-hidden">
-            <Marquee>
-              <p className="px-4 text-xs font-medium text-primary">
-                {marqueeText}
-              </p>
-            </Marquee>
-          </div>
-      </div>
-
+      <MarqueeText />
 
       <div>
         <h2 className="mb-4 text-center text-2xl font-bold">Games</h2>
         <div className="grid grid-cols-3 gap-3">
           {games.map((game) => {
               const isComingSoon = game.id === 'hok';
-              const commonContent = (
-                <>
-                  <Card className={cn("overflow-hidden transition-transform", !isComingSoon && "group-hover:scale-105")}>
-                      <Image
-                      src={game.image}
-                      alt={game.name}
-                      width={400}
-                      height={400}
-                      className={cn("aspect-square w-full rounded-lg object-cover", isComingSoon && "grayscale opacity-50")}
-                      />
-                  </Card>
-                    <p className="truncate text-sm font-semibold text-foreground">
-                      {game.name}
-                  </p>
-                  <Button variant="secondary" size="sm" className="h-8 w-full text-xs" disabled={isComingSoon}>
-                      {isComingSoon ? "မကြာမီလာမည်" : "ဝယ်မည်"}
-                  </Button>
-                </>
-              );
-              
-              if (isComingSoon) {
-                  return (
-                    <div key={`game-${game.id}`} className="group flex flex-col gap-2 text-center">
-                        {commonContent}
-                    </div>
-                  )
-              }
+              const Wrapper = isComingSoon ? 'div' : Link;
+              const props = isComingSoon ? {} : { href: `/games/${game.id}` };
 
               return (
-                <Link key={`game-${game.id}`} href={`/games/${game.id}`} className="group flex flex-col gap-2 text-center">
-                    {commonContent}
-                </Link>
+                <Wrapper {...props} key={`game-${game.id}`} className="group flex flex-col gap-2 text-center">
+                    <Card className={cn("overflow-hidden transition-transform", !isComingSoon && "group-hover:scale-105")}>
+                        <Image
+                        src={game.image}
+                        alt={game.name}
+                        width={400}
+                        height={400}
+                        className={cn("aspect-square w-full rounded-lg object-cover", isComingSoon && "grayscale opacity-50")}
+                        />
+                    </Card>
+                     <p className="truncate text-sm font-semibold text-foreground">
+                        {game.name}
+                    </p>
+                    <Button variant="secondary" size="sm" className="h-8 w-full text-xs" disabled={isComingSoon}>
+                        {isComingSoon ? "မကြာမီလာမည်" : "ဝယ်မည်"}
+                    </Button>
+                </Wrapper>
               )
           })}
         </div>

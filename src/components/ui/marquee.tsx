@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-export function Marquee({
+export function MarqueeUI({
   children,
   className,
 }: {

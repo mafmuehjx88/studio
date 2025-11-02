@@ -1,7 +1,7 @@
 
 import { initializeApp, getApps, getApp, FirebaseOptions } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import { getFirestore, initializeFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 
 const firebaseConfig: FirebaseOptions = {
@@ -17,10 +17,7 @@ const firebaseConfig: FirebaseOptions = {
 // Use `experimentalForceLongPolling: true` to avoid connection issues in some environments (like Next.js middleware).
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
-const db = getFirestore(app, {
-  experimentalForceLongPolling: true,
-  useFetchStreams: false, // Add this line
-});
+const db = getFirestore(app);
 const storage = getStorage(app);
 
 export { app, auth, db, storage };
