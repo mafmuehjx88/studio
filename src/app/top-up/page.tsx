@@ -4,9 +4,6 @@
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { db, storage } from '@/lib/firebase';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -54,7 +51,7 @@ export default function TopUpPage() {
 
   const [amount, setAmount] = useState('');
   const [screenshot, setScreenshot] = useState<File | null>(null);
-  const [screenshotPreview, setScreenshotPreview] = useState<string | null>(null);
+  const [screenshotPreview, setScreenshotPreview] = useState<string | null>(null); // This will hold the base64 string
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleCopy = (text: string) => {
@@ -71,11 +68,21 @@ export default function TopUpPage() {
       setScreenshot(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setScreenshotPreview(reader.result as string);
+        setScreenshotPreview(reader.result as string); // Store base64 string
       };
       reader.readAsDataURL(file);
     }
   };
+  
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = error => reject(error);
+    });
+  };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -89,37 +96,28 @@ export default function TopUpPage() {
     }
 
     setIsSubmitting(true);
-    let submissionSuccess = false;
 
     try {
-      // 1. Upload screenshot to Firebase Storage
+      // 1. Convert screenshot to base64
+      const photoBase64 = await fileToBase64(screenshot);
       const requestId = generateOrderId();
-      const storageRef = ref(
-        storage,
-        `top-up-screenshots/${user.uid}/${requestId}-${screenshot.name}`
-      );
-      const uploadResult = await uploadBytes(storageRef, screenshot);
-      const downloadURL = await getDownloadURL(uploadResult.ref);
-
-      // 2. Send notification to Telegram (No Firestore)
+      
       const caption = `
 💰 New Top-Up Request!
 #${requestId}
 👤 User: ${userProfile.username}
 💵 Amount: ${amount} MMK
-🕒 Time: ${new Date().toLocaleString('en-US', {
-        timeZone: 'Asia/Yangon',
-      })}
+🕒 Time: ${new Date().toLocaleString('en-US', { timeZone: 'Asia/Yangon' })}
       `;
-      await sendTopUpTelegramNotification({ caption, photoUrl: downloadURL });
+      
+      // 2. Send notification to Telegram with base64 string
+      await sendTopUpTelegramNotification({ caption, photoBase64 });
 
       toast({
         title: 'Request Submitted!',
-        description:
-          'Your top-up request has been sent. Please wait for confirmation.',
+        description: 'Your top-up request has been sent. Please wait for confirmation.',
       });
-
-      submissionSuccess = true;
+      
       router.push('/');
 
     } catch (error) {
@@ -130,10 +128,7 @@ export default function TopUpPage() {
         variant: 'destructive',
       });
     } finally {
-      if (submissionSuccess) {
-          router.push('/');
-      }
-      setIsSubmitting(false);
+        setIsSubmitting(false);
     }
   };
 
