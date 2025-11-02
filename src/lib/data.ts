@@ -62,7 +62,7 @@ export const staticImages = {
         imageHint: `game collage`
     },
     'logo': {
-        imageUrl: `https://picsum.photos/seed/logo/400/400`,
+        imageUrl: `https://i.ibb.co/7J7VJBGy/IMG-20251031-090933-686.jpg`,
         description: `Logo image`,
         imageHint: `letter A logo`
     },
