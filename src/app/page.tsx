@@ -80,6 +80,7 @@ export default function Home() {
       </div>
       
       <div className="space-y-4 pt-8">
+        <Separator />
         {logoImage && (
             <div className="flex justify-center">
                 <div className="w-1/3">
@@ -96,7 +97,6 @@ export default function Home() {
                 </div>
             </div>
         )}
-        <Separator />
         <div className="flex justify-center gap-4 py-4">
             <Link href="/terms" className="text-xs text-muted-foreground hover:text-primary">
                 Terms & Conditions
