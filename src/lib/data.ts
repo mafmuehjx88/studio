@@ -70,6 +70,11 @@ export const staticImages = {
         imageUrl: `https://picsum.photos/seed/default-avatar/400/400`,
         description: `Default user avatar`,
         imageHint: `abstract avatar`
+    },
+    'legal-banner': {
+        imageUrl: `https://picsum.photos/seed/legal/400/400`,
+        description: `Banner for legal links`,
+        imageHint: `customer service`
     }
 }
 

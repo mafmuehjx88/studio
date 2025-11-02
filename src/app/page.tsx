@@ -15,6 +15,7 @@ import MarqueeText from '@/components/MarqueeText';
 export default function Home() {
   
   const bannerImage = staticImages['banner'];
+  const legalBannerImage = staticImages['legal-banner'];
 
   return (
     <div className="space-y-6">
@@ -78,7 +79,19 @@ export default function Home() {
         </div>
       </div>
       
-      <div className="pt-8">
+      <div className="space-y-4 pt-8">
+        {legalBannerImage && (
+             <Card className="overflow-hidden border-none">
+                <Image
+                    src={legalBannerImage.imageUrl}
+                    alt={legalBannerImage.description}
+                    width={400}
+                    height={400}
+                    className="aspect-square w-full object-cover"
+                    data-ai-hint={legalBannerImage.imageHint}
+                />
+            </Card>
+        )}
         <Separator />
         <div className="flex justify-center gap-4 py-4">
             <Link href="/terms" className="text-xs text-muted-foreground hover:text-primary">
