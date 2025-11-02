@@ -101,23 +101,7 @@ export default function TopUpPage() {
       const uploadResult = await uploadBytes(storageRef, screenshot);
       const downloadURL = await getDownloadURL(uploadResult.ref);
 
-      // 2. Prepare data for Firestore and Telegram
-      const requestData = {
-        userId: user.uid,
-        username: userProfile.username,
-        amount: parseFloat(amount),
-        screenshotUrl: downloadURL,
-        status: 'Pending' as const,
-        createdAt: serverTimestamp(),
-      };
-
-      // 3. Add to Firestore collection
-      await addDoc(collection(db, 'topUpRequests'), {
-        id: requestId,
-        ...requestData,
-      });
-
-      // 4. Send notification to Telegram
+      // 2. Send notification to Telegram (No Firestore)
       const caption = `
 💰 New Top-Up Request!
 #${requestId}
@@ -146,6 +130,9 @@ export default function TopUpPage() {
         variant: 'destructive',
       });
     } finally {
+      if (submissionSuccess) {
+          router.push('/');
+      }
       setIsSubmitting(false);
     }
   };
