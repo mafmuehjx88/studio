@@ -34,8 +34,8 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
                 width={100}
                 height={100}
                 className={cn(
-                  "w-full object-cover aspect-square",
-                  isPassProduct ? "rounded-full" : "rounded-md"
+                  "w-full object-cover",
+                  isPassProduct ? "rounded-full aspect-square" : "rounded-md"
                 )}
               />
         )}
