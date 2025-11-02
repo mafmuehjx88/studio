@@ -13,10 +13,10 @@ const firebaseConfig: FirebaseOptions = {
   measurementId: "G-TH3MXQ0HDM"
 };
 
-// The `useFetchStreams` is a temporary flag to deal with a known issue in the Firestore SDK.
-const app = !getApps().length ? initializeApp(firebaseConfig, { useFetchStreams: false }) : getApp();
+// Use `experimentalForceLongPolling: true` to avoid connection issues in some environments (like Next.js middleware).
+const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
-const db = getFirestore(app);
+const db = getFirestore(app, { experimentalForceLongPolling: true });
 const storage = getStorage(app);
 
 export { app, auth, db, storage };
