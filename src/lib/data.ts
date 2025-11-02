@@ -31,9 +31,9 @@ export const products: Product[] = [
   { id: 'dm-706', gameId: 'mlbb', name: '706 💎', category: 'diamonds', price: 37700, image: 'https://i.ibb.co/SwpNnDqk/1760335244180-fc886416-22a7-4a63-9166-5e66419a58c4.png' },
   { id: 'dm-963', gameId: 'mlbb', name: '963 💎', category: 'diamonds', price: 51500, image: 'https://i.ibb.co/SwpNnDqk/1760335244180-fc886416-22a7-4a63-9166-5e66419a58c4.png' },
   { id: 'dm-1049', gameId: 'mlbb', name: '1049 💎', category: 'diamonds', price: 57268, image: 'https://i.ibb.co/SwpNnDqk/1760335244180-fc886416-22a7-4a63-9166-5e66419a58c4.png' },
-  { id: 'dm-2098', gameId: 'mlbb', name: '2,098 💎', category: 'diamonds', price: 114536, image: 'https://i.ibb.co/SwpNnDqk/1760335244180-fc886416-22a7-4a63-9166-5e66419a58c4.png' },
-  { id: 'dm-3147', gameId: 'mlbb', name: '3,147 💎', category: 'diamonds', price: 171804, image: 'https://i.ibb.co/SwpNnDqk/1760335244180-fc886416-22a7-4a63-9166-5e66419a58c4.png' },
-  { id: 'dm-4196', gameId: 'mlbb', name: '4,196 💎', category: 'diamonds', price: 229072, image: 'https://i.ibb.co/SwpNnDqk/1760335244180-fc886416-22a7-4a63-9166-5e66419a58c4.png' },
+  { id: 'dm-2098', gameId: 'mlbb', name: '2,098 💎', category: 'diamonds', price: 114536, image: 'https://i.ibb.co/BV24zqgV/1735899441907-5000or-More-MLBB-Diamonds.png' },
+  { id: 'dm-3147', gameId: 'mlbb', name: '3,147 💎', category: 'diamonds', price: 171804, image: 'https://i.ibb.co/BV24zqgV/1735899441907-5000or-More-MLBB-Diamonds.png' },
+  { id: 'dm-4196', gameId: 'mlbb', name: '4,196 💎', category: 'diamonds', price: 229072, image: 'https://i.ibb.co/BV24zqgV/1735899441907-5000or-More-MLBB-Diamonds.png' },
 
 
   // PUBG Mobile
