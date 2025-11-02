@@ -54,23 +54,25 @@ export default function Home() {
               const props = isComingSoon ? {} : { href: `/games/${game.id}` };
 
               return (
-                <Wrapper {...props} key={`game-${game.id}`} className="group flex flex-col gap-2 text-center">
-                    <Card className={cn("overflow-hidden transition-transform", !isComingSoon && "group-hover:scale-105")}>
-                        <Image
-                        src={game.image}
-                        alt={game.name}
-                        width={400}
-                        height={400}
-                        className={cn("aspect-square w-full rounded-lg object-cover", isComingSoon && "grayscale opacity-50")}
-                        />
-                    </Card>
-                     <p className="truncate text-sm font-semibold text-foreground">
-                        {game.name}
-                    </p>
-                    <Button variant="secondary" size="sm" className="h-8 w-full text-xs" disabled={isComingSoon}>
-                        {isComingSoon ? "မကြာမီလာမည်" : "ဝယ်မည်"}
-                    </Button>
-                </Wrapper>
+                <React.Fragment key={`game-${game.id}`}>
+                    <Wrapper {...props} className="group flex flex-col gap-2 text-center">
+                        <Card className={cn("overflow-hidden transition-transform", !isComingSoon && "group-hover:scale-105")}>
+                            <Image
+                            src={game.image}
+                            alt={game.name}
+                            width={400}
+                            height={400}
+                            className={cn("aspect-square w-full rounded-lg object-cover", isComingSoon && "grayscale opacity-50")}
+                            />
+                        </Card>
+                         <p className="truncate text-sm font-semibold text-foreground">
+                            {game.name}
+                        </p>
+                        <Button variant="secondary" size="sm" className="h-8 w-full text-xs" disabled={isComingSoon}>
+                            {isComingSoon ? "မကြာမီလာမည်" : "ဝယ်မည်"}
+                        </Button>
+                    </Wrapper>
+                </React.Fragment>
               )
           })}
         </div>
