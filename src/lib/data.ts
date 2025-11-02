@@ -45,8 +45,8 @@ export const products: Product[] = [
   { id: 'pubg-480uc', gameId: 'pubg', name: '480 UC', category: 'UC', price: 31600, image: 'https://i.ibb.co/hFxsWsVs/660-PUBG-UC.png' },
   { id: 'pubg-660uc', gameId: 'pubg', name: '660 UC', category: 'UC', price: 43450, image: 'https://i.ibb.co/hFxsWsVs/660-PUBG-UC.png' },
   { id: 'pubg-1800uc', gameId: 'pubg', name: '1800 UC', category: 'UC', price: 118500, image: 'https://i.ibb.co/8DW7Hp5L/3850-PUBG-UC.png' },
-  { id: 'pubg-3850uc', gameId: 'pubg', name: '3850 UC', category: 'UC', price: 252800, image: 'https://i.ibb.co/7NGpPr48/7ae05f485fd0725143225238a2ef1cc2.jpg' },
-  { id: 'pubg-8100uc', gameId: 'pubg', name: '8100 UC', category: 'UC', price: 533250, image: 'https://i.ibb.co/7NGpPr48/7ae05f485fd0725143225238a2ef1cc2.jpg' },
+  { id: 'pubg-3850uc', gameId: 'pubg', name: '3850 UC', category: 'UC', price: 252800, image: 'https://i.ibb.co/KjqwNXDG/8100-PUBG-UC.png' },
+  { id: 'pubg-8100uc', gameId: 'pubg', name: '8100 UC', category: 'UC', price: 533250, image: 'https://i.ibb.co/KjqwNXDG/8100-PUBG-UC.png' },
 
   // Honor of Kings
   { id: 'hok-weekly', gameId: 'hok', name: 'Weekly Pass', category: 'Weekly Passes', price: 3000, image: 'https://picsum.photos/seed/hok-pass/200/200' },
@@ -74,4 +74,6 @@ export const staticImages = {
 }
 
     
+    
+
     
