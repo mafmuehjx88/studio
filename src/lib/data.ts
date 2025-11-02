@@ -37,8 +37,8 @@ export const products: Product[] = [
 
 
   // PUBG Mobile
-  { id: 'pubg-60uc', gameId: 'pubg', name: '60 UC', category: 'UC', price: 3950, image: 'https://i.ibb.co/7NGpPr48/7ae05f485fd0725143225238a2ef1cc2.jpg' },
-  { id: 'pubg-120uc', gameId: 'pubg', name: '120 UC', category: 'UC', price: 7900, image: 'https://i.ibb.co/7NGpPr48/7ae05f485fd0725143225238a2ef1cc2.jpg' },
+  { id: 'pubg-60uc', gameId: 'pubg', name: '60 UC', category: 'UC', price: 3950, image: 'https://i.ibb.co/tTF4140T/60-PUBG-UC.png' },
+  { id: 'pubg-120uc', gameId: 'pubg', name: '120 UC', category: 'UC', price: 7900, image: 'https://i.ibb.co/tTF4140T/60-PUBG-UC.png' },
   { id: 'pubg-180uc', gameId: 'pubg', name: '180 UC', category: 'UC', price: 11850, image: 'https://i.ibb.co/7NGpPr48/7ae05f485fd0725143225238a2ef1cc2.jpg' },
   { id: 'pubg-300uc', gameId: 'pubg', name: '300 UC', category: 'UC', price: 19750, image: 'https://i.ibb.co/7NGpPr48/7ae05f485fd0725143225238a2ef1cc2.jpg' },
   { id: 'pubg-360uc', gameId: 'pubg', name: '360 UC', category: 'UC', price: 23700, image: 'https://i.ibb.co/7NGpPr48/7ae05f485fd0725143225238a2ef1cc2.jpg' },
