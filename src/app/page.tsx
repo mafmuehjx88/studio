@@ -15,7 +15,7 @@ import MarqueeText from '@/components/MarqueeText';
 export default function Home() {
   
   const bannerImage = staticImages['banner'];
-  const legalBannerImage = staticImages['legal-banner'];
+  const logoImage = staticImages['logo'];
 
   return (
     <div className="space-y-6">
@@ -80,15 +80,15 @@ export default function Home() {
       </div>
       
       <div className="space-y-4 pt-8">
-        {legalBannerImage && (
+        {logoImage && (
              <Card className="overflow-hidden border-none">
                 <Image
-                    src={legalBannerImage.imageUrl}
-                    alt={legalBannerImage.description}
+                    src={logoImage.imageUrl}
+                    alt={logoImage.description}
                     width={400}
                     height={400}
                     className="aspect-square w-full object-cover"
-                    data-ai-hint={legalBannerImage.imageHint}
+                    data-ai-hint={logoImage.imageHint}
                 />
             </Card>
         )}
