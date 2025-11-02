@@ -7,7 +7,7 @@ service cloud.firestore {
     }
     
     match /users/{userId} {
-      // A user can read or update their own profile, or an admin can.
+      // An admin can read or update their own profile, or an admin can.
       allow read, update: if request.auth.uid == userId || isAdmin();
       // A user can create their own document when they sign up.
       // The `request.auth.uid` must match the `userId` in the path.
