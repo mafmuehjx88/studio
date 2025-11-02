@@ -101,24 +101,6 @@ export default async function Home() {
                 </Wrapper>
               )
           })}
-            <div key="buy-account" className="group flex flex-col gap-2 text-center">
-                <Card className="overflow-hidden transition-transform">
-                    <Image
-                    src="https://i.ibb.co/d4z5MQ1x/New-Project-107-3-ADF212.png"
-                    alt="အကောင့်ဝယ်ရန်"
-                    width={400}
-                    height={400}
-                    data-ai-hint="user key"
-                    className="aspect-square w-full rounded-lg object-cover grayscale opacity-50"
-                    />
-                </Card>
-                 <p className="truncate text-sm font-semibold text-foreground">
-                    အကောင့်ဝယ်ရန်
-                </p>
-                <Button variant="secondary" size="sm" className="h-8 w-full text-xs" disabled>
-                    မကြာမီလာမည်
-                </Button>
-            </div>
         </div>
       </div>
       
