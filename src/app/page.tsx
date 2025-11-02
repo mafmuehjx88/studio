@@ -104,7 +104,7 @@ export default async function Home() {
             <div className="group flex flex-col gap-2 text-center">
                 <Card className="overflow-hidden transition-transform">
                     <Image
-                    src="https://picsum.photos/seed/buy-account/400/400"
+                    src="https://i.ibb.co/d4z5MQ1x/New-Project-107-3-ADF212.png"
                     alt="အကောင့်ဝယ်ရန်"
                     width={400}
                     height={400}
