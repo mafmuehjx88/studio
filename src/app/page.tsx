@@ -83,7 +83,7 @@ export default function Home() {
         <Separator />
         {logoImage && (
             <div className="flex justify-center">
-                <div className="w-1/3">
+                <div className="w-1/4">
                     <Card className="overflow-hidden border-none bg-transparent shadow-none">
                         <Image
                             src={logoImage.imageUrl}
