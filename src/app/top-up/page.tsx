@@ -136,6 +136,8 @@ export default function TopUpPage() {
       });
 
       submissionSuccess = true;
+      router.push('/');
+
     } catch (error) {
       console.error('Error submitting top-up request:', error);
       toast({
@@ -145,9 +147,6 @@ export default function TopUpPage() {
       });
     } finally {
       setIsSubmitting(false);
-      if (submissionSuccess) {
-          router.push('/');
-      }
     }
   };
 
