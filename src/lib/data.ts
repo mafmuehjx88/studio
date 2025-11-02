@@ -14,8 +14,8 @@ export const products: Product[] = [
   
   { id: '2x-50', gameId: 'mlbb', name: '50 (2x50) 💎', category: '2x', price: 3400, image: 'https://i.ibb.co/r2GCkBSt/1760334222477-bdd28040-0bd9-4dff-b748-ed7b1a0aecdd.png' },
   { id: '2x-150', gameId: 'mlbb', name: '150 (2x150) 💎', category: '2x', price: 10200, image: 'https://i.ibb.co/SXmLqPqp/1760334222447-c62c5300-1e1f-4f91-90f4-d677eeb054db.png' },
-  { id: '2x-250', gameId: 'mlbb', name: '250 (2x250) 💎', category: '2x', price: 17000, image: 'https://i.ibb.co/Rbm5y1V/diamond-pile-2.png' },
-  { id: '2x-500', gameId: 'mlbb', name: '500 (2x500) 💎', category: '2x', price: 34000, image: 'https://i.ibb.co/Q8Q0p6j/diamond-pile-3.png' },
+  { id: '2x-250', gameId: 'mlbb', name: '250 (2x250) 💎', category: '2x', price: 17000, image: 'https://i.ibb.co/GfBnfkwr/1760334222388-daa6d2f0-0249-4fa5-bb28-5ce48267c1d8.png' },
+  { id: '2x-500', gameId: 'mlbb', name: '500 (2x500) 💎', category: '2x', price: 34000, image: 'https://i.ibb.co/GfBnfkwr/1760334222388-daa6d2f0-0249-4fa5-bb28-5ce48267c1d8.png' },
 
   { id: 'dm-11', gameId: 'mlbb', name: '11 💎', category: 'diamonds', price: 870, image: 'https://i.ibb.co/YBP7c6wc/1760335241932-2d157ab5-58a3-45e0-9061-7318b1b0415a.png' },
   { id: 'dm-22', gameId: 'mlbb', name: '22 💎', category: 'diamonds', price: 1740, image: 'https://i.ibb.co/YBP7c6wc/1760335241932-2d157ab5-58a3-45e0-9061-7318b1b0415a.png' },
