@@ -4,21 +4,15 @@
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
-import {
-  addDoc,
-  collection,
-  serverTimestamp,
-} from 'firebase/firestore';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { db, storage } from '@/lib/firebase';
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { Card, CardContent } from '@/components/ui/card';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { AlertTriangle, Copy, Loader2, UploadCloud } from 'lucide-react';
+import { Copy, Loader2, Upload } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { generateOrderId } from '@/lib/utils';
 import { sendTopUpTelegramNotification } from '@/lib/actions';
 
@@ -48,6 +42,9 @@ const paymentAccounts = [
     logo: 'https://i.ibb.co/7tdxdMP0/new355-ab76bb0483ac7c445251c650cc7c1227-1.jpg',
   },
 ];
+
+const attentionText = `သတိပြုရန်- ငွေလွဲနည်း ဆိုတဲ့ဟာကို နှိပ်ပြီးတော့ စာကိုအရင်ဖတ်ပေးပါဗျ။ ငွေဖြည့် စည်းမျဉ်းအနေနဲ့ငွေလွဲပြီးတာနဲ့ 20min အတွင်းပြေစာတင်ရန်/ပြေစာတစ်ခုကို နှစ်ခါမတင်ရန်/ပြေစာအတု နဲ့Scam မလုပ်ရပါဘူး။ အထက်ပါအချက်များကိုချိုးဖောက်ပါက ရာသက်ပန် Banပါမယ်။ငွေပြန်မအမ်းပါ။`;
+
 
 export default function TopUpPage() {
   const { user, userProfile } = useAuth();
@@ -92,11 +89,14 @@ export default function TopUpPage() {
     }
 
     setIsSubmitting(true);
-    
+
     try {
       // 1. Upload screenshot to Firebase Storage
       const requestId = generateOrderId();
-      const storageRef = ref(storage, `top-up-screenshots/${user.uid}/${requestId}-${screenshot.name}`);
+      const storageRef = ref(
+        storage,
+        `top-up-screenshots/${user.uid}/${requestId}-${screenshot.name}`
+      );
       const uploadResult = await uploadBytes(storageRef, screenshot);
       const downloadURL = await getDownloadURL(uploadResult.ref);
 
@@ -110,8 +110,11 @@ export default function TopUpPage() {
         createdAt: serverTimestamp(),
       };
 
-       // 3. Add to Firestore collection
-      await addDoc(collection(db, 'topUpRequests'), { id: requestId, ...requestData });
+      // 3. Add to Firestore collection
+      await addDoc(collection(db, 'topUpRequests'), {
+        id: requestId,
+        ...requestData,
+      });
 
       // 4. Send notification to Telegram
       const caption = `
@@ -119,17 +122,19 @@ export default function TopUpPage() {
 #${requestId}
 👤 User: ${userProfile.username}
 💵 Amount: ${amount} MMK
-🕒 Time: ${new Date().toLocaleString('en-US', { timeZone: 'Asia/Yangon' })}
+🕒 Time: ${new Date().toLocaleString('en-US', {
+        timeZone: 'Asia/Yangon',
+      })}
       `;
       await sendTopUpTelegramNotification({ caption, photoUrl: downloadURL });
 
       toast({
         title: 'Request Submitted!',
-        description: 'Your top-up request has been sent. Please wait for confirmation.',
+        description:
+          'Your top-up request has been sent. Please wait for confirmation.',
       });
-      
-      router.push('/');
 
+      router.push('/');
     } catch (error) {
       console.error('Error submitting top-up request:', error);
       toast({
@@ -146,66 +151,73 @@ export default function TopUpPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-center text-3xl font-bold">ငွေဖြည့်မည်</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-xl font-bold">ငွေဖြည့်မည်</h1>
+        <Button variant="secondary" size="sm" asChild>
+          <a href="#">မှတ်တမ်း</a>
+        </Button>
+      </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="space-y-3">
         {paymentAccounts.map((account) => (
-          <Card key={account.phone + account.type} className="p-3">
-            <CardContent className="flex flex-col items-center gap-2 p-0 text-center">
-              <Image
-                src={account.logo}
-                alt={account.type}
-                width={40}
-                height={40}
-                className="h-10 w-10 rounded-full object-cover"
-              />
-              <div className='flex flex-col items-center'>
-                 <p className="text-xs text-muted-foreground">{account.name}</p>
-                 <p className="text-sm font-semibold">{account.phone}</p>
-                 <p className="text-xs font-bold text-primary">{account.type}</p>
+          <div
+            key={account.phone + account.type}
+            className="rounded-lg border border-border bg-card p-3 shadow-md"
+          >
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <Image
+                  src={account.logo}
+                  alt={account.type}
+                  width={60}
+                  height={60}
+                  className="rounded-md object-cover"
+                />
               </div>
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() => handleCopy(account.phone)}
-                className="w-full gap-2"
-              >
-                <Copy className="h-4 w-4" />
-                Copy
-              </Button>
-            </CardContent>
-          </Card>
+              <div className="ml-4 flex-grow">
+                <div className="flex items-center justify-between">
+                  <p className="text-lg font-bold">{account.phone}</p>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="h-8 bg-muted px-3"
+                    onClick={() => handleCopy(account.phone)}
+                  >
+                    Copy
+                  </Button>
+                </div>
+                <p className="text-sm text-muted-foreground">{account.name}</p>
+              </div>
+            </div>
+            <Button
+              size="sm"
+              variant="link"
+              className="mt-2 w-full justify-center gap-2 rounded-md bg-yellow-400 text-black hover:bg-yellow-500"
+            >
+              <Image src={account.logo} alt="" width={16} height={16} className="rounded-full" />
+              ငွေလွှဲနည်း
+            </Button>
+          </div>
         ))}
       </div>
-      
-       <Alert variant="destructive">
-            <AlertTriangle className="h-4 w-4" />
-            <AlertTitle>သတိပြုရန်</AlertTitle>
-            <AlertDescription>
-                ငွေလွှဲနည်း ဆိုတဲ့ဟာကို နှိပ်ပြီးတော့ စာကိုအရင်ဖတ်ပေးပါဗျ။ ငွေဖြည့် စည်းမျဉ်းအနေနဲ့ငွေလွဲပြီးတာနဲ့ 20min အတွင်းပြေစာတင်ရန်/ပြေစာတစ်ခုကို နှစ်ခါမတင်ရန်/ပြေစာအတု နဲ့Scam မလုပ်ရပါဘူး။ အထက်ပါအချက်များကိုချိုးဖောက်ပါက ရာသက်ပန် Banပါမယ်။ငွေပြန်မအမ်းပါ။
-            </AlertDescription>
-        </Alert>
 
-        <Alert variant="destructive">
-           <AlertTriangle className="h-4 w-4" />
-           <AlertTitle>အထူးသတိပေးချက်</AlertTitle>
-            <AlertDescription>
-            ဒီမှာ ငွေလွှဲနံပါတ်ကိုသေချာကြည့်ပြီးမှ ငွေလွဲပေးပါ။ ပမာဏက 5000ဆိုရင် လွဲတဲ့အခါ 5000အတိအကျလွဲပေးပါ။ သတိပေးချက်-ပြေစာအတုလုပ်ခြင်း/ ငွေလွဲပြီး 20minကြာမှပြေစာပြပါက Auto Ban!!
-           </AlertDescription>
-       </Alert>
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-         <div className="space-y-2">
-            <Label htmlFor="username">Username</Label>
-            <Input
-              id="username"
-              value={userProfile?.username || ''}
-              readOnly
-              disabled
-            />
-             <p className="text-xs text-muted-foreground">ကျေးဇူးပြု၍ သင်၏ Username အမှန်ဖြစ်ကြောင်း စစ်ဆေးပါ။</p>
+      <div className="rounded-lg border border-red-500/50 bg-destructive/10 p-3">
+          <div className="flex justify-between items-start">
+             <div className="flex items-start gap-3">
+                <div className="w-16 flex-shrink-0 text-center text-sm font-bold text-red-400">
+                    သတိပြုရန်
+                </div>
+                <p className="flex-1 text-xs text-muted-foreground">
+                    {attentionText}
+                </p>
+             </div>
+             <Button size="sm" variant="ghost" className="h-8 bg-muted px-3" onClick={() => handleCopy(attentionText)}>
+                Copy
+             </Button>
           </div>
-
+      </div>
+      
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="amount">ငွေပမာဏ (MMK)</Label>
           <Input
@@ -216,13 +228,14 @@ export default function TopUpPage() {
             placeholder="လွှဲပြောင်းလိုက်သော ငွေပမာဏကိုထည့်ပါ"
             required
             disabled={isSubmitting}
+            className="bg-card"
           />
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="screenshot">Payment Screenshot (ငွေလွှဲ Id ပါတဲ့ပုံ)</Label>
           <div
-            className="flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-md border-2 border-dashed bg-muted/50 transition-colors hover:bg-muted"
+            className="flex h-36 w-full cursor-pointer flex-col items-center justify-center rounded-md border-2 border-dashed border-green-500/50 bg-green-500/10 text-green-400 transition-colors hover:bg-green-500/20"
             onClick={() => fileInputRef.current?.click()}
           >
             <Input
@@ -239,14 +252,14 @@ export default function TopUpPage() {
               <Image
                 src={screenshotPreview}
                 alt="Screenshot Preview"
-                width={100}
-                height={100}
+                width={120}
+                height={120}
                 className="h-full w-auto object-contain p-2"
               />
             ) : (
-              <div className="text-center text-muted-foreground">
-                <UploadCloud className="mx-auto h-8 w-8" />
-                <p className="mt-2 text-sm">ငွေလွှဲပုံထည့်ရန်နှိပ်ပါ</p>
+              <div className="text-center">
+                <Upload className="mx-auto h-10 w-10" />
+                <p className="mt-2 text-sm font-semibold">ငွေလွှဲပုံထည့်ရန်နှိပ်ပါ</p>
               </div>
             )}
           </div>
@@ -254,11 +267,11 @@ export default function TopUpPage() {
 
         <Button
           type="submit"
-          className="w-full"
+          className="w-full h-12 text-lg font-bold"
           disabled={!isFormComplete || isSubmitting}
         >
           {isSubmitting ? (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
           ) : (
             'ငွေဖြည့်ခြင်း အတည်ပြုမည်'
           )}
@@ -267,3 +280,5 @@ export default function TopUpPage() {
     </div>
   );
 }
+
+    
