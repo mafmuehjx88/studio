@@ -56,7 +56,6 @@ export default function TopUpPage() {
   const [screenshot, setScreenshot] = useState<File | null>(null);
   const [screenshotPreview, setScreenshotPreview] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submissionSuccess, setSubmissionSuccess] = useState(false);
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -90,6 +89,7 @@ export default function TopUpPage() {
     }
 
     setIsSubmitting(true);
+    let submissionSuccess = false;
 
     try {
       // 1. Upload screenshot to Firebase Storage
@@ -135,7 +135,7 @@ export default function TopUpPage() {
           'Your top-up request has been sent. Please wait for confirmation.',
       });
 
-      setSubmissionSuccess(true);
+      submissionSuccess = true;
     } catch (error) {
       console.error('Error submitting top-up request:', error);
       toast({
@@ -145,7 +145,7 @@ export default function TopUpPage() {
       });
     } finally {
       setIsSubmitting(false);
-      if (submissionSuccess || user) { // Navigate away on success or if there was a caught error
+      if (submissionSuccess) {
           router.push('/');
       }
     }
