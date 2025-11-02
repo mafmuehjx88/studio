@@ -17,7 +17,10 @@ const firebaseConfig: FirebaseOptions = {
 // Use `experimentalForceLongPolling: true` to avoid connection issues in some environments (like Next.js middleware).
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
-const db = getFirestore(app, { experimentalForceLongPolling: true });
+const db = getFirestore(app, {
+  experimentalForceLongPolling: true,
+  useFetchStreams: false, // Add this line
+});
 const storage = getStorage(app);
 
 export { app, auth, db, storage };
