@@ -1,3 +1,4 @@
+
 import type { Game, Product } from './types';
 
 export const games: Game[] = [
@@ -20,9 +21,9 @@ export const products: Product[] = [
   { id: 'dm-22', gameId: 'mlbb', name: '22 💎', category: 'diamonds', price: 1740, image: 'https://i.ibb.co/YBP7c6wc/1760335241932-2d157ab5-58a3-45e0-9061-7318b1b0415a.png' },
   { id: 'dm-33', gameId: 'mlbb', name: '33 💎', category: 'diamonds', price: 2610, image: 'https://i.ibb.co/YBP7c6wc/1760335241932-2d157ab5-58a3-45e0-9061-7318b1b0415a.png' },
   { id: 'dm-44', gameId: 'mlbb', name: '44 💎', category: 'diamonds', price: 3480, image: 'https://i.ibb.co/YBP7c6wc/1760335241932-2d157ab5-58a3-45e0-9061-7318b1b0415a.png' },
-  { id: 'dm-86', gameId: 'mlbb', name: '86 💎', category: 'diamonds', price: 4900, image: 'https://i.ibb.co/VvZv7gM/diamond-pile-1.png' },
-  { id: 'dm-172', gameId: 'mlbb', name: '172 💎', category: 'diamonds', price: 9800, image: 'https://i.ibb.co/Rbm5y1V/diamond-pile-2.png' },
-  { id: 'dm-257', gameId: 'mlbb', name: '257 💎', category: 'diamonds', price: 14000, image: 'https://i.ibb.co/Rbm5y1V/diamond-pile-2.png' },
+  { id: 'dm-86', gameId: 'mlbb', name: '86 💎', category: 'diamonds', price: 4900, image: 'https://i.ibb.co/GQfMfDhZ/1760335245898-e3d40beb-2e0d-473c-b9ff-be6c797666db.png' },
+  { id: 'dm-172', gameId: 'mlbb', name: '172 💎', category: 'diamonds', price: 9800, image: 'https://i.ibb.co/GQfMfDhZ/1760335245898-e3d40beb-2e0d-473c-b9ff-be6c797666db.png' },
+  { id: 'dm-257', gameId: 'mlbb', name: '257 💎', category: 'diamonds', price: 14000, image: 'https://i.ibb.co/GQfMfDhZ/1760335245898-e3d40beb-2e0d-473c-b9ff-be6c797666db.png' },
   { id: 'dm-343', gameId: 'mlbb', name: '343 💎', category: 'diamonds', price: 18800, image: 'https://i.ibb.co/Q8Q0p6j/diamond-pile-3.png' },
   { id: 'dm-429', gameId: 'mlbb', name: '429 💎', category: 'diamonds', price: 23600, image: 'https://i.ibb.co/Q8Q0p6j/diamond-pile-3.png' },
   { id: 'dm-514', gameId: 'mlbb', name: '514 💎', category: 'diamonds', price: 28500, image: 'https://i.ibb.co/Q8Q0p6j/diamond-pile-3.png' },
@@ -68,3 +69,5 @@ export const staticImages = {
         imageHint: `abstract avatar`
     }
 }
+
+    
