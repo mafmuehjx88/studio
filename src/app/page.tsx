@@ -82,7 +82,7 @@ export default function Home() {
       <div className="space-y-4 pt-8">
         <Separator />
         {logoImage && (
-            <div className="flex justify-center">
+            <div className="flex flex-col items-center gap-2">
                 <div className="w-1/4">
                     <Card className="overflow-hidden border-none bg-transparent shadow-none">
                         <Image
@@ -95,6 +95,7 @@ export default function Home() {
                         />
                     </Card>
                 </div>
+                <p className="text-center text-lg font-bold text-primary">AT Game HUB</p>
             </div>
         )}
         <div className="flex justify-center gap-4 py-4">
