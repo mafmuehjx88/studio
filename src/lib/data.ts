@@ -12,7 +12,7 @@ export const products: Product[] = [
   { id: 'twilight-pass', gameId: 'mlbb', name: 'Twilight Pass', category: 'pass', price: 32900, image: 'https://i.ibb.co/C0qP8b0/twilight-pass.png' },
   { id: 'weekly-pass', gameId: 'mlbb', name: 'Weekly Pass', category: 'pass', price: 5850, image: 'https://i.ibb.co/wZypZFHg/e406adc7efb93d2994b8bfd30b0f25f0.jpg' },
   
-  { id: '2x-50', gameId: 'mlbb', name: '50 (2x50) 💎', category: '2x', price: 3400, image: 'https://i.ibb.co/VvZv7gM/diamond-pile-1.png' },
+  { id: '2x-50', gameId: 'mlbb', name: '50 (2x50) 💎', category: '2x', price: 3400, image: 'https://i.ibb.co/r2GCkBSt/1760334222477-bdd28040-0bd9-4dff-b748-ed7b1a0aecdd.png' },
   { id: '2x-150', gameId: 'mlbb', name: '150 (2x150) 💎', category: '2x', price: 10200, image: 'https://i.ibb.co/Rbm5y1V/diamond-pile-2.png' },
   { id: '2x-250', gameId: 'mlbb', name: '250 (2x250) 💎', category: '2x', price: 17000, image: 'https://i.ibb.co/Rbm5y1V/diamond-pile-2.png' },
   { id: '2x-500', gameId: 'mlbb', name: '500 (2x500) 💎', category: '2x', price: 34000, image: 'https://i.ibb.co/Q8Q0p6j/diamond-pile-3.png' },
