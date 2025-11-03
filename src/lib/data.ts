@@ -6,7 +6,7 @@ export const games: Game[] = [
   { id: 'pubg', name: 'PUBG', image: 'https://i.ibb.co/PsSM1JKc/new3589-516a74d6d701c86c007f668d7cf2891a.jpg', bannerImage: 'https://i.ibb.co/7NGpPr48/7ae05f485fd0725143225238a2ef1cc2.jpg', needsServerId: false, needsUserIdentifier: true, userIdentifierLabel: 'Player ID' },
   { id: 'hok', name: 'HOK', image: 'https://i.ibb.co/PZj5t6PX/new3418-1cff9a1ebb8677d02e5c0d96199b5384.jpg', bannerImage: 'https://i.ibb.co/k3yT8y4/HOK-Banner.jpg', needsServerId: false, needsUserIdentifier: true, userIdentifierLabel: 'Player ID' },
   { id: 'telegram', name: 'Telegram', image: 'https://i.ibb.co/fVKbf2Bw/01-JZ3-RJE7-RGAM58-RVVTY8-GVBFW.jpg', bannerImage: 'https://i.ibb.co/fVKbf2Bw/01-JZ3-RJE7-RGAM58-RVVTY8-GVBFW.jpg', needsServerId: false, needsUserIdentifier: true, userIdentifierLabel: 'Telegram Link' },
-  { id: 'tiktok', name: 'Tiktok', image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png', bannerImage: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png', needsServerId: false, needsUserIdentifier: true, userIdentifierLabel: 'TikTok Profile Link' },
+  { id: 'tiktok', name: 'Tiktok', image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png', bannerImage: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png', needsServerId: false, needsUserIdentifier: true, userIdentifierLabel: 'Account/Post Link' },
 ];
 
 export const products: Product[] = [
@@ -109,5 +109,7 @@ export const staticImages = {
         imageHint: `customer service`
     }
 }
+
+    
 
     
