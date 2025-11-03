@@ -4,9 +4,9 @@ import type { Game, Product } from './types';
 export const games: Game[] = [
   { id: 'mlbb', name: 'MLBB', image: 'https://i.ibb.co/R47v6TDX/8255033248d018b6c5f3d460b2deec16.jpg', bannerImage: 'https://i.ibb.co/NnNMr8gq/New-Project-85-E9-F449-A.png', needsServerId: true, needsUserIdentifier: true, userIdentifierLabel: 'User ID' },
   { id: 'pubg', name: 'PUBG', image: 'https://i.ibb.co/PsSM1JKc/new3589-516a74d6d701c86c007f668d7cf2891a.jpg', bannerImage: 'https://i.ibb.co/7NGpPr48/7ae05f485fd0725143225238a2ef1cc2.jpg', needsServerId: false, needsUserIdentifier: true, userIdentifierLabel: 'Player ID' },
-  { id: 'hok', name: 'HOK', image: 'https://i.ibb.co/PZj5t6PX/new3418-1cff9a1ebb8677d02e5c0d96199b5384.jpg', needsServerId: false, needsUserIdentifier: true, userIdentifierLabel: 'Player ID' },
-  { id: 'telegram', name: 'Telegram', image: 'https://i.ibb.co/fVKbf2Bw/01-JZ3-RJE7-RGAM58-RVVTY8-GVBFW.jpg', bannerImage: 'https://i.ibb.co/fVKbf2Bw/01-JZ3-RJE7-RGAM58-RVVTY8-GVBFW.jpg', needsUserIdentifier: true, userIdentifierLabel: 'Phone Number or Username' },
-  { id: 'tiktok', name: 'Tiktok', image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png', bannerImage: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png', needsUserIdentifier: true, userIdentifierLabel: 'TikTok Profile Link' },
+  { id: 'hok', name: 'HOK', image: 'https://i.ibb.co/PZj5t6PX/new3418-1cff9a1ebb8677d02e5c0d96199b5384.jpg', bannerImage: 'https://i.ibb.co/k3yT8y4/HOK-Banner.jpg', needsServerId: false, needsUserIdentifier: true, userIdentifierLabel: 'Player ID' },
+  { id: 'telegram', name: 'Telegram', image: 'https://i.ibb.co/fVKbf2Bw/01-JZ3-RJE7-RGAM58-RVVTY8-GVBFW.jpg', bannerImage: 'https://i.ibb.co/fVKbf2Bw/01-JZ3-RJE7-RGAM58-RVVTY8-GVBFW.jpg', needsServerId: false, needsUserIdentifier: true, userIdentifierLabel: 'Phone Number or Username' },
+  { id: 'tiktok', name: 'Tiktok', image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png', bannerImage: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png', needsServerId: false, needsUserIdentifier: true, userIdentifierLabel: 'TikTok Profile Link' },
 ];
 
 export const products: Product[] = [
@@ -63,25 +63,28 @@ export const products: Product[] = [
   { id: 'telegram-subs-1k', gameId: 'telegram', name: 'Subscribers(1K)', category: 'Subscribers', price: 12800, image: 'https://i.ibb.co/fVKbf2Bw/01-JZ3-RJE7-RGAM58-RVVTY8-GVBFW.jpg'},
 
   // Tiktok - New Data
-  { id: 'tiktok-view-100k', gameId: 'tiktok', name: 'View 100K', category: 'Views', price: 2500, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
   { id: 'tiktok-view-1k', gameId: 'tiktok', name: 'View 1K', category: 'Views', price: 200, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
   { id: 'tiktok-view-5k', gameId: 'tiktok', name: 'View 5K', category: 'Views', price: 900, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
   { id: 'tiktok-view-10k', gameId: 'tiktok', name: 'View 10K', category: 'Views', price: 1500, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
+  { id: 'tiktok-view-100k', gameId: 'tiktok', name: 'View 100K', category: 'Views', price: 2500, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
+  
   { id: 'tiktok-like-100', gameId: 'tiktok', name: 'Like 100', category: 'Likes', price: 199, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
   { id: 'tiktok-like-500', gameId: 'tiktok', name: 'Like 500', category: 'Likes', price: 980, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
   { id: 'tiktok-like-1k', gameId: 'tiktok', name: 'Like 1K', category: 'Likes', price: 1470, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
   { id: 'tiktok-like-3k', gameId: 'tiktok', name: 'Like 3K', category: 'Likes', price: 4300, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
   { id: 'tiktok-like-5k', gameId: 'tiktok', name: 'Like 5K', category: 'Likes', price: 7300, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
   { id: 'tiktok-like-10k', gameId: 'tiktok', name: 'Like 10K', category: 'Likes', price: 13000, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
-  { id: 'tiktok-promote-1', gameId: 'tiktok', name: 'Promote View(1$)', category: 'Promote', price: 6800, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
-  { id: 'tiktok-promote-2', gameId: 'tiktok', name: 'Promote View(2$)', category: 'Promote', price: 13200, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
-  { id: 'tiktok-promote-3', gameId: 'tiktok', name: 'Promote View(3$)', category: 'Promote', price: 20500, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
+  
   { id: 'tiktok-followers-100', gameId: 'tiktok', name: 'Followers(100)', category: 'Followers', price: 2500, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
   { id: 'tiktok-followers-500', gameId: 'tiktok', name: 'Followers(500)', category: 'Followers', price: 11500, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
   { id: 'tiktok-followers-1k', gameId: 'tiktok', name: 'Followers(1K)', category: 'Followers', price: 21000, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
   { id: 'tiktok-followers-1usd', gameId: 'tiktok', name: 'Followers(1$)', category: 'Followers', price: 6800, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
   { id: 'tiktok-followers-2usd', gameId: 'tiktok', name: 'Followers(2$)', category: 'Followers', price: 12500, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
   { id: 'tiktok-followers-3usd', gameId: 'tiktok', name: 'Followers(3$)', category: 'Followers', price: 21000, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
+  
+  { id: 'tiktok-promote-1', gameId: 'tiktok', name: 'Promote View(1$)', category: 'Promote', price: 6800, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
+  { id: 'tiktok-promote-2', gameId: 'tiktok', name: 'Promote View(2$)', category: 'Promote', price: 13200, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
+  { id: 'tiktok-promote-3', gameId: 'tiktok', name: 'Promote View(3$)', category: 'Promote', price: 20500, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
 ];
 
 export const staticImages = {
