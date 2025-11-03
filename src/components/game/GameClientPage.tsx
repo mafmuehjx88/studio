@@ -48,7 +48,7 @@ export default function GameClientPage({ game, products }: GameClientPageProps) 
 
   const isPassProduct = selectedProduct?.category === 'pass';
   const is2xProduct = selectedProduct?.category === '2x';
-  const isQuantityChangable = isPassProduct || is2xProduct || selectedProduct?.gameId === 'telegram';
+  const isQuantityChangable = isPassProduct || is2xProduct || selectedProduct?.gameId === 'telegram' || selectedProduct?.gameId === 'tiktok';
 
 
   const finalPrice = selectedProduct
@@ -257,12 +257,32 @@ Order Time: ${new Date().toLocaleString('en-US', {
          );
       case 'tiktok':
          return (
-            <ProductGrid
-                title="Coin Packages"
-                products={productGroups['Coins'] || []}
-                onProductClick={handleProductClick}
-                gridCols="grid-cols-3"
-            />
+            <>
+                <ProductGrid
+                    title="Views"
+                    products={productGroups['Views'] || []}
+                    onProductClick={handleProductClick}
+                    gridCols="grid-cols-3"
+                />
+                <ProductGrid
+                    title="Likes"
+                    products={productGroups['Likes'] || []}
+                    onProductClick={handleProductClick}
+                    gridCols="grid-cols-3"
+                />
+                <ProductGrid
+                    title="Promote"
+                    products={productGroups['Promote'] || []}
+                    onProductClick={handleProductClick}
+                    gridCols="grid-cols-3"
+                />
+                 <ProductGrid
+                    title="Followers"
+                    products={productGroups['Followers'] || []}
+                    onProductClick={handleProductClick}
+                    gridCols="grid-cols-3"
+                />
+            </>
          );
       default:
          return (
@@ -270,7 +290,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
                 title="Items"
                 products={products}
                 onProductClick={handleProductClick}
-                gridCols="grid-cols-2"
+                gridCols="grid-cols-3"
             />
          )
     }
@@ -421,3 +441,5 @@ Order Time: ${new Date().toLocaleString('en-US', {
     </div>
   );
 }
+
+    
