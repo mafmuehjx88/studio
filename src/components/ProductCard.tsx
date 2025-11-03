@@ -15,6 +15,8 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
   const is2xProduct = product.category === '2x';
   const isPassProduct = product.category === 'pass';
   const isPubgProduct = product.gameId === 'pubg';
+  const isTelegramProduct = product.gameId === 'telegram';
+  const isTiktokProduct = product.gameId === 'tiktok';
 
   return (
     <Card
@@ -22,7 +24,7 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
       onClick={() => onClick(product)}
     >
       <CardContent className="relative flex flex-1 flex-col justify-start p-2 text-left">
-        {!is2xProduct && !isPubgProduct && (
+        {!is2xProduct && !isPubgProduct && !isTelegramProduct && !isTiktokProduct && (
           <Badge className="absolute right-1 top-1 z-10 rounded-sm border-none bg-green-500 px-1.5 py-0.5 text-[10px] font-medium text-white">
             မစောင့်ရပါ
           </Badge>
