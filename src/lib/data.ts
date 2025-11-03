@@ -4,7 +4,7 @@ export const games: Game[] = [
   { id: 'mlbb', name: 'MLBB', image: 'https://i.ibb.co/R47v6TDX/8255033248d018b6c5f3d460b2deec16.jpg', bannerImage: 'https://i.ibb.co/NnNMr8gq/New-Project-85-E9-F449-A.png', needsServerId: true, needsUserIdentifier: true, userIdentifierLabel: 'User ID' },
   { id: 'pubg', name: 'PUBG', image: 'https://i.ibb.co/PsSM1JKc/new3589-516a74d6d701c86c007f668d7cf2891a.jpg', bannerImage: 'https://i.ibb.co/7NGpPr48/7ae05f485fd0725143225238a2ef1cc2.jpg', needsServerId: false, needsUserIdentifier: true, userIdentifierLabel: 'Player ID' },
   { id: 'hok', name: 'HOK', image: 'https://i.ibb.co/PZj5t6PX/new3418-1cff9a1ebb8677d02e5c0d96199b5384.jpg', needsServerId: false, needsUserIdentifier: true, userIdentifierLabel: 'Player ID' },
-  { id: 'telegram', name: 'Telegram', image: 'https://i.ibb.co/1nC3VSp/telegram-logo-512.png', bannerImage: 'https://i.ibb.co/1nC3VSp/telegram-logo-512.png', needsUserIdentifier: true, userIdentifierLabel: 'Phone Number or Username' },
+  { id: 'telegram', name: 'Telegram', image: 'https://i.ibb.co/1nC3VSp/telegram-logo-512.png', bannerImage: 'https://i.ibb.co/fVKbf2Bw/01-JZ3-RJE7-RGAM58-RVVTY8-GVBFW.jpg', needsUserIdentifier: true, userIdentifierLabel: 'Phone Number or Username' },
   { id: 'tiktok', name: 'Tiktok', image: 'https://i.ibb.co/3s2R9zM/tiktok-logo-512.png', bannerImage: 'https://i.ibb.co/3s2R9zM/tiktok-logo-512.png', needsUserIdentifier: true, userIdentifierLabel: 'TikTok Profile Link' },
 ];
 
@@ -42,12 +42,15 @@ export const products: Product[] = [
   { id: 'pubg-120uc', gameId: 'pubg', name: '120 UC', category: 'UC', price: 7900, image: 'https://i.ibb.co/tTF4140T/60-PUBG-UC.png' },
   { id: 'pubg-180uc', gameId: 'pubg', name: '180 UC', category: 'UC', price: 11850, image: 'https://i.ibb.co/fGCFFh5y/325-PUBG-UC.png' },
   { id: 'pubg-300uc', gameId: 'pubg', name: '300 UC', category: 'UC', price: 19750, image: 'https://i.ibb.co/fGCFFh5y/325-PUBG-UC.png' },
-  { id: 'pubg-360uc', gameId: 'pubg', name: '360 UC', category: 'UC', price: 23700, image: 'https://i.ibb.co/fGCFFh5y/325-PUBG-UC.png' },
+  { id: 'pubg-360uc', gameId: 'pubg', name: '360 UC', category: 'UC', price: 23700, image: 'https://iibb.co/fGCFFh5y/325-PUBG-UC.png' },
   { id: 'pubg-480uc', gameId: 'pubg', name: '480 UC', category: 'UC', price: 31600, image: 'https://i.ibb.co/hFxsWsVs/660-PUBG-UC.png' },
   { id: 'pubg-660uc', gameId: 'pubg', name: '660 UC', category: 'UC', price: 43450, image: 'https://i.ibb.co/hFxsWsVs/660-PUBG-UC.png' },
   { id: 'pubg-1800uc', gameId: 'pubg', name: '1800 UC', category: 'UC', price: 118500, image: 'https://i.ibb.co/8DW7Hp5L/3850-PUBG-UC.png' },
   { id: 'pubg-3850uc', gameId: 'pubg', name: '3850 UC', category: 'UC', price: 252800, image: 'https://i.ibb.co/KjqwNXDG/8100-PUBG-UC.png' },
   { id: 'pubg-8100uc', gameId: 'pubg', name: '8100 UC', category: 'UC', price: 533250, image: 'https://i.ibb.co/KjqwNXDG/8100-PUBG-UC.png' },
+
+  // HOK - No products yet
+  // Products removed to show coming soon message
 
   // Telegram
   { id: 'telegram-premium-1y', gameId: 'telegram', name: 'Premium 1 Yrs', category: 'Premium', price: 118500, image: 'https://i.ibb.co/K50GJ4p/telegram-premium.png'},
