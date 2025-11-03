@@ -108,9 +108,19 @@ export const staticImages = {
         description: `Banner for legal links`,
         imageHint: `customer service`
     },
-    'how-to-use-guide': {
+    'how-to-use-guide-1': {
         imageUrl: `https://i.ibb.co/2W7z1Q0/how-to-use-guide.jpg`,
-        description: `Guide on how to use the app`,
+        description: `Guide on how to use the app - Step 1`,
+        imageHint: `app tutorial`
+    },
+    'how-to-use-guide-2': {
+        imageUrl: `https://i.ibb.co/dKj1Nqg/how-to-use-guide-2.jpg`,
+        description: `Guide on how to use the app - Step 2`,
+        imageHint: `app tutorial`
+    },
+    'how-to-use-guide-3': {
+        imageUrl: `https://i.ibb.co/PNY5d7G/how-to-use-guide-3.jpg`,
+        description: `Guide on how to use the app - Step 3`,
         imageHint: `app tutorial`
     }
 }
