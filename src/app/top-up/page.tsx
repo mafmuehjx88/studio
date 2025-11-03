@@ -96,9 +96,9 @@ export default function TopUpPage() {
     }
 
     setIsSubmitting(true);
+    let submissionSuccess = false;
 
     try {
-      // 1. Convert screenshot to base64
       const photoBase64 = await fileToBase64(screenshot);
       const requestId = generateOrderId();
       
@@ -110,7 +110,6 @@ export default function TopUpPage() {
 🕒 Time: ${new Date().toLocaleString('en-US', { timeZone: 'Asia/Yangon' })}
       `;
       
-      // 2. Send notification to Telegram with base64 string
       await sendTopUpTelegramNotification({ caption, photoBase64 });
 
       toast({
@@ -118,7 +117,7 @@ export default function TopUpPage() {
         description: 'Your top-up request has been sent. Please wait for confirmation.',
       });
       
-      router.push('/');
+      submissionSuccess = true;
 
     } catch (error) {
       console.error('Error submitting top-up request:', error);
@@ -128,6 +127,9 @@ export default function TopUpPage() {
         variant: 'destructive',
       });
     } finally {
+        if (submissionSuccess) {
+            router.push('/');
+        }
         setIsSubmitting(false);
     }
   };

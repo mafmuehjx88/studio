@@ -29,6 +29,27 @@
         }
       },
       "required": ["uid", "username", "email", "walletBalance", "createdAt"]
+    },
+    "Announcement": {
+      "title": "Announcement",
+      "description": "Represents a site-wide announcement.",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "The title of the announcement."
+        },
+        "content": {
+          "type": "string",
+          "description": "The main content of the announcement."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp when the announcement was created."
+        }
+      },
+      "required": ["title", "content", "createdAt"]
     }
   },
   "auth": {
@@ -40,6 +61,23 @@
         "$ref": "#/entities/UserProfile"
       },
       "description": "Stores public profile information for each user, keyed by their auth UID."
+    },
+    "/announcements/{announcementId}": {
+      "schema": {
+        "$ref": "#/entities/Announcement"
+      },
+      "description": "Stores site-wide announcements."
+    },
+    "/settings/marquee": {
+        "schema": {
+            "type": "object",
+            "properties": {
+                "text": {
+                    "type": "string"
+                }
+            }
+        },
+        "description": "Stores the scrolling marquee text for the homepage."
     }
   }
 }

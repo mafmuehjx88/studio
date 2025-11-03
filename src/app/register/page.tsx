@@ -109,19 +109,16 @@ export default function RegisterPage() {
           // This catch block is for the setDoc operation
           console.error("Firestore Error:", error);
           
-          let description = "Could not save your profile. Please contact support.";
-          if (error.code === 'permission-denied') {
-              const permissionError = new FirestorePermissionError({
-                path: userDocRef.path,
-                operation: 'create',
-                requestResourceData: userProfileData,
-              });
-              errorEmitter.emit('permission-error', permissionError);
-              description = "You don't have permission to create a user profile.";
-          }
+          const permissionError = new FirestorePermissionError({
+            path: userDocRef.path,
+            operation: 'create',
+            requestResourceData: userProfileData,
+          });
+          errorEmitter.emit('permission-error', permissionError);
+          
            toast({
             title: "Registration Failed",
-            description: description,
+            description: "Could not save your profile due to permission issues.",
             variant: "destructive",
           });
         })

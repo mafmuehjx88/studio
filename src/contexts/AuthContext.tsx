@@ -32,48 +32,47 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
 
   useEffect(() => {
-    // This effect should only run once on mount to set up the auth listener.
+    setLoading(true);
     const unsubscribeAuth = onAuthStateChanged(auth, (firebaseUser) => {
-      setUser(firebaseUser);
-      setIsAdmin(firebaseUser?.email === 'marrci448@gmail.com');
-      
+      let profileUnsubscribe: () => void = () => {};
+
       if (firebaseUser) {
-        // User is logged in, now fetch their profile.
-        // Loading will be set to false inside the onSnapshot listener.
+        setUser(firebaseUser);
+        setIsAdmin(firebaseUser.email === 'marrci448@gmail.com');
+        
         const userDocRef = doc(db, 'users', firebaseUser.uid);
-        const unsubscribeProfile = onSnapshot(userDocRef, 
+        profileUnsubscribe = onSnapshot(userDocRef, 
           (docSnap) => {
             if (docSnap.exists()) {
               setUserProfile({ ...docSnap.data(), uid: docSnap.id } as UserProfile);
             } else {
-              setUserProfile(null); // Auth record exists, but no profile doc.
+              setUserProfile(null);
             }
-            setLoading(false); // Finished loading profile data
+            setLoading(false);
           }, 
           (error) => {
             console.error("Error listening to user profile:", error);
             setUserProfile(null);
-            setLoading(false); // Finished loading, but with an error
+            setLoading(false);
           }
         );
-        // We don't return unsubscribeProfile here because onAuthStateChanged
-        // gives us a new one every time auth state changes. We need to handle
-        // cleanup inside the auth callback itself if needed, but onSnapshot
-        // for a specific user doc will be implicitly cleaned when the user logs out
-        // and this whole block is re-evaluated.
       } else {
-        // User is logged out or session is expired.
+        setUser(null);
         setUserProfile(null);
-        setLoading(false); // We are done loading.
+        setIsAdmin(false);
+        setLoading(false);
       }
+      
+      return () => {
+        profileUnsubscribe();
+      };
     });
 
-    return () => unsubscribeAuth(); // Cleanup the auth subscription on unmount.
+    return () => unsubscribeAuth();
   }, []);
 
 
   useEffect(() => {
-    // This effect handles redirection logic after loading is complete.
     if (loading) return;
 
     const isAuthPage = AUTH_PAGES.includes(pathname);
@@ -81,18 +80,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const isAdminRoute = ADMIN_PAGES.some(p => pathname.startsWith(p));
 
     if (user) {
-      // User is logged in
       if (isAuthPage) {
-        // If on an auth page, redirect to a default authenticated page
         router.replace('/profile');
       } else if (isAdminRoute && !isAdmin) {
-        // If on an admin page without admin rights, redirect to home
         router.replace('/');
       }
     } else {
-      // No user is logged in
       if (isProtectedRoute || isAdminRoute) {
-        // If trying to access a protected or admin page, redirect to login
         router.replace('/login');
       }
     }

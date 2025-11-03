@@ -77,8 +77,3 @@ export const staticImages = {
         imageHint: `customer service`
     }
 }
-
-    
-    
-
-    
