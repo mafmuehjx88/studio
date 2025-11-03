@@ -143,10 +143,17 @@ Order Time: ${new Date().toLocaleString('en-US', {
 `;
       await sendTelegramNotification(notificationMessage);
 
-      toast({
-        title: "အောင်မြင်ပါတယ်",
-        description: "Stock ကုန်နေလို့ ခနစောင့်ပေးပါ 10 မိနစ်အတွင်းအကောင့်ထဲရောက်ပါမယ်",
-      });
+      if (game.id === 'tiktok') {
+        toast({
+          title: 'အောင်မြင်ပါတယ်',
+          description: '3 မိနစ်ကနေ 24 နာရီအတွင် အကုန်ရောက်ပါမယ်',
+        });
+      } else {
+        toast({
+          title: "အောင်မြင်ပါတယ်",
+          description: "Stock ကုန်နေလို့ ခနစောင့်ပေးပါ 10 မိနစ်အတွင်းအကောင့်ထဲရောက်ပါမယ်",
+        });
+      }
 
       setSelectedProduct(null);
       setUserGameId('');
@@ -477,6 +484,8 @@ Order Time: ${new Date().toLocaleString('en-US', {
 
 
 
+
+    
 
     
 
