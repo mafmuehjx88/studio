@@ -176,6 +176,9 @@ Order Time: ${new Date().toLocaleString('en-US', {
       if (selectedProduct.category === 'Boost') {
         return 'တိုးရမဲ့ Ch ရဲ့ Boost linkပို့ပေးပါ။ ကြာချိန်- Fast';
       }
+       if (selectedProduct.category === 'Subscribers') {
+        return 'မြန်မာ Name Subscribers / Online ဖြစ်ပါတယ်။ တိုးမဲ့ Channal ရဲ့ Username ပဲလိုအပ်ပါတယ်။ သတိ - စထောင်တာမကြာသေးတဲ့Ch ဆိုရင် Not working. ကြာချိန် - 10min to 5hrs / Just For 1M';
+      }
     }
     return 'AT Game Hubတွင် ဝယ်ယူအားပေးသည့် Customersများအားလုံးကို ကျေးဇူးတင်ပါတယ် ခင်ဗျာ။';
   };
@@ -282,7 +285,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
                     onProductClick={handleProductClick}
                     gridCols="grid-cols-3"
                 />
-                <ProductGrid
+                 <ProductGrid
                     title="Promote"
                     products={productGroups['Promote'] || []}
                     onProductClick={handleProductClick}
@@ -453,5 +456,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
     </div>
   );
 }
+
+    
 
     
