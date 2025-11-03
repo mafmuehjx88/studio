@@ -36,6 +36,12 @@ import { Skeleton } from '@/components/ui/skeleton';
 import type { Game, Product } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
+export async function generateStaticParams() {
+  return allGames.map((game) => ({
+    gameId: game.id,
+  }));
+}
+
 export default function GameItemsPage() {
   const params = useParams();
   const router = useRouter();
