@@ -167,6 +167,18 @@ Order Time: ${new Date().toLocaleString('en-US', {
       setIsPurchasing(false);
     }
   };
+
+  const getDialogMessage = () => {
+    if (selectedProduct?.gameId === 'telegram') {
+      if (selectedProduct.category === 'Premium') {
+        return 'ဝယ်မဲ့ Account ရဲ့ Username ပေးရုံပါပဲဗျ။ ကြာချိန် - Fast';
+      }
+      if (selectedProduct.category === 'Boost') {
+        return 'တိုးရမဲ့ Ch ရဲ့ Boost linkပို့ပေးပါ။ ကြာချိန်- Fast';
+      }
+    }
+    return 'AT Game Hubတွင် ဝယ်ယူအားပေးသည့် Customersများအားလုံးကို ကျေးဇူးတင်ပါတယ် ခင်ဗျာ။';
+  };
   
   const renderProductGrids = () => {
     if (!game) return null;
@@ -230,7 +242,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
             />
         );
       case 'hok':
-        // This will now render the 'Coming Soon' message as products are removed.
+        // This will now render the 'Coming Soon' message as products are empty.
         return null;
       case 'telegram':
          return (
@@ -407,10 +419,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
             </div>
 
             <p className="text-center text-sm font-semibold text-green-600">
-              {selectedProduct?.gameId === 'telegram' && selectedProduct.category === 'Premium' 
-                ? 'ဝယ်မဲ့ Account ရဲ့ Username ပေးရုံပါပဲဗျ။ ကြာချိန် - Fast'
-                : 'AT Game Hubတွင် ဝယ်ယူအားပေးသည့် Customersများအားလုံးကို ကျေးဇူးတင်ပါတယ် ခင်ဗျာ။'
-              }
+              {getDialogMessage()}
             </p>
 
             <div className="flex justify-between text-lg font-bold text-[#111827]">
