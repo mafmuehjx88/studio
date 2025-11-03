@@ -1,4 +1,3 @@
-
 'use client';
 
 import Image from 'next/image';
@@ -13,7 +12,7 @@ import Link from 'next/link';
 const digitalProducts = [
   {
     name: 'Telegram',
-    image: 'https://i.ibb.co/1nC3VSp/telegram-logo-512.png',
+    image: 'https://i.ibb.co/wFmXwwNg/zproduct.jpg',
     link: '/games/telegram'
   },
   {
@@ -77,5 +76,3 @@ export default function DigitalProductPage() {
     </div>
   );
 }
-
-    
