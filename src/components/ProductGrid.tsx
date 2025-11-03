@@ -12,7 +12,7 @@ interface ProductGridProps {
   titleNumber?: number;
 }
 
-export default function ProductGrid({ title, products, onProductClick, gridCols = 'grid-cols-2', titleNumber }: ProductGridProps) {
+export default function ProductGrid({ title, products, onProductClick, gridCols = 'grid-cols-3', titleNumber }: ProductGridProps) {
     if (products.length === 0) {
         return null;
     }
