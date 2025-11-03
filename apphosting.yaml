@@ -8,14 +8,6 @@ runConfig:
 # If you have an existing Next.js app, copy this file to your project root.
 # https://firebase.google.com/docs/hosting/frameworks/nextjs
 #
-# build:
-#   run:
-#     npm_ci:
-#       build: npm run build
-# serve:
-#   run:
-#     - npm start
-#
 # The following config is the one that's used for this project.
 build:
   run:
