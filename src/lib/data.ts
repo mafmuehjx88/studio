@@ -75,16 +75,16 @@ export const products: Product[] = [
   { id: 'tiktok-like-5k', gameId: 'tiktok', name: 'Like 5K', category: 'Likes', price: 7300, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
   { id: 'tiktok-like-10k', gameId: 'tiktok', name: 'Like 10K', category: 'Likes', price: 13000, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
   
-  { id: 'tiktok-followers-100', gameId: 'tiktok', name: 'Followers(100)', category: 'Followers', price: 2500, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
-  { id: 'tiktok-followers-500', gameId: 'tiktok', name: 'Followers(500)', category: 'Followers', price: 11500, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
-  { id: 'tiktok-followers-1k', gameId: 'tiktok', name: 'Followers(1K)', category: 'Followers', price: 21000, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
-  { id: 'tiktok-followers-1usd', gameId: 'tiktok', name: 'Followers(1$)', category: 'Followers', price: 6800, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
-  { id: 'tiktok-followers-2usd', gameId: 'tiktok', name: 'Followers(2$)', category: 'Followers', price: 12500, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
-  { id: 'tiktok-followers-3usd', gameId: 'tiktok', name: 'Followers(3$)', category: 'Followers', price: 21000, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
+  { id: 'tiktok-followers-100', gameId: 'tiktok', name: 'Followers(100)', category: 'Followers', price: 2600, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
+  { id: 'tiktok-followers-500', gameId: 'tiktok', name: 'Followers(500)', category: 'Followers', price: 12500, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
+  { id: 'tiktok-followers-1k', gameId: 'tiktok', name: 'Followers(1K)', category: 'Followers', price: 25000, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
+  { id: 'tiktok-followers-1usd', gameId: 'tiktok', name: 'Followers(1$)', category: 'Followers', price: 6900, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
+  { id: 'tiktok-followers-2usd', gameId: 'tiktok', name: 'Followers(2$)', category: 'Followers', price: 13800, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
+  { id: 'tiktok-followers-3usd', gameId: 'tiktok', name: 'Followers(3$)', category: 'Followers', price: 21500, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
   
-  { id: 'tiktok-promote-1', gameId: 'tiktok', name: 'Promote View(1$)', category: 'Promote', price: 6800, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
-  { id: 'tiktok-promote-2', gameId: 'tiktok', name: 'Promote View(2$)', category: 'Promote', price: 13200, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
-  { id: 'tiktok-promote-3', gameId: 'tiktok', name: 'Promote View(3$)', category: 'Promote', price: 20500, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
+  { id: 'tiktok-promote-1', gameId: 'tiktok', name: 'Promote View(1$)', category: 'Promote', price: 6900, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
+  { id: 'tiktok-promote-2', gameId: 'tiktok', name: 'Promote View(2$)', category: 'Promote', price: 13800, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
+  { id: 'tiktok-promote-3', gameId: 'tiktok', name: 'Promote View(3$)', category: 'Promote', price: 20700, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
 ];
 
 export const staticImages = {
