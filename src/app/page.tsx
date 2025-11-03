@@ -1,19 +1,21 @@
 
+"use client";
+
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { games as allGames, staticImages } from '@/lib/data';
 import type { Game } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import MarqueeText from '@/components/MarqueeText';
+import { useAuth } from '@/contexts/AuthContext';
 
 
 export default function Home() {
-  
+  const { isAdmin } = useAuth();
   const bannerImage = staticImages['banner'];
   const logoImage = staticImages['logo'];
 
@@ -53,11 +55,13 @@ export default function Home() {
         </Button>
       </div>
 
-      <div className="mt-2 flex justify-center">
-        <Button asChild variant="outline" size="sm">
-            <Link href="/how-to-use">Website အသုံးပြုနည်း</Link>
-        </Button>
-      </div>
+      {isAdmin && (
+        <div className="mt-2 flex justify-center">
+            <Button asChild variant="outline" size="sm">
+                <Link href="/how-to-use">Website အသုံးပြုနည်း</Link>
+            </Button>
+        </div>
+      )}
 
       <MarqueeText />
 
@@ -96,7 +100,6 @@ export default function Home() {
       </div>
       
       <div className="space-y-4 pt-8">
-        <Separator />
         {logoImage && (
             <div className="flex flex-col items-center gap-2">
                 <div className="w-1/4">
@@ -126,5 +129,3 @@ export default function Home() {
     </div>
   );
 }
-
-    
