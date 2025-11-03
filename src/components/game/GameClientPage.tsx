@@ -184,6 +184,9 @@ Order Time: ${new Date().toLocaleString('en-US', {
       if (selectedProduct.category === 'Views' || selectedProduct.category === 'Likes') {
         return 'တိုးမဲ့ vd link သာထည့်ပေးပါ။ private accမရပါဘူး။ Official မဟုတ်တာမလို့ တက်မတက် လုံးဝအာမမခံပါဘူးဗျ။';
       }
+      if (selectedProduct.category === 'Promote') {
+        return 'တကယ်မြန်မာနိုင်ငံက လူတွေမြင်ရအောင် Official Boostလုပ်တာပဲဖြစ်ပါတယ်။ Boost orderတင်တဲ့အခါ တိုးမဲ့ Vd linkပဲပို့ပေးပါ။ Orderတင်ပြီးတာနဲ့ ဒီ Acc ကိုစာပို့ပေးပါ - @mario_official_2079';
+      }
     }
     return 'AT Game Hubတွင် ဝယ်ယူအားပေးသည့် Customersများအားလုံးကို ကျေးဇူးတင်ပါတယ် ခင်ဗျာ။';
   };
@@ -465,3 +468,4 @@ Order Time: ${new Date().toLocaleString('en-US', {
     
 
     
+
