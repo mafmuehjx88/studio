@@ -66,7 +66,7 @@ export default function Home() {
                             className={cn("aspect-square w-full rounded-lg object-cover", isComingSoon && "grayscale opacity-50")}
                             />
                         </Card>
-                         <p className="truncate text-sm font-semibold text-foreground">
+                         <p className="text-sm font-semibold text-foreground">
                             {game.name}
                         </p>
                         <Button variant="secondary" size="sm" className="h-8 w-full text-xs" disabled={isComingSoon}>
