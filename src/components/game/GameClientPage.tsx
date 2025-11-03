@@ -143,7 +143,10 @@ Order Time: ${new Date().toLocaleString('en-US', {
 `;
       await sendTelegramNotification(notificationMessage);
 
-      if (game.id === 'tiktok') {
+      const isSpecialToast = game.id === 'tiktok' || 
+                             (game.id === 'telegram' && (selectedProduct.category === 'Subscribers' || selectedProduct.category === 'Boost'));
+
+      if (isSpecialToast) {
         toast({
           title: 'အောင်မြင်ပါတယ်',
           description: '3 မိနစ်ကနေ 24 နာရီအတွင် အကုန်ရောက်ပါမယ်',
@@ -484,6 +487,8 @@ Order Time: ${new Date().toLocaleString('en-US', {
 
 
 
+
+    
 
     
 
