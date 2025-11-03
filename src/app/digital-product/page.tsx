@@ -12,7 +12,7 @@ import Link from 'next/link';
 const digitalProducts = [
   {
     name: 'Telegram',
-    image: 'https://i.ibb.co/wFmXwwNg/zproduct.jpg',
+    image: 'https://i.ibb.co/fVKbf2Bw/01-JZ3-RJE7-RGAM58-RVVTY8-GVBFW.jpg',
     link: '/games/telegram'
   },
   {
