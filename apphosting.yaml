@@ -1,7 +1,26 @@
 # Settings to manage and configure a Firebase App Hosting backend.
 # https://firebase.google.com/docs/app-hosting/configure
-
 runConfig:
   # Increase this value if you'd like to automatically spin up
   # more instances in response to increased traffic.
   maxInstances: 1
+# This is a sample apphosting.yaml to build and serve a Next.js app.
+# If you have an existing Next.js app, copy this file to your project root.
+# https://firebase.google.com/docs/hosting/frameworks/nextjs
+#
+# build:
+#   run:
+#     npm_ci:
+#       build: npm run build
+# serve:
+#   run:
+#     - npm start
+#
+# The following config is the one that's used for this project.
+build:
+  run:
+    npm_ci:
+      build: npm run build
+serve:
+  run:
+    - npm start
