@@ -51,8 +51,14 @@ export default function Home() {
         <div className="grid grid-cols-3 gap-3">
           {games.map((game) => {
               const isComingSoon = game.id === 'hok';
+              const isDigitalProduct = game.id === 'digital-product';
               const Wrapper = isComingSoon ? 'div' : Link;
               const props = isComingSoon ? {} : { href: `/games/${game.id}` };
+              
+              if (isDigitalProduct) {
+                props.href = '/digital-product';
+              }
+
 
               return (
                 <React.Fragment key={`game-${game.id}`}>
