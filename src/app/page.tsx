@@ -4,7 +4,7 @@ import Link from 'next/link';
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { games, staticImages } from '@/lib/data';
+import { games as allGames, staticImages } from '@/lib/data';
 import type { Game } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from '@/components/ui/separator';
@@ -16,6 +16,12 @@ export default function Home() {
   
   const bannerImage = staticImages['banner'];
   const logoImage = staticImages['logo'];
+
+  const games: (Game | { id: string, name: string, image: string })[] = [
+    ...allGames,
+    { id: 'digital-product', name: 'Digital Product', image: 'https://i.ibb.co/wFmXwwNg/zproduct.jpg' }
+  ];
+
 
   return (
     <div className="space-y-6">
@@ -51,8 +57,9 @@ export default function Home() {
         <div className="grid grid-cols-3 gap-3">
           {games.map((game) => {
               const isComingSoon = false; // All products are available now
+              const isDigitalProduct = game.id === 'digital-product';
               const Wrapper = Link;
-              const props = { href: `/games/${game.id}` };
+              const props = { href: isDigitalProduct ? `/digital-product` : `/games/${game.id}` };
               
               return (
                 <React.Fragment key={`game-${game.id}`}>
@@ -70,7 +77,7 @@ export default function Home() {
                             {game.name}
                         </p>
                         <Button variant="secondary" size="sm" className="h-8 w-full text-xs" disabled={isComingSoon}>
-                            {isComingSoon ? "မကြာမီလာမည်" : "ဝယ်မည်"}
+                            {isDigitalProduct ? "ဝယ်မည်" : (isComingSoon ? "မကြာမီလာမည်" : "ဝယ်မည်")}
                         </Button>
                     </Wrapper>
                 </React.Fragment>

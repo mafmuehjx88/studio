@@ -2,11 +2,9 @@
 import type { Game, Product } from './types';
 
 export const games: Game[] = [
-  { id: 'mlbb', name: 'MLBB', image: 'https://i.ibb.co/R47v6TDX/8255033248d018b6c5f3d460b2deec16.jpg', bannerImage: 'https://i.ibb.co/NnNMr8gq/New-Project-85-E9-F449-A.png', needsServerId: true },
-  { id: 'pubg', name: 'PUBG', image: 'https://i.ibb.co/PsSM1JKc/new3589-516a74d6d701c86c007f668d7cf2891a.jpg', bannerImage: 'https://i.ibb.co/7NGpPr48/7ae05f485fd0725143225238a2ef1cc2.jpg', needsServerId: false },
-  { id: 'hok', name: 'HOK', image: 'https://i.ibb.co/PZj5t6PX/new3418-1cff9a1ebb8677d02e5c0d96199b5384.jpg', needsServerId: false },
-  { id: 'telegram', name: 'Telegram', image: 'https://i.ibb.co/1nC3VSp/telegram-logo-512.png', bannerImage: 'https://picsum.photos/seed/telegram-banner/600/300', needsServerId: false },
-  { id: 'tiktok', name: 'Tiktok', image: 'https://i.ibb.co/3s2R9zM/tiktok-logo-512.png', bannerImage: 'https://picsum.photos/seed/tiktok-banner/600/300', needsServerId: false },
+  { id: 'mlbb', name: 'MLBB', image: 'https://i.ibb.co/R47v6TDX/8255033248d018b6c5f3d460b2deec16.jpg', bannerImage: 'https://i.ibb.co/NnNMr8gq/New-Project-85-E9-F449-A.png', needsServerId: true, needsUserIdentifier: true, userIdentifierLabel: 'User ID' },
+  { id: 'pubg', name: 'PUBG', image: 'https://i.ibb.co/PsSM1JKc/new3589-516a74d6d701c86c007f668d7cf2891a.jpg', bannerImage: 'https://i.ibb.co/7NGpPr48/7ae05f485fd0725143225238a2ef1cc2.jpg', needsServerId: false, needsUserIdentifier: true, userIdentifierLabel: 'Player ID' },
+  { id: 'hok', name: 'HOK', image: 'https://i.ibb.co/PZj5t6PX/new3418-1cff9a1ebb8677d02e5c0d96199b5384.jpg', needsServerId: false, needsUserIdentifier: true, userIdentifierLabel: 'Player ID' },
 ];
 
 export const products: Product[] = [
