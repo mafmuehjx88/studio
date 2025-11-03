@@ -240,19 +240,19 @@ Order Time: ${new Date().toLocaleString('en-US', {
                 title="Premium"
                 products={productGroups['Premium'] || []}
                 onProductClick={handleProductClick}
-                gridCols="grid-cols-2"
+                gridCols="grid-cols-3"
             />
              <ProductGrid
                 title="Channel/Group Boost"
                 products={productGroups['Boost'] || []}
                 onProductClick={handleProductClick}
-                gridCols="grid-cols-2"
+                gridCols="grid-cols-3"
             />
              <ProductGrid
                 title="Subscribers"
                 products={productGroups['Subscribers'] || []}
                 onProductClick={handleProductClick}
-                gridCols="grid-cols-2"
+                gridCols="grid-cols-3"
             />
           </>
          );
@@ -262,7 +262,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
                 title="Coin Packages"
                 products={productGroups['Coins'] || []}
                 onProductClick={handleProductClick}
-                gridCols="grid-cols-2"
+                gridCols="grid-cols-3"
             />
          );
       default:
