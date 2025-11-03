@@ -143,10 +143,16 @@ Order Time: ${new Date().toLocaleString('en-US', {
 `;
       await sendTelegramNotification(notificationMessage);
 
-      const isSpecialToast = game.id === 'tiktok' || 
+      const isPremiumToast = game.id === 'telegram' && selectedProduct.category === 'Premium';
+      const isSpecialDurationToast = game.id === 'tiktok' || 
                              (game.id === 'telegram' && (selectedProduct.category === 'Subscribers' || selectedProduct.category === 'Boost'));
 
-      if (isSpecialToast) {
+      if (isPremiumToast) {
+        toast({
+            title: 'Premium ဝယ်ယူမှုအောင်မြင်ပါတယ်',
+            description: 'အချိန်ခနစောင့်ပေးပါ တစ်ခုခု လိုအပ်တာရှိရင် ဒီကိုလာပေးပါ - @mario_official_2079',
+        });
+      } else if (isSpecialDurationToast) {
         toast({
           title: 'အောင်မြင်ပါတယ်',
           description: '3 မိနစ်ကနေ 24 နာရီအတွင် အကုန်ရောက်ပါမယ်',
@@ -194,10 +200,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
       if (selectedProduct.category === 'Views' || selectedProduct.category === 'Likes') {
         return 'တိုးမဲ့ vd link သာထည့်ပေးပါ။ private accမရပါဘူး။ Official မဟုတ်တာမလို့ တက်မတက် လုံးဝအာမမခံပါဘူးဗျ။';
       }
-      if (selectedProduct.category === 'Promote') {
-        return 'တကယ်မြန်မာနိုင်ငံက လူတွေမြင်ရအောင် Official Boostလုပ်တာပဲဖြစ်ပါတယ်။ Boost orderတင်တဲ့အခါ တိုးမဲ့ Vd linkပဲပို့ပေးပါ။ Orderတင်ပြီးတာနဲ့ ဒီ Acc ကိုစာပို့ပေးပါ - @mario_official_2079';
-      }
-       if (selectedProduct.category === 'Followers' && selectedProduct.name.includes('$')) {
+      if (selectedProduct.category === 'Promote' || (selectedProduct.category === 'Followers' && selectedProduct.name.includes('$'))) {
         return 'တကယ်မြန်မာနိုင်ငံက လူတွေမြင်ရအောင် Official Boostလုပ်တာပဲဖြစ်ပါတယ်။ Boost orderတင်တဲ့အခါ တိုးမဲ့ Vd linkပဲပို့ပေးပါ။ Orderတင်ပြီးတာနဲ့ ဒီ Acc ကိုစာပို့ပေးပါ - @mario_official_2079';
       }
        if (selectedProduct.category === 'Followers' && !selectedProduct.name.includes('$')) {
