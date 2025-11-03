@@ -109,7 +109,7 @@ export const staticImages = {
         imageHint: `customer service`
     },
     'how-to-use-guide-1': {
-        imageUrl: `https://i.ibb.co/2W7z1Q0/how-to-use-guide.jpg`,
+        imageUrl: `https://i.ibb.co/YTX1wcRr/IMG-20251103-215753-033.jpg`,
         description: `Guide on how to use the app - Step 1`,
         imageHint: `app tutorial`
     },
@@ -124,6 +124,8 @@ export const staticImages = {
         imageHint: `app tutorial`
     }
 }
+
+    
 
     
 

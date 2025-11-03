@@ -12,7 +12,7 @@ const guideSteps = [
   {
     image: staticImages['how-to-use-guide-1'],
     alt: 'How to use guide step 1',
-    description: '1. ပထမဆုံး म्हणून AT Game HUB ရဲ့ Register Now ကိုနှိပ်ပြီး အကောင့်အသစ်ဖွင့်ပါ။',
+    description: 'အသစ်ဖွင့်မယ်ဆို Register now နိပ်ပြီ  Username / Email / Password ထည့်ပြီ အကောင့်သစ်ဖွင့်နိုင်ပါတယ် အကောင့်ဖွင့်ပြီသာရှိပါက Email နဲ့ Password ထည့်ပြီ ပြန်ဝင်နိုင်ပါတယ်',
   },
   {
     image: staticImages['how-to-use-guide-2'],
@@ -59,3 +59,5 @@ export default function HowToUsePage() {
     </div>
   );
 }
+
+    
