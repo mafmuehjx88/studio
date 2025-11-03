@@ -71,10 +71,10 @@ export default function GameClientPage({ game, products }: GameClientPageProps) 
   const handlePurchase = async () => {
     if (!user || !userProfile || !selectedProduct || !game) return;
 
-    if (!userGameId) {
+    if (game.needsUserIdentifier && !userGameId) {
       toast({
         title: 'Error',
-        description: 'Please enter your Game ID.',
+        description: `Please enter your ${game.userIdentifierLabel || 'ID'}.`,
         variant: 'destructive',
       });
       return;
@@ -121,6 +121,7 @@ export default function GameClientPage({ game, products }: GameClientPageProps) 
       await addDoc(collection(db, `users/${user.uid}/orders`), orderData);
 
       // 3. Send notification
+      const identifierLabel = game.userIdentifierLabel || 'Game User ID';
       const notificationMessage = `
 New Order Received!
 ----------------------
@@ -130,7 +131,7 @@ Item: *${orderData.itemName}*
 Price: *${finalPrice.toLocaleString()} Ks*
 ----------------------
 Username: \`${userProfile.username}\`
-Game User ID: \`${userGameId}\`
+${identifierLabel}: \`${userGameId}\`
 ${userServerId ? `Game Server ID: \`${userServerId}\`` : ''}
 ----------------------
 Payment: Wallet
@@ -168,9 +169,14 @@ Order Time: ${new Date().toLocaleString('en-US', {
   const renderProductGrids = () => {
     if (!game) return null;
 
-    const passes = products.filter(p => p.category === 'pass');
-    const diamonds2x = products.filter(p => p.category === '2x');
-    const otherDiamonds = products.filter(p => p.category === 'diamonds');
+    // A more generic way to group products by category
+    const productGroups: { [key: string]: Product[] } = {};
+    products.forEach(p => {
+        if (!productGroups[p.category]) {
+            productGroups[p.category] = [];
+        }
+        productGroups[p.category].push(p);
+    });
 
     switch (game.id) {
       case 'mlbb':
@@ -178,21 +184,21 @@ Order Time: ${new Date().toLocaleString('en-US', {
           <>
             <ProductGrid
               title="Weekly Pass & Twilight Pass"
-              products={passes}
+              products={productGroups['pass'] || []}
               onProductClick={handleProductClick}
               gridCols="grid-cols-2"
               titleNumber={1}
             />
             <ProductGrid
               title="2x Diamonds"
-              products={diamonds2x}
+              products={productGroups['2x'] || []}
               onProductClick={handleProductClick}
               gridCols="grid-cols-3"
               titleNumber={2}
             />
              <ProductGrid
               title="Other Diamonds"
-              products={otherDiamonds}
+              products={productGroups['diamonds'] || []}
               onProductClick={handleProductClick}
               gridCols="grid-cols-3"
               titleNumber={3}
@@ -201,32 +207,48 @@ Order Time: ${new Date().toLocaleString('en-US', {
         );
       case 'pubg':
         return (
-          <>
             <ProductGrid
               title="UC Top-Up"
-              products={products.filter((p) => p.category === 'UC')}
+              products={productGroups['UC'] || []}
               onProductClick={handleProductClick}
               gridCols="grid-cols-3"
             />
-          </>
         );
       case 'hok':
         return (
           <>
              <ProductGrid
               title="Weekly Passes"
-              products={products.filter((p) => p.category === 'Weekly Passes')}
+              products={productGroups['Weekly Passes'] || []}
               onProductClick={handleProductClick}
               gridCols="grid-cols-2"
             />
             <ProductGrid
               title="Tokens"
-              products={products.filter((p) => p.category === 'Tokens')}
+              products={productGroups['Tokens'] || []}
               onProductClick={handleProductClick}
               gridCols="grid-cols-2"
             />
           </>
         );
+      case 'telegram':
+         return (
+            <ProductGrid
+                title="Subscriptions"
+                products={productGroups['Subscription'] || []}
+                onProductClick={handleProductClick}
+                gridCols="grid-cols-2"
+            />
+         );
+      case 'tiktok':
+         return (
+            <ProductGrid
+                title="Coin Packages"
+                products={productGroups['Coins'] || []}
+                onProductClick={handleProductClick}
+                gridCols="grid-cols-2"
+            />
+         );
       default:
          return (
             <ProductGrid
@@ -288,14 +310,17 @@ Order Time: ${new Date().toLocaleString('en-US', {
                   readOnly
                   disabled
                 />
+             {(game.needsUserIdentifier || game.needsServerId) && (
               <div className="flex gap-2.5">
-                <Input
-                  className="h-10 rounded-md border-[#E5E7EB]"
-                  value={userGameId}
-                  onChange={(e) => setUserGameId(e.target.value)}
-                  placeholder="Game ID"
-                  required
-                />
+                {game.needsUserIdentifier && (
+                    <Input
+                        className="h-10 rounded-md border-[#E5E7EB]"
+                        value={userGameId}
+                        onChange={(e) => setUserGameId(e.target.value)}
+                        placeholder={game.userIdentifierLabel || 'User ID'}
+                        required
+                    />
+                )}
                 {game.needsServerId && (
                   <Input
                     className="h-10 rounded-md border-[#E5E7EB]"
@@ -305,6 +330,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
                   />
                 )}
               </div>
+             )}
             </div>
 
 
@@ -380,3 +406,5 @@ Order Time: ${new Date().toLocaleString('en-US', {
     </div>
   );
 }
+
+    

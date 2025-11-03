@@ -5,7 +5,8 @@ export const games: Game[] = [
   { id: 'mlbb', name: 'MLBB', image: 'https://i.ibb.co/R47v6TDX/8255033248d018b6c5f3d460b2deec16.jpg', bannerImage: 'https://i.ibb.co/NnNMr8gq/New-Project-85-E9-F449-A.png', needsServerId: true },
   { id: 'pubg', name: 'PUBG', image: 'https://i.ibb.co/PsSM1JKc/new3589-516a74d6d701c86c007f668d7cf2891a.jpg', bannerImage: 'https://i.ibb.co/7NGpPr48/7ae05f485fd0725143225238a2ef1cc2.jpg', needsServerId: false },
   { id: 'hok', name: 'HOK', image: 'https://i.ibb.co/PZj5t6PX/new3418-1cff9a1ebb8677d02e5c0d96199b5384.jpg', needsServerId: false },
-  { id: 'digital-product', name: 'Digital Product', image: 'https://i.ibb.co/wFmXwwNg/zproduct.jpg', bannerImage: 'https://picsum.photos/seed/digital-banner/600/300', needsServerId: false },
+  { id: 'telegram', name: 'Telegram', image: 'https://i.ibb.co/1nC3VSp/telegram-logo-512.png', bannerImage: 'https://picsum.photos/seed/telegram-banner/600/300', needsServerId: false },
+  { id: 'tiktok', name: 'Tiktok', image: 'https://i.ibb.co/3s2R9zM/tiktok-logo-512.png', bannerImage: 'https://picsum.photos/seed/tiktok-banner/600/300', needsServerId: false },
 ];
 
 export const products: Product[] = [
@@ -54,6 +55,14 @@ export const products: Product[] = [
   { id: 'hok-monthly', gameId: 'hok', name: 'Monthly Card', category: 'Weekly Passes', price: 10000, image: 'https://picsum.photos/seed/hok-pass/200/200' },
   { id: 'hok-500t', gameId: 'hok', name: '500 Tokens', category: 'Tokens', price: 10000, image: 'https://picsum.photos/seed/hok-token/200/200' },
   { id: 'hok-1000t', gameId: 'hok', name: '1000 Tokens', category: 'Tokens', price: 20000, image: 'https://picsum.photos/seed/hok-token/200/200' },
+
+  // Telegram
+  { id: 'telegram-premium-1m', gameId: 'telegram', name: 'Premium - 1 Month', category: 'Subscription', price: 15000, image: 'https://i.ibb.co/1nC3VSp/telegram-logo-512.png'},
+  { id: 'telegram-premium-3m', gameId: 'telegram', name: 'Premium - 3 Months', category: 'Subscription', price: 40000, image: 'https://i.ibb.co/1nC3VSp/telegram-logo-512.png'},
+
+  // Tiktok
+  { id: 'tiktok-100coins', gameId: 'tiktok', name: '100 Coins', category: 'Coins', price: 5000, image: 'https://i.ibb.co/3s2R9zM/tiktok-logo-512.png'},
+  { id: 'tiktok-500coins', gameId: 'tiktok', name: '500 Coins', category: 'Coins', price: 25000, image: 'https://i.ibb.co/3s2R9zM/tiktok-logo-512.png'},
 ];
 
 export const staticImages = {
@@ -79,4 +88,5 @@ export const staticImages = {
     }
 }
 
+    
     

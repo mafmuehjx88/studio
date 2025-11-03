@@ -14,12 +14,12 @@ const digitalProducts = [
   {
     name: 'Telegram',
     image: 'https://i.ibb.co/1nC3VSp/telegram-logo-512.png',
-    link: 'https://t.me/your_telegram_channel' // Replace with actual link
+    link: '/games/telegram'
   },
   {
     name: 'Tiktok',
     image: 'https://i.ibb.co/3s2R9zM/tiktok-logo-512.png',
-    link: 'https://www.tiktok.com/@your_tiktok_profile' // Replace with actual link
+    link: '/games/tiktok'
   }
 ];
 
@@ -65,7 +65,7 @@ export default function DigitalProductPage() {
                 </div>
                 <p className="font-semibold text-foreground">{product.name}</p>
                 <Button asChild className="w-full">
-                  <Link href={product.link} target="_blank" rel="noopener noreferrer">
+                  <Link href={product.link}>
                     Buy Now
                   </Link>
                 </Button>
@@ -77,3 +77,5 @@ export default function DigitalProductPage() {
     </div>
   );
 }
+
+    

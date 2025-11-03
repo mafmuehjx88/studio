@@ -50,16 +50,10 @@ export default function Home() {
         <h2 className="mb-4 text-center text-2xl font-bold">Games</h2>
         <div className="grid grid-cols-3 gap-3">
           {games.map((game) => {
-              const isComingSoon = game.id === 'hok';
-              const isDigitalProduct = game.id === 'digital-product';
-              const Wrapper = isComingSoon ? 'div' : Link;
-              const props = isComingSoon ? {} : { href: `/games/${game.id}` };
+              const isComingSoon = false; // All products are available now
+              const Wrapper = Link;
+              const props = { href: `/games/${game.id}` };
               
-              if (isDigitalProduct) {
-                props.href = '/digital-product';
-              }
-
-
               return (
                 <React.Fragment key={`game-${game.id}`}>
                     <Wrapper {...props} className="group flex flex-col gap-2 text-center">
@@ -116,3 +110,5 @@ export default function Home() {
     </div>
   );
 }
+
+    

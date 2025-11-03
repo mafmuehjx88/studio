@@ -1,3 +1,4 @@
+
 import type { Timestamp, FieldValue } from "firebase/firestore";
 
 export interface UserProfile {
@@ -13,7 +14,9 @@ export interface Game {
   name: string;
   image: string; // This is now a direct URL
   bannerImage?: string; // Optional banner for the game page
-  needsServerId: boolean;
+  needsServerId?: boolean;
+  needsUserIdentifier?: boolean;
+  userIdentifierLabel?: string;
 }
 
 export interface Product {
@@ -74,3 +77,5 @@ export interface PlaceholderImage {
     description: string;
     imageHint?: string;
 }
+
+    
