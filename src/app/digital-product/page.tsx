@@ -33,7 +33,7 @@ export default function DigitalProductPage() {
         <Button variant="ghost" size="icon" onClick={() => router.back()}>
           <ArrowLeft />
         </Button>
-        <h1 className="text-2xl font-bold">Zenith Harrai Shop</h1>
+        <h1 className="text-2xl font-bold">AT Game HUB</h1>
       </div>
 
       <Card className="overflow-hidden border-none bg-card">
