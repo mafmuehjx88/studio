@@ -1,6 +1,9 @@
 # Settings to manage and configure a Firebase App Hosting backend.
 # https://firebase.google.com/docs/app-hosting/configure
 runConfig:
+  # By setting minInstances to 1, we ensure there is always at least one
+  # running instance of the application, keeping it active 24/7.
+  minInstances: 1
   # Increase this value if you'd like to automatically spin up
   # more instances in response to increased traffic.
   maxInstances: 1
