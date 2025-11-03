@@ -107,6 +107,11 @@ export const staticImages = {
         imageUrl: `https://picsum.photos/seed/legal/400/400`,
         description: `Banner for legal links`,
         imageHint: `customer service`
+    },
+    'how-to-use-guide': {
+        imageUrl: `https://i.ibb.co/2W7z1Q0/how-to-use-guide.jpg`,
+        description: `Guide on how to use the app`,
+        imageHint: `app tutorial`
     }
 }
 

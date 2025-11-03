@@ -55,7 +55,7 @@ export default function Home() {
 
       <div className="mt-2 flex justify-center">
         <Button asChild variant="outline" size="sm">
-            <Link href="#">Website အသုံးပြုနည်း</Link>
+            <Link href="/how-to-use">Website အသုံးပြုနည်း</Link>
         </Button>
       </div>
 
