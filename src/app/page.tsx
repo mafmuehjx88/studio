@@ -17,8 +17,11 @@ export default function Home() {
   const bannerImage = staticImages['banner'];
   const logoImage = staticImages['logo'];
 
+  // Filter out telegram and tiktok from the main games list to avoid duplication
+  const displayGames = allGames.filter(g => g.id !== 'telegram' && g.id !== 'tiktok');
+
   const games: (Game | { id: string, name: string, image: string })[] = [
-    ...allGames,
+    ...displayGames,
     { id: 'digital-product', name: 'Digital Product', image: 'https://i.ibb.co/wFmXwwNg/zproduct.jpg' }
   ];
 
