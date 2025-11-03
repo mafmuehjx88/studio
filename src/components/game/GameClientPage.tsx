@@ -429,7 +429,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
                <span className="ml-1 font-semibold text-gray-800">{userProfile?.walletBalance.toLocaleString() ?? 0} Ks</span>
             </div>
 
-            <p className="text-center text-sm font-semibold text-green-600">
+            <p className="text-center text-sm font-semibold text-red-600">
               {getDialogMessage()}
             </p>
 
@@ -468,4 +468,5 @@ Order Time: ${new Date().toLocaleString('en-US', {
     
 
     
+
 
