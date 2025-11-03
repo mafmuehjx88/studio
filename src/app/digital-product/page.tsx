@@ -17,7 +17,7 @@ const digitalProducts = [
   },
   {
     name: 'Tiktok',
-    image: 'https://i.ibb.co/3s2R9zM/tiktok-logo-512.png',
+    image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png',
     link: '/games/tiktok'
   }
 ];

@@ -4,8 +4,8 @@ export const games: Game[] = [
   { id: 'mlbb', name: 'MLBB', image: 'https://i.ibb.co/R47v6TDX/8255033248d018b6c5f3d460b2deec16.jpg', bannerImage: 'https://i.ibb.co/NnNMr8gq/New-Project-85-E9-F449-A.png', needsServerId: true, needsUserIdentifier: true, userIdentifierLabel: 'User ID' },
   { id: 'pubg', name: 'PUBG', image: 'https://i.ibb.co/PsSM1JKc/new3589-516a74d6d701c86c007f668d7cf2891a.jpg', bannerImage: 'https://i.ibb.co/7NGpPr48/7ae05f485fd0725143225238a2ef1cc2.jpg', needsServerId: false, needsUserIdentifier: true, userIdentifierLabel: 'Player ID' },
   { id: 'hok', name: 'HOK', image: 'https://i.ibb.co/PZj5t6PX/new3418-1cff9a1ebb8677d02e5c0d96199b5384.jpg', needsServerId: false, needsUserIdentifier: true, userIdentifierLabel: 'Player ID' },
-  { id: 'telegram', name: 'Telegram', image: 'https://i.ibb.co/1nC3VSp/telegram-logo-512.png', bannerImage: 'https://i.ibb.co/fVKbf2Bw/01-JZ3-RJE7-RGAM58-RVVTY8-GVBFW.jpg', needsUserIdentifier: true, userIdentifierLabel: 'Phone Number or Username' },
-  { id: 'tiktok', name: 'Tiktok', image: 'https://i.ibb.co/3s2R9zM/tiktok-logo-512.png', bannerImage: 'https://i.ibb.co/3s2R9zM/tiktok-logo-512.png', needsUserIdentifier: true, userIdentifierLabel: 'TikTok Profile Link' },
+  { id: 'telegram', name: 'Telegram', image: 'https://i.ibb.co/fVKbf2Bw/01-JZ3-RJE7-RGAM58-RVVTY8-GVBFW.jpg', bannerImage: 'https://i.ibb.co/fVKbf2Bw/01-JZ3-RJE7-RGAM58-RVVTY8-GVBFW.jpg', needsUserIdentifier: true, userIdentifierLabel: 'Phone Number or Username' },
+  { id: 'tiktok', name: 'Tiktok', image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png', bannerImage: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png', needsUserIdentifier: true, userIdentifierLabel: 'TikTok Profile Link' },
 ];
 
 export const products: Product[] = [
@@ -63,8 +63,8 @@ export const products: Product[] = [
   { id: 'telegram-subs-1k', gameId: 'telegram', name: 'Subscribers(1K)', category: 'Subscribers', price: 12800, image: 'https://i.ibb.co/fVKbf2Bw/01-JZ3-RJE7-RGAM58-RVVTY8-GVBFW.jpg'},
 
   // Tiktok
-  { id: 'tiktok-100coins', gameId: 'tiktok', name: '100 Coins', category: 'Coins', price: 5000, image: 'https://i.ibb.co/3s2R9zM/tiktok-logo-512.png'},
-  { id: 'tiktok-500coins', gameId: 'tiktok', name: '500 Coins', category: 'Coins', price: 25000, image: 'https://i.ibb.co/3s2R9zM/tiktok-logo-512.png'},
+  { id: 'tiktok-100coins', gameId: 'tiktok', name: '100 Coins', category: 'Coins', price: 5000, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png'},
+  { id: 'tiktok-500coins', gameId: 'tiktok', name: '500 Coins', category: 'Coins', price: 25000, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png'},
 ];
 
 export const staticImages = {
