@@ -48,9 +48,11 @@ export default function GameClientPage({ game, products }: GameClientPageProps) 
 
   const isPassProduct = selectedProduct?.category === 'pass';
   const is2xProduct = selectedProduct?.category === '2x';
+  const isQuantityChangable = isPassProduct || is2xProduct || selectedProduct?.gameId === 'telegram';
+
 
   const finalPrice = selectedProduct
-    ? isPassProduct || is2xProduct
+    ? isQuantityChangable
       ? selectedProduct.price * quantity
       : selectedProduct.price
     : 0;
@@ -109,7 +111,7 @@ export default function GameClientPage({ game, products }: GameClientPageProps) 
         gameName: game.name,
         itemId: selectedProduct.id,
         itemName: `${selectedProduct.name}${
-          isPassProduct || is2xProduct ? ` (x${quantity})` : ''
+          isQuantityChangable ? ` (x${quantity})` : ''
         }`,
         price: finalPrice,
         gameUserId: userGameId,
@@ -233,12 +235,26 @@ Order Time: ${new Date().toLocaleString('en-US', {
         );
       case 'telegram':
          return (
+          <>
             <ProductGrid
-                title="Subscriptions"
-                products={productGroups['Subscription'] || []}
+                title="Premium"
+                products={productGroups['Premium'] || []}
                 onProductClick={handleProductClick}
                 gridCols="grid-cols-2"
             />
+             <ProductGrid
+                title="Channel/Group Boost"
+                products={productGroups['Boost'] || []}
+                onProductClick={handleProductClick}
+                gridCols="grid-cols-2"
+            />
+             <ProductGrid
+                title="Subscribers"
+                products={productGroups['Subscribers'] || []}
+                onProductClick={handleProductClick}
+                gridCols="grid-cols-2"
+            />
+          </>
          );
       case 'tiktok':
          return (
@@ -335,11 +351,11 @@ Order Time: ${new Date().toLocaleString('en-US', {
 
 
             <div className="flex h-[45px] items-center justify-between rounded-md bg-[#F3F4F6] p-2.5 text-sm">
-                <span className="text-[#111827]">{selectedProduct?.name}{isPassProduct || is2xProduct ? ` (x${quantity})` : ''}</span>
+                <span className="text-[#111827]">{selectedProduct?.name}{isQuantityChangable ? ` (x${quantity})` : ''}</span>
                 <span className="font-bold text-[#111827]">{finalPrice.toLocaleString()} Ks</span>
             </div>
 
-            {(isPassProduct || is2xProduct) && (
+            {isQuantityChangable && (
               <div className="flex items-center justify-center gap-2">
                 <Button
                   variant="outline"
@@ -406,5 +422,3 @@ Order Time: ${new Date().toLocaleString('en-US', {
     </div>
   );
 }
-
-    

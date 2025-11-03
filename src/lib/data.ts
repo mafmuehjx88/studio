@@ -57,8 +57,14 @@ export const products: Product[] = [
   { id: 'hok-1000t', gameId: 'hok', name: '1000 Tokens', category: 'Tokens', price: 20000, image: 'https://picsum.photos/seed/hok-token/200/200' },
 
   // Telegram
-  { id: 'telegram-premium-1m', gameId: 'telegram', name: 'Premium - 1 Month', category: 'Subscription', price: 15000, image: 'https://i.ibb.co/1nC3VSp/telegram-logo-512.png'},
-  { id: 'telegram-premium-3m', gameId: 'telegram', name: 'Premium - 3 Months', category: 'Subscription', price: 40000, image: 'https://i.ibb.co/1nC3VSp/telegram-logo-512.png'},
+  { id: 'telegram-premium-1y', gameId: 'telegram', name: 'Premium 1 Yrs', category: 'Premium', price: 118500, image: 'https://i.ibb.co/K50GJ4p/telegram-premium.png'},
+  { id: 'telegram-premium-3m', gameId: 'telegram', name: 'Premium 3 M', category: 'Premium', price: 49000, image: 'https://i.ibb.co/K50GJ4p/telegram-premium.png'},
+  { id: 'telegram-premium-6m', gameId: 'telegram', name: 'Premium 6 M', category: 'Premium', price: 65000, image: 'https://i.ibb.co/K50GJ4p/telegram-premium.png'},
+  { id: 'telegram-boost-3m', gameId: 'telegram', name: 'Ch/Gp boost 3 M', category: 'Boost', price: 2200, image: 'https://i.ibb.co/qY7b4Vn/telegram-boost.png'},
+  { id: 'telegram-boost-6m', gameId: 'telegram', name: 'Ch Boost 6 M', category: 'Boost', price: 2700, image: 'https://i.ibb.co/qY7b4Vn/telegram-boost.png'},
+  { id: 'telegram-subs-100', gameId: 'telegram', name: 'Subscribers(100)', category: 'Subscribers', price: 1800, image: 'https://i.ibb.co/f8y7z8p/telegram-subscriber.png'},
+  { id: 'telegram-subs-500', gameId: 'telegram', name: 'Subscribers(500)', category: 'Subscribers', price: 6200, image: 'https://i.ibb.co/f8y7z8p/telegram-subscriber.png'},
+  { id: 'telegram-subs-1k', gameId: 'telegram', name: 'Subscribers(1K)', category: 'Subscribers', price: 12800, image: 'https://i.ibb.co/f8y7z8p/telegram-subscriber.png'},
 
   // Tiktok
   { id: 'tiktok-100coins', gameId: 'tiktok', name: '100 Coins', category: 'Coins', price: 5000, image: 'https://i.ibb.co/3s2R9zM/tiktok-logo-512.png'},
@@ -87,6 +93,3 @@ export const staticImages = {
         imageHint: `customer service`
     }
 }
-
-    
-    
