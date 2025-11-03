@@ -201,7 +201,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
               title="Weekly Pass & Twilight Pass"
               products={productGroups['pass'] || []}
               onProductClick={handleProductClick}
-              gridCols="grid-cols-2"
+              gridCols="grid-cols-3"
               titleNumber={1}
             />
             <ProductGrid
@@ -407,7 +407,10 @@ Order Time: ${new Date().toLocaleString('en-US', {
             </div>
 
             <p className="text-center text-sm font-semibold text-green-600">
-                AT Game Hubတွင် ဝယ်ယူအားပေးသည့် Customersများအားလုံးကို ကျေးဇူးတင်ပါတယ် ခင်ဗျာ။
+              {selectedProduct?.gameId === 'telegram' && selectedProduct.category === 'Premium' 
+                ? 'ဝယ်မဲ့ Account ရဲ့ Username ပေးရုံပါပဲဗျ။ ကြာချိန် - Fast'
+                : 'AT Game Hubတွင် ဝယ်ယူအားပေးသည့် Customersများအားလုံးကို ကျေးဇူးတင်ပါတယ် ခင်ဗျာ။'
+              }
             </p>
 
             <div className="flex justify-between text-lg font-bold text-[#111827]">
