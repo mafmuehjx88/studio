@@ -16,7 +16,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import { Info, Loader2, Minus, Plus } from 'lucide-react';
+import { Info, Loader2, Minus, Plus, ShoppingBag } from 'lucide-react';
 import {
   doc,
   addDoc,
@@ -171,6 +171,19 @@ Order Time: ${new Date().toLocaleString('en-US', {
   const renderProductGrids = () => {
     if (!game) return null;
 
+    if (products.length === 0) {
+        return (
+            <div className="flex h-[40vh] flex-col items-center justify-center space-y-4 text-center text-white">
+                <ShoppingBag className="h-16 w-16 text-white/50" strokeWidth={1} />
+                <h2 className="text-xl font-bold">Coming Soon</h2>
+                <p className="text-white/70">There are no items available for this game yet.</p>
+                 <Button variant="outline" onClick={() => router.back()} className="bg-transparent text-white border-white/50 hover:bg-white/10 hover:text-white">
+                    Go Back
+                </Button>
+            </div>
+        );
+    }
+
     // A more generic way to group products by category
     const productGroups: { [key: string]: Product[] } = {};
     products.forEach(p => {
@@ -217,22 +230,8 @@ Order Time: ${new Date().toLocaleString('en-US', {
             />
         );
       case 'hok':
-        return (
-          <>
-             <ProductGrid
-              title="Weekly Passes"
-              products={productGroups['Weekly Passes'] || []}
-              onProductClick={handleProductClick}
-              gridCols="grid-cols-2"
-            />
-            <ProductGrid
-              title="Tokens"
-              products={productGroups['Tokens'] || []}
-              onProductClick={handleProductClick}
-              gridCols="grid-cols-2"
-            />
-          </>
-        );
+        // This will now render the 'Coming Soon' message as products are removed.
+        return null;
       case 'telegram':
          return (
           <>

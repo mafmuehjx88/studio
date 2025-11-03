@@ -41,8 +41,10 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
               />
         )}
         
-        <div className={cn("flex flex-1 flex-col gap-1", isPassProduct ? "pt-2" : "pt-2 justify-center items-center")}>
-            <p className="text-xs font-semibold text-black">{product.name}</p>
+        <div className={cn("flex h-12 flex-col items-center justify-center gap-1 pt-2", isPassProduct && "pt-2")}>
+            <p className="text-center text-[11px] font-semibold leading-tight text-black flex items-center h-full whitespace-pre-wrap">
+              {product.name}
+            </p>
             <p className="text-xs font-bold text-yellow-400">{product.price.toLocaleString()} Ks</p>
         </div>
       </CardContent>
