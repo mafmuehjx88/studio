@@ -8,6 +8,9 @@ const config: CapacitorConfig = {
   server: {
     androidScheme: 'https',
   },
+  ios: {
+    webDir: 'out',
+  }
 };
 
 export default config;
