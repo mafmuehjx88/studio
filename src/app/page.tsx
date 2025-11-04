@@ -20,12 +20,30 @@ export default function Home() {
   const logoImage = staticImages['logo'];
 
   // Filter out telegram and tiktok from the main games list to avoid duplication
-  const displayGames = allGames.filter(g => g.id !== 'telegram' && g.id !== 'tiktok');
+  // Also filter out smile-coin by default
+  const displayGames = allGames.filter(g => g.id !== 'telegram' && g.id !== 'tiktok' && g.id !== 'smile-coin');
 
-  const games: (Game | { id: string, name: string, image: string })[] = [
+  const gamesList: (Game | { id: string, name: string, image: string })[] = [
     ...displayGames,
     { id: 'digital-product', name: 'Digital Product', image: 'https://i.ibb.co/wFmXwwNg/zproduct.jpg' }
   ];
+
+  // If the user is an admin, add smile-coin to the list
+  if (isAdmin) {
+    const smileCoinGame = allGames.find(g => g.id === 'smile-coin');
+    if (smileCoinGame) {
+      // find smile-coin's original position and insert it there, or just push
+      // For simplicity, let's find the original index to maintain order.
+      const originalIndex = allGames.findIndex(g => g.id === 'smile-coin');
+      // to avoid complex logic, just put it before digital-product
+      const digitalProductIndex = gamesList.findIndex(g => g.id === 'digital-product');
+      if (digitalProductIndex !== -1) {
+          gamesList.splice(digitalProductIndex, 0, smileCoinGame);
+      } else {
+          gamesList.push(smileCoinGame);
+      }
+    }
+  }
 
 
   return (
@@ -55,20 +73,18 @@ export default function Home() {
         </Button>
       </div>
 
-      {isAdmin && (
-        <div className="mt-2 flex justify-center">
-            <Button asChild variant="outline" size="sm">
-                <Link href="/how-to-use">Website အသုံးပြုနည်း</Link>
-            </Button>
-        </div>
-      )}
+      <div className="mt-2 flex justify-center">
+          <Button asChild variant="outline" size="sm">
+              <Link href="/how-to-use">Website အသုံးပြုနည်း</Link>
+          </Button>
+      </div>
 
       <MarqueeText />
 
       <div>
         <h2 className="mb-4 text-center text-2xl font-bold">Games</h2>
         <div className="grid grid-cols-3 gap-3">
-          {games.map((game) => {
+          {gamesList.map((game) => {
               const isDigitalProduct = game.id === 'digital-product';
               const isSmileCoin = game.id === 'smile-coin';
               
