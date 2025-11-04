@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -23,11 +24,19 @@ interface UserTopUpRowProps {
   user: UserProfile;
 }
 
+type TopUpTarget = 'main' | 'smileCoin';
+
 export default function UserTopUpRow({ user }: UserTopUpRowProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [amount, setAmount] = useState('');
   const [isUpdating, setIsUpdating] = useState(false);
+  const [topUpTarget, setTopUpTarget] = useState<TopUpTarget>('main');
   const { toast } = useToast();
+
+  const handleOpenDialog = (target: TopUpTarget) => {
+    setTopUpTarget(target);
+    setIsDialogOpen(true);
+  };
 
   const handleTopUp = async () => {
     const topUpAmount = parseFloat(amount);
@@ -42,15 +51,16 @@ export default function UserTopUpRow({ user }: UserTopUpRowProps) {
 
     setIsUpdating(true);
     const userDocRef = doc(db, 'users', user.uid);
+    const fieldToUpdate = topUpTarget === 'main' ? 'walletBalance' : 'smileCoinBalance';
 
     try {
       await updateDoc(userDocRef, {
-        walletBalance: increment(topUpAmount),
+        [fieldToUpdate]: increment(topUpAmount),
       });
 
       toast({
         title: 'Success!',
-        description: `Added ${topUpAmount.toLocaleString()} Ks to ${user.username}'s wallet.`,
+        description: `Added ${topUpAmount.toLocaleString()} to ${user.username}'s ${topUpTarget === 'main' ? 'main wallet' : 'Smile Coin balance'}.`,
       });
       setIsDialogOpen(false);
       setAmount('');
@@ -66,34 +76,50 @@ export default function UserTopUpRow({ user }: UserTopUpRowProps) {
     }
   };
 
+  const currentBalance = topUpTarget === 'main' ? user.walletBalance : (user.smileCoinBalance ?? 0);
+  const dialogTitle = topUpTarget === 'main' 
+    ? `Top Up Wallet for ${user.username}`
+    : `Top Up Smile Coins for ${user.username}`;
+  const dialogDescription = topUpTarget === 'main'
+    ? "Add funds to this user's main wallet. The change is immediate."
+    : "Add funds to this user's Smile Coin balance. The change is immediate.";
+
   return (
     <>
       <Card className="flex items-center justify-between p-4">
         <div className="space-y-1">
           <p className="font-semibold text-primary">{user.username}</p>
           <p className="text-xs text-muted-foreground">{user.email}</p>
-          <p className="text-sm font-medium">
-            Balance: {user.walletBalance.toLocaleString()} Ks
-          </p>
+          <div className="flex gap-4 text-sm">
+            <p className="font-medium">
+              Wallet: {user.walletBalance.toLocaleString()} Ks
+            </p>
+            <p className="font-medium text-yellow-400">
+              Smile: {(user.smileCoinBalance ?? 0).toLocaleString()}
+            </p>
+          </div>
         </div>
-        <Button onClick={() => setIsDialogOpen(true)}>Top Up</Button>
+        <div className="flex flex-col gap-2">
+            <Button size="sm" onClick={() => handleOpenDialog('main')}>Top Up Wallet</Button>
+            <Button size="sm" variant="secondary" onClick={() => handleOpenDialog('smileCoin')}>Top Up Smile</Button>
+        </div>
       </Card>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Top Up Wallet for {user.username}</DialogTitle>
+            <DialogTitle>{dialogTitle}</DialogTitle>
             <DialogDescription>
-              Add funds to this user's wallet. The change is immediate.
+              {dialogDescription}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="text-center">
               <p className="text-sm text-muted-foreground">Current Balance</p>
-              <p className="text-2xl font-bold">{user.walletBalance.toLocaleString()} Ks</p>
+              <p className="text-2xl font-bold">{currentBalance.toLocaleString()}</p>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="amount">Amount to Add (Ks)</Label>
+              <Label htmlFor="amount">Amount to Add</Label>
               <Input
                 id="amount"
                 type="number"

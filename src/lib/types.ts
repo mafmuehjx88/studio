@@ -6,6 +6,7 @@ export interface UserProfile {
   username: string;
   email: string;
   walletBalance: number;
+  smileCoinBalance: number; // New balance for Smile Coins
   createdAt: Timestamp | FieldValue;
 }
 

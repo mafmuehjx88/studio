@@ -8,8 +8,9 @@ import {
   CardHeader,
   CardTitle,
   CardContent,
+  CardDescription,
 } from '@/components/ui/card';
-import { LogOut, Settings, History, Wallet } from 'lucide-react';
+import { LogOut, Settings, History, Wallet, Coins } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { auth, db } from '@/lib/firebase';
 import { signOut } from 'firebase/auth';
@@ -71,7 +72,8 @@ export default function ProfilePage() {
         querySnapshot.forEach((doc) => {
           const order = doc.data() as Order;
           fetchedOrders.push(order);
-          if (order.status === 'Completed') {
+          // Only add to total spent if it's not a smile coin purchase
+          if (order.status === 'Completed' && order.gameId !== 'smile-coin') {
             total += order.price;
           }
         });
@@ -150,7 +152,7 @@ export default function ProfilePage() {
               {userProfile.username.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <div className="space-y-1">
+          <div className="space-y-2">
             <CardTitle className="text-xl">{userProfile.username}</CardTitle>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Wallet className="h-4 w-4 text-primary" />
@@ -162,13 +164,22 @@ export default function ProfilePage() {
                 Ks
               </span>
             </div>
+             <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Coins className="h-4 w-4 text-yellow-400" />
+              <span className="font-semibold text-yellow-400">
+                {(userProfile.smileCoinBalance ?? 0).toLocaleString()}
+              </span>
+            </div>
           </div>
         </CardHeader>
       </Card>
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between p-4">
-          <CardTitle className="text-lg">ငွေသုံးစွဲမှု</CardTitle>
+          <div className='flex flex-col'>
+            <CardTitle className="text-lg">ငွေသုံးစွဲမှု (Main Wallet)</CardTitle>
+            <CardDescription className="text-xs">Smile Coin purchases are not included.</CardDescription>
+          </div>
            <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="sm" className="h-8 gap-1 text-sm">

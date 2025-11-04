@@ -90,7 +90,8 @@ export default function AdminUsersPage() {
             <TableRow>
               <TableHead>Username</TableHead>
               <TableHead>Email</TableHead>
-              <TableHead className="text-right">Wallet Balance</TableHead>
+              <TableHead className="text-right">Wallet</TableHead>
+              <TableHead className="text-right">Smile Coin</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -100,6 +101,9 @@ export default function AdminUsersPage() {
                 <TableCell className="text-muted-foreground">{user.email}</TableCell>
                 <TableCell className="text-right font-semibold text-primary">
                     {user.walletBalance.toLocaleString()} Ks
+                </TableCell>
+                <TableCell className="text-right font-semibold text-yellow-400">
+                    {(user.smileCoinBalance ?? 0).toLocaleString()}
                 </TableCell>
               </TableRow>
             ))}

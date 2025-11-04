@@ -92,6 +92,7 @@ export default function RegisterPage() {
         username: username,
         email: user.email!,
         walletBalance: 0,
+        smileCoinBalance: 0, // Initialize smile coin balance
         createdAt: serverTimestamp(),
       };
       

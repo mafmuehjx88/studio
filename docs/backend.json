@@ -1,3 +1,4 @@
+
 {
   "entities": {
     "UserProfile": {
@@ -20,7 +21,11 @@
         },
         "walletBalance": {
           "type": "number",
-          "description": "The user's current wallet balance."
+          "description": "The user's current wallet balance for general purchases."
+        },
+        "smileCoinBalance": {
+          "type": "number",
+          "description": "The user's current wallet balance specifically for Smile Coin purchases."
         },
         "createdAt": {
           "type": "string",
@@ -28,7 +33,7 @@
           "description": "The timestamp when the user profile was created."
         }
       },
-      "required": ["uid", "username", "email", "walletBalance", "createdAt"]
+      "required": ["uid", "username", "email", "walletBalance", "smileCoinBalance", "createdAt"]
     },
     "Announcement": {
       "title": "Announcement",
