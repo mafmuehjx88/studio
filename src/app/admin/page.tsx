@@ -8,6 +8,7 @@ import AdminOrdersPage from "./orders/page";
 import AdminUsersPage from "./users/page";
 import AdminContentPage from "./content/page";
 import AdminSmileCodesPage from "./smile-codes/page";
+import ManualTopUpPage from "./manual-top-up/page";
 
 export default function AdminPage() {
   const { isAdmin, loading } = useAuth();
@@ -27,9 +28,10 @@ export default function AdminPage() {
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">Admin Panel</h1>
       <Tabs defaultValue="orders" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="orders">All Orders</TabsTrigger>
-          <TabsTrigger value="users">User Management</TabsTrigger>
+          <TabsTrigger value="users">Users</TabsTrigger>
+          <TabsTrigger value="manual-top-up">Manual Top-Up</TabsTrigger>
           <TabsTrigger value="content">Content</TabsTrigger>
           <TabsTrigger value="smile-codes">Smile Codes</TabsTrigger>
         </TabsList>
@@ -38,6 +40,9 @@ export default function AdminPage() {
         </TabsContent>
         <TabsContent value="users">
           <AdminUsersPage />
+        </TabsContent>
+        <TabsContent value="manual-top-up">
+          <ManualTopUpPage />
         </TabsContent>
         <TabsContent value="content">
             <AdminContentPage />
