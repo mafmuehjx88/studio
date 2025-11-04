@@ -89,7 +89,7 @@ export const products: Product[] = [
 
   // Smile Coin
   { id: 'smile-coin-brazil', gameId: 'smile-coin', name: 'SMILE CODE BRAZIL', category: 'Smile Code', price: 0, image: 'https://i.ibb.co/5x1D58DQ/smilecode-brazil.jpg' },
-  { id: 'smile-coin-philippines', gameId: 'smile-coin', name: 'SMILE CODE PHILIPPINES', category: 'Smile Code', price: 0, image: 'https://i.ibb.co/cCrz0vM/1760334222340-e17f0352-71c1-419b-b0b4-9385d342cc88.png' },
+  { id: 'smile-coin-philippines', gameId: 'smile-coin', name: 'SMILE CODE PHILIPPINES', category: 'Smile Code', price: 0, image: 'https://i.ibb.co/Lf5zjQd/smilecode-philippines.jpg' },
 ];
 
 export const staticImages = {
@@ -135,4 +135,3 @@ export const staticImages = {
     
 
     
-
