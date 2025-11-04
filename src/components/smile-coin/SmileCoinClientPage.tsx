@@ -140,10 +140,11 @@ export default function SmileCoinClientPage({ region, products }: SmileCoinClien
                 // 1. Find an unused code for the product ID
                 const codesRef = collection(db, 'smileCodes');
                 const q = query(codesRef, where('productId', '==', itemToPurchase.id), where('isUsed', '==', false), limit(1));
+                
                 const codesSnapshot = await transaction.get(q);
 
                 if (codesSnapshot.empty) {
-                    throw new Error(`Sorry, we are out of stock for ${itemToPurchase.name}. Please try again later.`);
+                    throw new Error(`Code ကုန်နေပါသည်။ Admin အနေနဲ့ အမြန်ဆုံးပြန်ထည့်ပေးပါမည်။`);
                 }
 
                 // 2. Get the code and mark it as used
@@ -364,3 +365,5 @@ Order Time: ${new Date().toLocaleString('en-US', { timeZone: 'Asia/Yangon' })}`;
         </div>
     );
 }
+
+    
