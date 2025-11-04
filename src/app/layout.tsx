@@ -11,6 +11,8 @@ import Footer from "@/components/layout/Footer";
 import { Toaster } from "@/components/ui/toaster";
 import { usePathname } from "next/navigation";
 import LoadingScreen from "@/components/layout/LoadingScreen";
+import { useState } from "react";
+import { AnnouncementsSheet } from "@/components/layout/AnnouncementsSheet";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -20,10 +22,7 @@ const poppins = Poppins({
 
 function AppContent({ children }: { children: React.ReactNode }) {
   const { loading } = useAuth();
-  const pathname = usePathname();
-  const isGamePage = pathname.startsWith('/games/');
-
-  const backgroundStyle = { background: 'radial-gradient(circle, #007BFF 0%, #002D72 100%)' };
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   if (loading) {
     return <LoadingScreen />;
@@ -31,12 +30,12 @@ function AppContent({ children }: { children: React.ReactNode }) {
 
   return (
     <div
-      className="relative mx-auto flex min-h-screen w-full max-w-md flex-col"
-      style={backgroundStyle}
+      className="relative mx-auto flex min-h-screen w-full max-w-md flex-col bg-background"
     >
-      <Header />
+      <Header onBellClick={() => setIsSheetOpen(true)} />
       <main className="flex-1 px-4 pb-24 pt-6">{children}</main>
       <Footer />
+      <AnnouncementsSheet isOpen={isSheetOpen} onOpenChange={setIsSheetOpen} />
     </div>
   );
 }

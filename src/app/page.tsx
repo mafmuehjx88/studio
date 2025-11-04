@@ -9,27 +9,27 @@ import { Card } from '@/components/ui/card';
 import { games as allGames, staticImages } from '@/lib/data';
 import type { Game } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
-import { cn } from '@/lib/utils';
+import { useAuth } from '@/contexts/AuthContext';
 import MarqueeText from '@/components/MarqueeText';
-import { BookOpen, History, Info } from 'lucide-react';
 
 
 export default function Home() {
+  const { isAdmin } = useAuth();
   const bannerImage = staticImages['banner'];
 
-  const displayGames = allGames.filter(g => g.id !== 'telegram' && g.id !== 'tiktok' && g.id !== 'hok');
+  const displayGames: (Game | { id: string, name: string, image: string })[] = [
+    ...allGames.filter(g => g.id !== 'telegram' && g.id !== 'tiktok' && g.id !== 'hok')
+  ];
+
+  displayGames.push({ id: 'digital-product', name: 'Digital Product', image: 'https://i.ibb.co/wFmXwwNg/zproduct.jpg' });
+
+  if (isAdmin) {
+    const smileCoinGame = allGames.find(g => g.id === 'smile-coin');
+    if (smileCoinGame) {
+      displayGames.push(smileCoinGame);
+    }
+  }
   
-  const gamesList: (Game | { id: string, name: string, image: string })[] = [
-    ...displayGames
-  ];
-
-  gamesList.push({ id: 'digital-product', name: 'Digital Product', image: 'https://i.ibb.co/wFmXwwNg/zproduct.jpg' });
-
-  const mainButtons = [
-    { href: "/top-up", icon: BookOpen, label: "ငွေဖြည့်မည်" },
-    { href: "/orders", icon: History, label: "အော်ဒါများ" },
-    { href: "/how-to-use", icon: Info, label: "အသုံးပြုနည်း" },
-  ];
 
   return (
     <div className="space-y-6">
@@ -40,45 +40,41 @@ export default function Home() {
             alt={bannerImage.description}
             width={1200}
             height={400}
-            className="aspect-[3/1] w-full object-cover"
+            className="aspect-[2.5/1] w-full object-cover"
             data-ai-hint={bannerImage.imageHint}
             priority
           />
         ) : (
-          <Skeleton className="aspect-[3/1] w-full" />
+          <Skeleton className="aspect-[2.5/1] w-full" />
         )}
       </Card>
 
-      <div className="grid grid-cols-3 gap-3">
-        {mainButtons.map((item) => (
-          <Button
-            key={item.href}
-            variant="secondary"
-            className="flex flex-col items-center justify-center h-20 rounded-lg bg-card text-foreground"
-            asChild
-          >
-            <Link href={item.href}>
-              <item.icon className="h-6 w-6 mb-1" />
-              <span className="text-xs font-semibold">{item.label}</span>
-            </Link>
+      <div className="grid grid-cols-2 gap-4">
+          <Button asChild className="h-12 bg-white text-blue-600 font-bold hover:bg-gray-200">
+              <Link href="/top-up">ငွေဖြည့်မည်</Link>
           </Button>
-        ))}
+          <Button asChild className="h-12 bg-gray-800 text-white font-bold hover:bg-gray-700">
+              <Link href="/orders">အော်ဒါများ</Link>
+          </Button>
       </div>
+
+       <Button asChild className="w-full h-12 bg-black text-white font-bold hover:bg-gray-900">
+          <Link href="/how-to-use">Website အသုံးပြုနည်း</Link>
+      </Button>
       
       <MarqueeText />
 
       <div>
-        <div className="grid grid-cols-3 gap-3">
-          {gamesList.map((game) => {
+        <h2 className="mb-4 text-center text-2xl font-bold text-white">Games</h2>
+        <div className="grid grid-cols-3 gap-4">
+          {displayGames.map((game) => {
               const isDigitalProduct = game.id === 'digital-product';
-              
-              const Wrapper = Link;
-              const props = { href: isDigitalProduct ? '/digital-product' : `/games/${game.id}` };
+              const href = isDigitalProduct ? '/digital-product' : `/games/${game.id}`;
               
               return (
-                <React.Fragment key={`game-${game.id}`}>
-                    <Wrapper {...props} className="group flex flex-col gap-2 text-center">
-                        <Card className="overflow-hidden transition-transform group-hover:scale-105 rounded-lg">
+                <div key={game.id} className="flex flex-col items-center gap-2">
+                    <Link href={href} className="w-full">
+                        <Card className="overflow-hidden transition-transform hover:scale-105 rounded-lg border-2 border-transparent hover:border-blue-400">
                             <Image
                             src={game.image}
                             alt={game.name}
@@ -87,11 +83,14 @@ export default function Home() {
                             className="aspect-square w-full rounded-lg object-cover"
                             />
                         </Card>
-                         <p className="text-sm font-semibold text-foreground">
-                            {game.name}
-                        </p>
-                    </Wrapper>
-                </React.Fragment>
+                    </Link>
+                    <p className="text-sm font-semibold text-white">
+                        {game.name}
+                    </p>
+                    <Button asChild size="sm" className="w-full bg-gray-800 hover:bg-gray-700">
+                        <Link href={href}>ဝယ်မည်</Link>
+                    </Button>
+                </div>
               )
           })}
         </div>
