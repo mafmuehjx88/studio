@@ -6,7 +6,7 @@ import { db } from '@/lib/firebase';
 import { MarqueeUI } from '@/components/ui/marquee';
 import { Megaphone } from 'lucide-react';
 
-const defaultMarqueeText = "Welcome to AT Game HUB! Your trusted partner for game top-ups.";
+const defaultMarqueeText = "နွေးထွေးစွာကြိုဆိုပါတယ်ရှင့်။ AT Game HUB မှ ဝန်ဆောင်မှုအပြည့်ဖြင့်စောင့်ကြိုနေပါတယ်။";
 
 export default function MarqueeText() {
   const [marqueeText, setMarqueeText] = useState(defaultMarqueeText);
@@ -15,7 +15,7 @@ export default function MarqueeText() {
     const fetchMarquee = async () => {
       try {
         const marqueeDoc = await getDoc(doc(db, "settings", "marquee"));
-        if (marqueeDoc.exists()) {
+        if (marqueeDoc.exists() && marqueeDoc.data().text) {
           setMarqueeText(marqueeDoc.data().text);
         }
       } catch (error) {
@@ -28,11 +28,10 @@ export default function MarqueeText() {
   }, []);
 
   return (
-    <div className="flex items-center gap-2 rounded-lg bg-card px-2 py-1">
-      <Megaphone className="h-4 w-4 flex-shrink-0 text-primary" />
+    <div className="flex items-center gap-2 rounded-lg bg-card px-3 py-2">
       <div className="flex-1 overflow-hidden">
         <MarqueeUI>
-          <p className="px-4 text-xs font-medium text-primary">
+          <p className="px-4 text-sm font-medium text-primary">
             {marqueeText}
           </p>
         </MarqueeUI>

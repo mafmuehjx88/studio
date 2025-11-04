@@ -23,9 +23,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isGamePage = pathname.startsWith('/games/');
 
-  const backgroundStyle = isGamePage
-    ? { background: 'linear-gradient(to bottom, #002D72, #000000)'}
-    : { background: 'radial-gradient(circle, #007BFF 0%, #002D72 100%)' };
+  const backgroundStyle = { background: 'radial-gradient(circle, #007BFF 0%, #002D72 100%)' };
 
   if (loading) {
     return <LoadingScreen />;
