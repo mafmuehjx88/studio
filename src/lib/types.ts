@@ -45,6 +45,7 @@ export interface Order {
     status: 'Pending' | 'Completed' | 'Failed';
     createdAt: Timestamp;
     type?: 'Purchase' | 'Top-up';
+    smileCode?: string; // To store the redeemed code
 }
 
 export interface TopUpRequest {
@@ -78,4 +79,16 @@ export interface PlaceholderImage {
     imageUrl: string;
     description: string;
     imageHint?: string;
+}
+
+export interface SmileCode {
+  id?: string;
+  code: string;
+  productId: string;
+  productName: string;
+  price: number;
+  isUsed: boolean;
+  usedBy: string | null;
+  usedAt: Timestamp | FieldValue | null;
+  createdAt: Timestamp | FieldValue;
 }

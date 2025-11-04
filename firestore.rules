@@ -1,3 +1,4 @@
+
 rules_version = '2';
 service cloud.firestore {
   
@@ -8,26 +9,18 @@ service cloud.firestore {
     }
     
     match /users/{userId} {
-      // An admin can read or update their own profile, or an admin can.
       allow read, update: if request.auth.uid == userId || isAdmin();
-      // A user can create their own document when they sign up.
-      // The `request.auth.uid` must match the `userId` in the path.
       allow create: if request.auth.uid == userId;
-      // An admin can list all users.
       allow list: if isAdmin();
     }
     
     match /users/{userId}/orders/{orderId} {
-      allow read, create: if request.auth.uid == userId;
-      // Allow admin to update any order
-      allow update: if isAdmin();
+      allow read, create, update: if request.auth.uid == userId || isAdmin();
     }
     
     match /topUpRequests/{requestId} {
       allow create: if request.auth.uid != null;
-      // For individual reads, the user or an admin can read.
       allow get: if request.auth.uid == resource.data.userId || isAdmin();
-      // For listing all requests, only an admin can do it.
       allow list: if isAdmin();
       allow update: if isAdmin();
     }
@@ -42,8 +35,13 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
-    // Allow admins to list documents from collection groups
-    // This also helps Firebase auto-generate the required index for the collection group query.
+    match /smileCodes/{codeId} {
+        allow read, list, create, update, delete: if isAdmin();
+        // Allow a user to read a code only if it's assigned to them (for history)
+        // This is a future-proofing rule, current logic uses order history.
+        allow get: if request.auth.uid == resource.data.usedBy;
+    }
+
     match /{path=**}/orders/{orderId} {
       allow get, list: if isAdmin();
     }

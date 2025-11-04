@@ -6,10 +6,10 @@ import Image from 'next/image';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ArrowLeft, Coins, Loader2, Minus, Plus, ShoppingCart } from 'lucide-react';
+import { ArrowLeft, Coins, Loader2, Minus, Plus, ShoppingCart, AlertTriangle } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import type { Product } from '@/lib/types';
+import type { Product, SmileCode } from '@/lib/types';
 import {
   Dialog,
   DialogContent,
@@ -18,13 +18,24 @@ import {
   DialogDescription,
   DialogFooter
 } from '@/components/ui/dialog';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
 import { useToast } from '@/hooks/use-toast';
-import { doc, writeBatch, collection, serverTimestamp, increment } from 'firebase/firestore';
+import { doc, writeBatch, collection, serverTimestamp, increment, query, where, getDocs, limit, runTransaction } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { sendTelegramNotification } from '@/lib/actions';
 import { generateOrderId } from '@/lib/utils';
 import { Separator } from '../ui/separator';
-import { Label } from '@/components/ui/label';
 
 interface SmileCoinClientPageProps {
     region: {
@@ -47,7 +58,6 @@ export default function SmileCoinClientPage({ region, products }: SmileCoinClien
     const [cart, setCart] = useState<{ [key: string]: CartItem }>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isCartOpen, setIsCartOpen] = useState(false);
-    const [userGameId, setUserGameId] = useState('');
 
     const smileCoinBalance = userProfile?.smileCoinBalance ?? 0;
 
@@ -101,88 +111,112 @@ export default function SmileCoinClientPage({ region, products }: SmileCoinClien
             toast({ title: "Your cart is empty.", variant: "destructive" });
             return;
         }
-        if (!userGameId) {
-            toast({ title: "Please enter your Player ID.", variant: "destructive" });
-            return;
-        }
         if (!hasSufficientBalance) {
             toast({ title: "Insufficient Smile Coin balance.", variant: "destructive" });
             return;
         }
 
         setIsSubmitting(true);
-        const batch = writeBatch(db);
-        const userDocRef = doc(db, 'users', user.uid);
-
-        // 1. Deduct smileCoinBalance
-        batch.update(userDocRef, {
-            smileCoinBalance: increment(-totalCartPrice)
-        });
-
-        // 2. Create order documents for each item in the cart
-        const orderTimestamp = serverTimestamp();
-        const itemSummary = cartItems.map(item => `- ${item.name} (x${item.quantity})`).join('\n');
-        
-        const orderId = generateOrderId();
-        const mainOrderData = {
-            id: orderId,
-            userId: user.uid,
-            username: userProfile.username,
-            gameId: 'smile-coin',
-            gameName: region.name,
-            itemId: 'multiple-items',
-            itemName: `Smile Coin Order (${cartItems.length} items)`,
-            price: totalCartPrice,
-            gameUserId: userGameId,
-            gameServerId: '',
-            paymentMethod: 'SmileCoin Wallet',
-            status: 'Pending' as const,
-            createdAt: orderTimestamp,
-        };
-        const orderDocRef = doc(collection(db, `users/${user.uid}/orders`));
-        batch.set(orderDocRef, mainOrderData);
-
 
         try {
-            // 3. Commit batch
-            await batch.commit();
+            const orderId = generateOrderId();
+            const orderTimestamp = serverTimestamp();
+            
+            // This will hold the single code we find
+            let assignedCode: SmileCode | null = null;
+            let finalPrice = 0;
+            let finalItemName = "";
 
-            // 4. Send notification
-            const notificationMessage = `
+            // Since we're buying one item at a time now from the cart, get the first one
+            const itemToPurchase = cartItems[0];
+            if (!itemToPurchase) {
+                 throw new Error("Cart is empty, cannot proceed.");
+            }
+            finalPrice = itemToPurchase.price * itemToPurchase.quantity;
+            finalItemName = `${itemToPurchase.name} (x${itemToPurchase.quantity})`;
+
+
+            await runTransaction(db, async (transaction) => {
+                // 1. Find an unused code for the product ID
+                const codesRef = collection(db, 'smileCodes');
+                const q = query(codesRef, where('productId', '==', itemToPurchase.id), where('isUsed', '==', false), limit(1));
+                const codesSnapshot = await transaction.get(q);
+
+                if (codesSnapshot.empty) {
+                    throw new Error(`Sorry, we are out of stock for ${itemToPurchase.name}. Please try again later.`);
+                }
+
+                // 2. Get the code and mark it as used
+                const codeDoc = codesSnapshot.docs[0];
+                assignedCode = { ...codeDoc.data(), id: codeDoc.id } as SmileCode;
+                transaction.update(codeDoc.ref, {
+                    isUsed: true,
+                    usedBy: user.uid,
+                    usedAt: serverTimestamp() // Use server timestamp for accuracy
+                });
+
+                // 3. Deduct smileCoinBalance from user
+                const userDocRef = doc(db, 'users', user.uid);
+                transaction.update(userDocRef, {
+                    smileCoinBalance: increment(-finalPrice)
+                });
+                
+                // 4. Create the order document
+                const orderDocRef = doc(db, `users/${user.uid}/orders`, orderId);
+                 transaction.set(orderDocRef, {
+                    id: orderId,
+                    userId: user.uid,
+                    username: userProfile.username,
+                    gameId: 'smile-coin',
+                    gameName: region.name,
+                    itemId: itemToPurchase.id,
+                    itemName: finalItemName,
+                    price: finalPrice,
+                    paymentMethod: 'SmileCoin Wallet',
+                    status: 'Completed' as const, // Mark as completed since code is given
+                    createdAt: orderTimestamp,
+                    smileCode: assignedCode.code, // Store the code in the order!
+                });
+            });
+
+            // 5. If transaction is successful, send notification and redirect
+             if (assignedCode) {
+                const notificationMessage = `
  SMILE COIN Order! 🪙
 ----------------------
 Order ID: \`${orderId}\`
 Game: *${region.name}*
-Total Price: *${totalCartPrice.toLocaleString()}*
+Item: *${finalItemName}*
+Total Price: *${finalPrice.toLocaleString()} Coins*
 ----------------------
-Player ID: \`${userGameId}\`
 Username: \`${userProfile.username}\`
 ----------------------
-Items:
-${itemSummary}
+Code: \`${assignedCode.code}\`
 ----------------------
 Payment: SmileCoin Wallet
 Order Time: ${new Date().toLocaleString('en-US', { timeZone: 'Asia/Yangon' })}`;
 
-            await sendTelegramNotification(notificationMessage);
+                await sendTelegramNotification(notificationMessage);
 
-            toast({
-                title: "Order Submitted!",
-                description: "Your Smile Coin order has been placed successfully.",
-            });
+                toast({
+                    title: "Order Submitted!",
+                    description: "Your Smile Coin order has been placed successfully.",
+                });
+
+                // Redirect to the new order details page
+                router.push(`/orders/${orderId}`);
+            } else {
+                 throw new Error("Could not assign a code.");
+            }
 
             setCart({});
-            setUserGameId('');
             setIsCartOpen(false);
 
-        } catch (error) {
+        } catch (error: any) {
             console.error("Order submission failed:", error);
-            // This rollback is tricky because we don't know if the batch failed.
-            // A more robust system would use a transaction or a server-side function.
-            // For now, we notify the user.
             toast({
                 title: "Order Failed",
-                description: "An error occurred. Please check your balance and try again.",
+                description: error.message || "An error occurred. Please check your balance and try again.",
                 variant: "destructive",
             });
         } finally {
@@ -258,25 +292,15 @@ Order Time: ${new Date().toLocaleString('en-US', { timeZone: 'Asia/Yangon' })}`;
             <Dialog open={isCartOpen} onOpenChange={setIsCartOpen}>
                 <DialogContent className="w-[90vw] max-w-sm rounded-xl bg-white p-0 shadow-xl">
                     <DialogHeader className="p-5 pb-0">
-                        <DialogTitle>Your Smile Coin Cart</DialogTitle>
+                        <DialogTitle>သင်၏ Smile Coin Cart</DialogTitle>
                         <DialogDescription>
-                            Review your items and provide your Player ID to complete the purchase.
+                            အောက်တွင် သင်ဝယ်ယူမည့်ပစ္စည်းများကို စစ်ဆေးပါ။
                         </DialogDescription>
                     </DialogHeader>
                     <div className="flex flex-col gap-4 p-5">
-                         <div className="space-y-2">
-                            <Label htmlFor="userGameId">Player ID</Label>
-                            <Input
-                                id="userGameId"
-                                value={userGameId}
-                                onChange={(e) => setUserGameId(e.target.value)}
-                                placeholder="Enter your Player ID"
-                                className="h-10"
-                            />
-                        </div>
                         <div className="flex items-center rounded-md border-l-4 border-yellow-400 bg-yellow-400/10 p-3 text-sm">
                            <Coins className="mr-2 h-4 w-4 text-yellow-500" />
-                           <span className="text-gray-600">Your Balance:</span>
+                           <span className="text-gray-600">သင်၏လက်ကျန်ငွေ:</span>
                            <span className="ml-1 font-semibold text-gray-800">{smileCoinBalance.toLocaleString()}</span>
                         </div>
                         <Separator />
@@ -293,31 +317,46 @@ Order Time: ${new Date().toLocaleString('en-US', { timeZone: 'Asia/Yangon' })}`;
                         </div>
                         <Separator />
                         <div className="flex justify-between text-lg font-bold text-gray-900">
-                            <span>Total</span>
+                            <span>စုစုပေါင်း</span>
                             <span>{totalCartPrice.toLocaleString()}</span>
                         </div>
                          {!hasSufficientBalance && (
                             <p className="text-center text-sm font-semibold text-red-600">
-                                Insufficient Smile Coin balance for this purchase.
+                                သင်၏ Smile Coin လက်ကျန်ငွေ မလုံလောက်ပါ။
                             </p>
                         )}
                     </div>
-                    <DialogFooter className="flex gap-2.5 bg-gray-50 px-5 py-3">
-                         <Button
+                    <DialogFooter className="flex-col space-y-2 bg-gray-50 px-5 py-3">
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                 <Button
+                                    disabled={!hasSufficientBalance || isSubmitting || cartItems.length === 0}
+                                    className="h-[42px] w-full"
+                                >
+                                    {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                                    ဝယ်ယူမည်
+                                </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                <AlertDialogTitle>ဝယ်ယူမှာ သေချာပါသလား?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    သင်၏ Smile Coin {totalCartPrice.toLocaleString()} ကို အသုံးပြု၍ ဝယ်ယူတော့မှာဖြစ်ပါတယ်။ ဒီလုပ်ဆောင်ချက်ကို နောက်ပြန်ပြင်လို့မရပါ။
+                                </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                <AlertDialogCancel>မဝယ်တော့ပါ</AlertDialogCancel>
+                                <AlertDialogAction onClick={handleSubmitOrder}>အတည်ပြုသည်</AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
+                        <Button
                             variant="outline"
                             onClick={() => setIsCartOpen(false)}
                             disabled={isSubmitting}
                             className="h-[42px] w-full"
                         >
-                            Cancel
-                        </Button>
-                        <Button
-                            onClick={handleSubmitOrder}
-                            disabled={!hasSufficientBalance || isSubmitting || !userGameId}
-                            className="h-[42px] w-full"
-                        >
-                            {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                            Confirm Order
+                            မဝယ်သေးပါ
                         </Button>
                     </DialogFooter>
                 </DialogContent>

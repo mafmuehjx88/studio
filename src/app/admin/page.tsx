@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AdminOrdersPage from "./orders/page";
 import AdminUsersPage from "./users/page";
 import AdminContentPage from "./content/page";
+import AdminSmileCodesPage from "./smile-codes/page";
 
 export default function AdminPage() {
   const { isAdmin, loading } = useAuth();
@@ -26,10 +27,11 @@ export default function AdminPage() {
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">Admin Panel</h1>
       <Tabs defaultValue="orders" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="orders">All Orders</TabsTrigger>
           <TabsTrigger value="users">User Management</TabsTrigger>
           <TabsTrigger value="content">Content</TabsTrigger>
+          <TabsTrigger value="smile-codes">Smile Codes</TabsTrigger>
         </TabsList>
         <TabsContent value="orders">
           <AdminOrdersPage />
@@ -39,6 +41,9 @@ export default function AdminPage() {
         </TabsContent>
         <TabsContent value="content">
             <AdminContentPage />
+        </TabsContent>
+         <TabsContent value="smile-codes">
+            <AdminSmileCodesPage />
         </TabsContent>
       </Tabs>
     </div>
