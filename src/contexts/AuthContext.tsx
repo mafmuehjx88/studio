@@ -21,6 +21,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const AUTH_PAGES = ['/login', '/register'];
 const PROTECTED_PAGES = ['/profile', '/wallet', '/orders', '/top-up', '/games'];
 const ADMIN_PAGES = ['/admin'];
+const ADMIN_EMAILS = ['marrci448@gmail.com', 'ohshif5@gmail.com'];
 
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -38,7 +39,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       if (firebaseUser) {
         setUser(firebaseUser);
-        setIsAdmin(firebaseUser.email === 'marrci448@gmail.com');
+        setIsAdmin(ADMIN_EMAILS.includes(firebaseUser.email || ''));
         
         const userDocRef = doc(db, 'users', firebaseUser.uid);
         profileUnsubscribe = onSnapshot(userDocRef, 
