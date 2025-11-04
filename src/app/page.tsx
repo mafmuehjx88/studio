@@ -17,18 +17,18 @@ export default function Home() {
   const { isAdmin } = useAuth();
   const bannerImage = staticImages['banner'];
 
+  // Start with games, excluding ones that will be handled specially
   const displayGames: (Game | { id: string, name: string, image: string })[] = [
-    ...allGames.filter(g => g.id !== 'telegram' && g.id !== 'tiktok' && g.id !== 'hok')
+    ...allGames.filter(g => g.id !== 'telegram' && g.id !== 'tiktok' && g.id !== 'hok' && g.id !== 'smile-coin')
   ];
 
+  // Add the generic "Digital Product" card
   displayGames.push({ id: 'digital-product', name: 'Digital Product', image: 'https://i.ibb.co/wFmXwwNg/zproduct.jpg' });
 
-  // Only show smile coin to admins for now
-  if (isAdmin) {
-    const smileCoinGame = allGames.find(g => g.id === 'smile-coin');
-    if (smileCoinGame) {
-      displayGames.push(smileCoinGame);
-    }
+  // Add smile coin game for all users now
+  const smileCoinGame = allGames.find(g => g.id === 'smile-coin');
+  if (smileCoinGame) {
+    displayGames.push(smileCoinGame);
   }
   
 
