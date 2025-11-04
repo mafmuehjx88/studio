@@ -40,6 +40,7 @@ export default function AdminUsersPage() {
         // Sort on the client-side
         usersData.sort((a, b) => {
           if (a.createdAt && b.createdAt) {
+            // @ts-ignore
             return b.createdAt.toMillis() - a.createdAt.toMillis();
           }
           return 0;
@@ -123,4 +124,5 @@ export default function AdminUsersPage() {
     </Card>
   );
 }
+
 

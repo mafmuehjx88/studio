@@ -1,0 +1,39 @@
+
+rules_version = '2';
+service cloud.firestore {
+  
+  match /databases/{database}/documents {
+    
+    match /users/{userId} {
+      allow read, update: if request.auth.uid == userId || request.auth.token.email == 'marrci448@gmail.com';
+      allow create: if request.auth.uid == userId;
+      // Admins can list all users.
+      allow list: if request.auth.token.email == 'marrci448@gmail.com';
+    }
+    
+    match /users/{userId}/orders/{orderId} {
+      allow read, create, update: if request.auth.uid == userId || request.auth.token.email == 'marrci448@gmail.com';
+      allow list: if request.auth.token.email == 'marrci448@gmail.com';
+    }
+    
+    match /settings/{docId} {
+      allow read: if true;
+      allow write: if request.auth.token.email == 'marrci448@gmail.com';
+    }
+    
+    match /announcements/{announcementId} {
+      allow read: if true;
+      allow write: if request.auth.token.email == 'marrci448@gmail.com';
+    }
+
+    match /smileCodes/{codeId} {
+        // Admin has full control.
+        allow read, write: if request.auth.token.email == 'marrci448@gmail.com';
+    }
+
+    match /{path=**}/orders/{orderId} {
+      // Allow admin to get any order from any user.
+      allow get, list: if request.auth.token.email == 'marrci448@gmail.com';
+    }
+  }
+}

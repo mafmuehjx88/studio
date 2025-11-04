@@ -47,6 +47,7 @@ export default function AdminOrdersPage() {
         // Sort the data on the client-side by creation date, descending
         ordersData.sort((a, b) => {
             if (a.createdAt && b.createdAt) {
+                // @ts-ignore
                 return b.createdAt.toMillis() - a.createdAt.toMillis();
             }
             return 0;
