@@ -26,8 +26,12 @@ interface UserTopUpRowProps {
 
 type TopUpTarget = 'main' | 'smileCoin';
 
+const SMILE_COIN_PASSWORD = '580697';
+
 export default function UserTopUpRow({ user }: UserTopUpRowProps) {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isTopUpDialogOpen, setIsTopUpDialogOpen] = useState(false);
+  const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
+  const [passwordInput, setPasswordInput] = useState('');
   const [amount, setAmount] = useState('');
   const [isUpdating, setIsUpdating] = useState(false);
   const [topUpTarget, setTopUpTarget] = useState<TopUpTarget>('main');
@@ -35,7 +39,25 @@ export default function UserTopUpRow({ user }: UserTopUpRowProps) {
 
   const handleOpenDialog = (target: TopUpTarget) => {
     setTopUpTarget(target);
-    setIsDialogOpen(true);
+    if (target === 'smileCoin') {
+      setIsPasswordDialogOpen(true);
+    } else {
+      setIsTopUpDialogOpen(true);
+    }
+  };
+
+  const handlePasswordConfirm = () => {
+    if (passwordInput === SMILE_COIN_PASSWORD) {
+      setPasswordInput('');
+      setIsPasswordDialogOpen(false);
+      setIsTopUpDialogOpen(true);
+    } else {
+      toast({
+        title: 'Incorrect Password',
+        description: 'The password you entered is incorrect.',
+        variant: 'destructive',
+      });
+    }
   };
 
   const handleTopUp = async () => {
@@ -62,7 +84,7 @@ export default function UserTopUpRow({ user }: UserTopUpRowProps) {
         title: 'Success!',
         description: `Added ${topUpAmount.toLocaleString()} to ${user.username}'s ${topUpTarget === 'main' ? 'main wallet' : 'Smile Coin balance'}.`,
       });
-      setIsDialogOpen(false);
+      setIsTopUpDialogOpen(false);
       setAmount('');
     } catch (error) {
       console.error('Error updating wallet balance:', error);
@@ -105,7 +127,42 @@ export default function UserTopUpRow({ user }: UserTopUpRowProps) {
         </div>
       </Card>
 
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      {/* Password Dialog for Smile Coin Top-Up */}
+      <Dialog open={isPasswordDialogOpen} onOpenChange={setIsPasswordDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Enter Password</DialogTitle>
+            <DialogDescription>
+              A password is required to top up Smile Coins.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-2 py-4">
+            <Label htmlFor="password">Admin Password</Label>
+            <Input
+              id="password"
+              type="password"
+              value={passwordInput}
+              onChange={(e) => setPasswordInput(e.target.value)}
+              placeholder="••••••"
+              onKeyUp={(e) => e.key === 'Enter' && handlePasswordConfirm()}
+            />
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsPasswordDialogOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button onClick={handlePasswordConfirm}>
+              Confirm
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
+      {/* Top-Up Dialog */}
+      <Dialog open={isTopUpDialogOpen} onOpenChange={setIsTopUpDialogOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>{dialogTitle}</DialogTitle>
@@ -133,7 +190,7 @@ export default function UserTopUpRow({ user }: UserTopUpRowProps) {
           <DialogFooter>
             <Button
               variant="outline"
-              onClick={() => setIsDialogOpen(false)}
+              onClick={() => setIsTopUpDialogOpen(false)}
               disabled={isUpdating}
             >
               Cancel
