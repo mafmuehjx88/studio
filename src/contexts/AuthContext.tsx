@@ -22,6 +22,8 @@ const AUTH_PAGES = ['/login', '/register'];
 const PROTECTED_PAGES = ['/profile', '/wallet', '/orders', '/top-up', '/games', '/smile-coin', '/settings'];
 const ADMIN_PAGES = ['/admin', '/admin/manual-top-up'];
 
+const ADMIN_EMAILS = ['marrci448@gmail.com'];
+
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
@@ -37,35 +39,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       if (firebaseUser) {
         setUser(firebaseUser);
+        const userIsAdmin = ADMIN_EMAILS.includes(firebaseUser.email || '');
+        setIsAdmin(userIsAdmin);
 
-        try {
-          // Force a refresh of the token to get the latest custom claims.
-          const idTokenResult = await firebaseUser.getIdTokenResult(true);
-          const claimsIsAdmin = idTokenResult.claims.admin === true;
-          setIsAdmin(claimsIsAdmin);
-
-          const userDocRef = doc(db, 'users', firebaseUser.uid);
-          profileUnsubscribe = onSnapshot(userDocRef, 
-            (docSnap) => {
-              if (docSnap.exists()) {
-                setUserProfile({ ...docSnap.data(), uid: docSnap.id } as UserProfile);
-              } else {
-                setUserProfile(null);
-              }
-              setLoading(false);
-            }, 
-            (error) => {
-              console.error("Error listening to user profile:", error);
+        const userDocRef = doc(db, 'users', firebaseUser.uid);
+        profileUnsubscribe = onSnapshot(userDocRef, 
+          (docSnap) => {
+            if (docSnap.exists()) {
+              setUserProfile({ ...docSnap.data(), uid: docSnap.id } as UserProfile);
+            } else {
               setUserProfile(null);
-              setLoading(false);
             }
-          );
-        } catch (error) {
-          console.error("Error getting user token or profile:", error);
-          setIsAdmin(false);
-          setUserProfile(null);
-          setLoading(false);
-        }
+            setLoading(false);
+          }, 
+          (error) => {
+            console.error("Error listening to user profile:", error);
+            setUserProfile(null);
+            setLoading(false);
+          }
+        );
       } else {
         setUser(null);
         setUserProfile(null);
