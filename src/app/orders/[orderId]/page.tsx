@@ -8,10 +8,11 @@ import { useAuth } from '@/contexts/AuthContext';
 import { notFound, useParams, useRouter } from 'next/navigation';
 import { Order } from '@/lib/types';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, CheckCircle, Copy, Loader2 } from 'lucide-react';
+import { ArrowLeft, CheckCircle, Copy } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Separator } from '@/components/ui/separator';
 
 export default function OrderDetailsPage() {
   const { user, loading: authLoading } = useAuth();
@@ -90,6 +91,8 @@ export default function OrderDetailsPage() {
       return notFound();
   }
 
+  const codes = order.smileCode?.split(',').map(c => c.trim()) || [];
+
   return (
     <div className="space-y-6">
        <div className="flex items-center gap-4">
@@ -103,29 +106,35 @@ export default function OrderDetailsPage() {
         <CardHeader className="text-center">
             <CheckCircle className="mx-auto h-16 w-16 text-green-500" />
           <CardTitle className="text-2xl pt-2">Purchase Successful!</CardTitle>
-          <CardDescription>Your Smile Coin code is ready.</CardDescription>
+          <CardDescription>Your Smile Coin code(s) are ready.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
             <div className="rounded-lg border bg-secondary p-4 text-center">
                 <p className="text-sm text-muted-foreground">{order.itemName}</p>
                 <p className="text-2xl font-bold text-yellow-400">{order.price.toLocaleString()} Coins</p>
             </div>
-            <div className="relative rounded-lg border-2 border-dashed border-primary bg-primary/10 p-4 text-center">
-                <p className="text-sm font-semibold text-primary">Your Code</p>
-                <p className="text-2xl font-bold font-mono break-words text-primary my-2">
-                    {order.smileCode}
-                </p>
-                <Button 
-                    size="sm" 
-                    className="w-full"
-                    onClick={() => handleCopy(order.smileCode || '')}
-                >
-                    <Copy className="mr-2 h-4 w-4"/>
-                    Copy Code
-                </Button>
+            
+            <div className='space-y-3'>
+                {codes.map((code, index) => (
+                    <div key={index} className="relative rounded-lg border-2 border-dashed border-primary bg-primary/10 p-4 text-center">
+                        <p className="text-sm font-semibold text-primary">Your Code #{index + 1}</p>
+                        <p className="text-xl font-bold font-mono break-words text-primary my-2">
+                            {code}
+                        </p>
+                        <Button 
+                            size="sm" 
+                            className="w-full"
+                            onClick={() => handleCopy(code)}
+                        >
+                            <Copy className="mr-2 h-4 w-4"/>
+                            Copy Code
+                        </Button>
+                    </div>
+                ))}
             </div>
-             <p className="text-center text-xs text-muted-foreground">
-                This code has been saved to your order history for future reference.
+
+             <p className="text-center text-xs text-muted-foreground pt-2">
+                These codes have been saved to your order history for future reference.
             </p>
         </CardContent>
         <CardFooter>
@@ -139,3 +148,5 @@ export default function OrderDetailsPage() {
     </div>
   );
 }
+
+    

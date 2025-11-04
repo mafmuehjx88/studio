@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ArrowLeft, Coins, Loader2, Minus, Plus, ShoppingCart, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Coins, Loader2, Minus, Plus, ShoppingCart } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import type { Product, SmileCode } from '@/lib/types';
@@ -121,74 +121,71 @@ export default function SmileCoinClientPage({ region, products }: SmileCoinClien
         }
 
         setIsSubmitting(true);
+        let orderIdForRedirect = '';
 
         try {
-            // This is a simplified, non-transactional approach since we are not using Firestore for codes anymore.
-            // For a real-world app, a server-side transactional process would be required to prevent race conditions.
             const batch = writeBatch(db);
-            let finalAssignedCode: SmileCode | null = null;
+            const codesToAssign: { item: CartItem, code: SmileCode }[] = [];
 
-            // We will only process the first item in the cart for simplicity, as requested
-            const itemToPurchase = cartItems[0];
-            if (!itemToPurchase) {
-                 throw new Error("Cart is empty.");
+            // 1. Reserve codes for all items in the cart
+            for (const item of cartItems) {
+                for (let i = 0; i < item.quantity; i++) {
+                    const availableCode = allSmileCodes.find(
+                        (code) => code.productId === item.id && !code.isUsed && !usedCodeIds.has(code.id!)
+                    );
+
+                    if (!availableCode) {
+                        throw new Error(`Code ကုန်နေပါသည်။ Admin အနေနဲ့ အမြန်ဆုံးပြန်ထည့်ပေးပါမည်။ (${item.name})`);
+                    }
+                    
+                    usedCodeIds.add(availableCode.id!); // Mark as used for this session
+                    codesToAssign.push({ item, code: availableCode });
+                }
             }
 
-            // Find an available code from the hardcoded list
-            const availableCode = allSmileCodes.find(
-                (code) => code.productId === itemToPurchase.id && !code.isUsed && !usedCodeIds.has(code.id!)
-            );
-
-            if (!availableCode) {
-                throw new Error(`Code ကုန်နေပါသည်။ Admin အနေနဲ့ အမြန်ဆုံးပြန်ထည့်ပေးပါမည်။`);
-            }
-
-            // Mark the code as used in our in-memory set for this session
-            usedCodeIds.add(availableCode.id!);
-            finalAssignedCode = availableCode;
-
-            // 1. Deduct smileCoinBalance from user's document in Firestore
-            const userDocRef = doc(db, 'users', user.uid);
-            const finalPrice = itemToPurchase.price * itemToPurchase.quantity;
-            batch.update(userDocRef, {
-                smileCoinBalance: increment(-finalPrice)
-            });
-            
-            // 2. Create the order document in Firestore
+            // 2. Create a single order document for the entire cart
             const orderId = generateOrderId();
+            orderIdForRedirect = orderId;
             const orderDocRef = doc(db, `users/${user.uid}/orders`, orderId);
-            const finalItemName = `${itemToPurchase.name} (x${itemToPurchase.quantity})`;
             
+            const purchasedCodes = codesToAssign.map(c => c.code.code).join(', ');
+            const finalItemName = cartItems.map(item => `${item.name} (x${item.quantity})`).join(', ');
+
             batch.set(orderDocRef, {
                 id: orderId,
                 userId: user.uid,
                 username: userProfile.username,
                 gameId: 'smile-coin',
                 gameName: region.name,
-                itemId: itemToPurchase.id,
                 itemName: finalItemName,
-                price: finalPrice,
+                price: totalCartPrice,
                 paymentMethod: 'SmileCoin Wallet',
                 status: 'Completed' as const,
                 createdAt: serverTimestamp(),
-                smileCode: finalAssignedCode.code,
+                smileCode: purchasedCodes, // Store all purchased codes
+            });
+            
+            // 3. Deduct total smileCoinBalance from user's document
+            const userDocRef = doc(db, 'users', user.uid);
+            batch.update(userDocRef, {
+                smileCoinBalance: increment(-totalCartPrice)
             });
 
             // Commit all Firestore operations
             await batch.commit();
-
-            // 3. Send Telegram notification
+            
+            // 4. Send Telegram notification
             const notificationMessage = `
  SMILE COIN Order! 🪙
 ----------------------
 Order ID: \`${orderId}\`
 Game: *${region.name}*
 Item: *${finalItemName}*
-Total Price: *${finalPrice.toLocaleString()} Coins*
+Total Price: *${totalCartPrice.toLocaleString()} Coins*
 ----------------------
 Username: \`${userProfile.username}\`
 ----------------------
-Code: \`${finalAssignedCode.code}\`
+Codes: \`${purchasedCodes}\`
 ----------------------
 Payment: SmileCoin Wallet
 Order Time: ${new Date().toLocaleString('en-US', { timeZone: 'Asia/Yangon' })}`;
@@ -208,6 +205,8 @@ Order Time: ${new Date().toLocaleString('en-US', { timeZone: 'Asia/Yangon' })}`;
 
         } catch (error: any) {
             console.error("Order submission failed:", error);
+            // Rollback in-memory code reservations
+            usedCodeIds.clear();
             toast({
                 title: "Order Failed",
                 description: error.message || "An error occurred. Please check your balance and try again.",
@@ -358,3 +357,5 @@ Order Time: ${new Date().toLocaleString('en-US', { timeZone: 'Asia/Yangon' })}`;
         </div>
     );
 }
+
+    
