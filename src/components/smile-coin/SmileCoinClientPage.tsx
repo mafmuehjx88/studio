@@ -24,6 +24,7 @@ import { db } from '@/lib/firebase';
 import { sendTelegramNotification } from '@/lib/actions';
 import { generateOrderId } from '@/lib/utils';
 import { Separator } from '../ui/separator';
+import { Label } from '@/components/ui/label';
 
 interface SmileCoinClientPageProps {
     region: {
