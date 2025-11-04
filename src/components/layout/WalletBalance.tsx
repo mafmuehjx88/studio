@@ -21,7 +21,7 @@ export default function WalletBalance() {
     return <Skeleton className="h-8 w-24 rounded-full" />;
   }
 
-  const isSmileCoinPage = pathname.startsWith('/smile-coin');
+  const isSmileCoinPage = pathname.startsWith('/smile-coin') || pathname.startsWith('/top-up/smile-coin');
   
   const balance = isSmileCoinPage 
     ? (userProfile?.smileCoinBalance ?? 0).toLocaleString()
