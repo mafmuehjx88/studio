@@ -10,6 +10,7 @@ import { ArrowLeft, Coins, Loader2, Minus, Plus, ShoppingCart, AlertTriangle } f
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import type { Product, SmileCode } from '@/lib/types';
+import { smileCodes as allSmileCodes } from '@/lib/data';
 import {
   Dialog,
   DialogContent,
@@ -31,12 +32,11 @@ import {
 } from "@/components/ui/alert-dialog"
 
 import { useToast } from '@/hooks/use-toast';
-import { doc, writeBatch, collection, serverTimestamp, increment, query, where, getDocs, limit, runTransaction } from 'firebase/firestore';
+import { doc, writeBatch, collection, serverTimestamp, increment } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { sendTelegramNotification } from '@/lib/actions';
 import { generateOrderId } from '@/lib/utils';
 import { Separator } from '../ui/separator';
-import { Label } from '../ui/label';
 
 interface SmileCoinClientPageProps {
     region: {
@@ -50,6 +50,9 @@ interface SmileCoinClientPageProps {
 interface CartItem extends Product {
     quantity: number;
 }
+
+// In-memory store for used codes to prevent re-use during a single app session
+const usedCodeIds = new Set<string>();
 
 export default function SmileCoinClientPage({ region, products }: SmileCoinClientPageProps) {
     const { user, userProfile } = useAuth();
@@ -120,70 +123,62 @@ export default function SmileCoinClientPage({ region, products }: SmileCoinClien
         setIsSubmitting(true);
 
         try {
-            const orderId = generateOrderId();
-            const orderTimestamp = serverTimestamp();
+            // This is a simplified, non-transactional approach since we are not using Firestore for codes anymore.
+            // For a real-world app, a server-side transactional process would be required to prevent race conditions.
+            const batch = writeBatch(db);
+            let finalAssignedCode: SmileCode | null = null;
+
+            // We will only process the first item in the cart for simplicity, as requested
+            const itemToPurchase = cartItems[0];
+            if (!itemToPurchase) {
+                 throw new Error("Cart is empty.");
+            }
+
+            // Find an available code from the hardcoded list
+            const availableCode = allSmileCodes.find(
+                (code) => code.productId === itemToPurchase.id && !code.isUsed && !usedCodeIds.has(code.id!)
+            );
+
+            if (!availableCode) {
+                throw new Error(`Code ကုန်နေပါသည်။ Admin အနေနဲ့ အမြန်ဆုံးပြန်ထည့်ပေးပါမည်။`);
+            }
+
+            // Mark the code as used in our in-memory set for this session
+            usedCodeIds.add(availableCode.id!);
+            finalAssignedCode = availableCode;
+
+            // 1. Deduct smileCoinBalance from user's document in Firestore
+            const userDocRef = doc(db, 'users', user.uid);
+            const finalPrice = itemToPurchase.price * itemToPurchase.quantity;
+            batch.update(userDocRef, {
+                smileCoinBalance: increment(-finalPrice)
+            });
             
-            let assignedCode: SmileCode | null = null;
-            let finalPrice = 0;
-            let finalItemName = "";
-
-            await runTransaction(db, async (transaction) => {
-                const itemToPurchase = cartItems[0];
-                if (!itemToPurchase) {
-                  throw new Error("Cart is empty. Please add an item to purchase.");
-                }
-
-                // Now that we have a valid item, calculate price and name
-                finalPrice = itemToPurchase.price * itemToPurchase.quantity;
-                finalItemName = `${itemToPurchase.name} (x${itemToPurchase.quantity})`;
-
-
-                // 1. Find an unused code for the product ID
-                const codesRef = collection(db, 'smileCodes');
-                const q = query(codesRef, where('productId', '==', itemToPurchase.id), where('isUsed', '==', false), limit(1));
-                
-                const codesSnapshot = await transaction.get(q);
-
-                if (codesSnapshot.empty) {
-                    throw new Error(`Code ကုန်နေပါသည်။ Admin အနေနဲ့ အမြန်ဆုံးပြန်ထည့်ပေးပါမည်။`);
-                }
-
-                // 2. Get the code and mark it as used
-                const codeDoc = codesSnapshot.docs[0];
-                assignedCode = { ...codeDoc.data(), id: codeDoc.id } as SmileCode;
-                transaction.update(codeDoc.ref, {
-                    isUsed: true,
-                    usedBy: user.uid,
-                    usedAt: serverTimestamp() // Use server timestamp for accuracy
-                });
-
-                // 3. Deduct smileCoinBalance from user
-                const userDocRef = doc(db, 'users', user.uid);
-                transaction.update(userDocRef, {
-                    smileCoinBalance: increment(-finalPrice)
-                });
-                
-                // 4. Create the order document
-                const orderDocRef = doc(db, `users/${user.uid}/orders`, orderId);
-                 transaction.set(orderDocRef, {
-                    id: orderId,
-                    userId: user.uid,
-                    username: userProfile.username,
-                    gameId: 'smile-coin',
-                    gameName: region.name,
-                    itemId: itemToPurchase.id,
-                    itemName: finalItemName,
-                    price: finalPrice,
-                    paymentMethod: 'SmileCoin Wallet',
-                    status: 'Completed' as const, // Mark as completed since code is given
-                    createdAt: orderTimestamp,
-                    smileCode: assignedCode.code, // Store the code in the order!
-                });
+            // 2. Create the order document in Firestore
+            const orderId = generateOrderId();
+            const orderDocRef = doc(db, `users/${user.uid}/orders`, orderId);
+            const finalItemName = `${itemToPurchase.name} (x${itemToPurchase.quantity})`;
+            
+            batch.set(orderDocRef, {
+                id: orderId,
+                userId: user.uid,
+                username: userProfile.username,
+                gameId: 'smile-coin',
+                gameName: region.name,
+                itemId: itemToPurchase.id,
+                itemName: finalItemName,
+                price: finalPrice,
+                paymentMethod: 'SmileCoin Wallet',
+                status: 'Completed' as const,
+                createdAt: serverTimestamp(),
+                smileCode: finalAssignedCode.code,
             });
 
-            // 5. If transaction is successful, send notification and redirect
-             if (assignedCode) {
-                const notificationMessage = `
+            // Commit all Firestore operations
+            await batch.commit();
+
+            // 3. Send Telegram notification
+            const notificationMessage = `
  SMILE COIN Order! 🪙
 ----------------------
 Order ID: \`${orderId}\`
@@ -193,24 +188,21 @@ Total Price: *${finalPrice.toLocaleString()} Coins*
 ----------------------
 Username: \`${userProfile.username}\`
 ----------------------
-Code: \`${assignedCode.code}\`
+Code: \`${finalAssignedCode.code}\`
 ----------------------
 Payment: SmileCoin Wallet
 Order Time: ${new Date().toLocaleString('en-US', { timeZone: 'Asia/Yangon' })}`;
 
-                await sendTelegramNotification(notificationMessage);
+            await sendTelegramNotification(notificationMessage);
 
-                toast({
-                    title: "Order Submitted!",
-                    description: "Your Smile Coin order has been placed successfully.",
-                });
+            toast({
+                title: "Order Submitted!",
+                description: "Your Smile Coin order has been placed successfully.",
+            });
 
-                // Redirect to the new order details page
-                router.push(`/orders/${orderId}`);
-            } else {
-                 throw new Error("Could not assign a code.");
-            }
-
+            // Redirect to the new order details page
+            router.push(`/orders/${orderId}`);
+            
             setCart({});
             setIsCartOpen(false);
 
@@ -254,7 +246,7 @@ Order Time: ${new Date().toLocaleString('en-US', { timeZone: 'Asia/Yangon' })}`;
                             <div className="flex flex-col space-y-3">
                                 <div>
                                     <p className="font-semibold text-foreground">{product.name}</p>
-                                    <p className="text-lg font-bold text-yellow-400">{product.price.toLocaleString()}</p>
+                                    <p className="text-lg font-bold text-yellow-400">{product.price.toLocaleString()} Coins</p>
                                 </div>
                                 {quantity > 0 ? (
                                     <div className="flex items-center justify-end gap-2">
@@ -303,7 +295,7 @@ Order Time: ${new Date().toLocaleString('en-US', { timeZone: 'Asia/Yangon' })}`;
                         <div className="flex items-center rounded-md border-l-4 border-yellow-400 bg-yellow-400/10 p-3 text-sm">
                            <Coins className="mr-2 h-4 w-4 text-yellow-500" />
                            <span className="text-gray-600">သင်၏လက်ကျန်ငွေ:</span>
-                           <span className="ml-1 font-semibold text-gray-800">{smileCoinBalance.toLocaleString()}</span>
+                           <span className="ml-1 font-semibold text-gray-800">{smileCoinBalance.toLocaleString()} Coins</span>
                         </div>
                         <Separator />
                         <div className="max-h-48 space-y-3 overflow-y-auto pr-2">
@@ -311,16 +303,16 @@ Order Time: ${new Date().toLocaleString('en-US', { timeZone: 'Asia/Yangon' })}`;
                                 <div key={item.id} className="flex items-center justify-between text-sm">
                                     <div className='flex-1'>
                                         <p className="font-medium text-gray-800">{item.name}</p>
-                                        <p className="text-xs text-gray-500">{item.quantity} x {item.price.toLocaleString()}</p>
+                                        <p className="text-xs text-gray-500">{item.quantity} x {item.price.toLocaleString()} Coins</p>
                                     </div>
-                                    <p className="font-semibold text-gray-900">{(item.quantity * item.price).toLocaleString()}</p>
+                                    <p className="font-semibold text-gray-900">{(item.quantity * item.price).toLocaleString()} Coins</p>
                                 </div>
                             ))}
                         </div>
                         <Separator />
                         <div className="flex justify-between text-lg font-bold text-gray-900">
                             <span>စုစုပေါင်း</span>
-                            <span>{totalCartPrice.toLocaleString()}</span>
+                            <span>{totalCartPrice.toLocaleString()} Coins</span>
                         </div>
                          {!hasSufficientBalance && (
                             <p className="text-center text-sm font-semibold text-red-600">

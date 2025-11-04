@@ -1,5 +1,5 @@
 
-import type { Game, Product } from './types';
+import type { Game, Product, SmileCode } from './types';
 
 export const games: Game[] = [
   { id: 'mlbb', name: 'MLBB', image: 'https://i.ibb.co/R47v6TDX/8255033248d018b6c5f3d460b2deec16.jpg', bannerImage: 'https://i.ibb.co/NnNMr8gq/New-Project-85-E9-F449-A.png', needsServerId: true, needsUserIdentifier: true, userIdentifierLabel: 'User ID' },
@@ -90,13 +90,24 @@ export const products: Product[] = [
 
 export const smileCoinProducts: Product[] = [
     // Brazil - Updated Prices & New Product
-    { id: 'smile-brl-30', gameId: 'smile-coin', country: 'brazil', name: '30 BRL (300 Smile Coins)', price: 23500, image: 'https://i.ibb.co/5x1D58DQ/smilecode-brazil.jpg', category: 'Smile Code'},
-    { id: 'smile-brl-100', gameId: 'smile-coin', country: 'brazil', name: '100 BRL (1000 Smile Coins)', price: 75500, image: 'https://i.ibb.co/5x1D58DQ/smilecode-brazil.jpg', category: 'Smile Code'},
-    { id: 'smile-brl-500', gameId: 'smile-coin', country: 'brazil', name: '500 BRL (5000 Smile Coins)', price: 377500, image: 'https://i.ibb.co/5x1D58DQ/smilecode-brazil.jpg', category: 'Smile Code'},
-    { id: 'smile-brl-1000', gameId: 'smile-coin', country: 'brazil', name: '1000 BRL (10000 Smile Coins)', price: 755000, image: 'https://i.ibb.co/5x1D58DQ/smilecode-brazil.jpg', category: 'Smile Code'},
+    { id: 'smile-brl-30', gameId: 'smile-coin', country: 'brazil', name: '30 BRL (300 Smile Coins)', price: 300, image: 'https://i.ibb.co/5x1D58DQ/smilecode-brazil.jpg', category: 'Smile Code'},
+    { id: 'smile-brl-100', gameId: 'smile-coin', country: 'brazil', name: '100 BRL (1000 Smile Coins)', price: 1000, image: 'https://i.ibb.co/5x1D58DQ/smilecode-brazil.jpg', category: 'Smile Code'},
+    { id: 'smile-brl-500', gameId: 'smile-coin', country: 'brazil', name: '500 BRL (5000 Smile Coins)', price: 5000, image: 'https://i.ibb.co/5x1D58DQ/smilecode-brazil.jpg', category: 'Smile Code'},
+    { id: 'smile-brl-1000', gameId: 'smile-coin', country: 'brazil', name: '1000 BRL (10000 Smile Coins)', price: 10000, image: 'https://i.ibb.co/5x1D58DQ/smilecode-brazil.jpg', category: 'Smile Code'},
     // Philippines
-    { id: 'smile-php-100', gameId: 'smile-coin', country: 'philippines', name: '100 PHP', price: 0, image: 'https://i.ibb.co/Lf5zjQd/smilecode-philippines.jpg', category: 'Smile Code'},
+    { id: 'smile-php-100', gameId: 'smile-coin', country: 'philippines', name: '100 PHP', price: 100, image: 'https://i.ibb.co/Lf5zjQd/smilecode-philippines.jpg', category: 'Smile Code'},
 ];
+
+// This is now the source of truth for smile codes.
+// Add, edit, or remove codes from this array.
+// The purchase logic will automatically handle marking them as "used" in memory.
+export const smileCodes: SmileCode[] = [
+    { id: 'scbr-001', code: 'BR-SAMPLE-001', productId: 'smile-brl-30', productName: '30 BRL (300 Smile Coins)', price: 300, isUsed: false, usedBy: null, usedAt: null, createdAt: new Date().toISOString() },
+    { id: 'scbr-002', code: 'BR-SAMPLE-002', productId: 'smile-brl-30', productName: '30 BRL (300 Smile Coins)', price: 300, isUsed: false, usedBy: null, usedAt: null, createdAt: new Date().toISOString() },
+    { id: 'scbr-003', code: 'BR-SAMPLE-003', productId: 'smile-brl-100', productName: '100 BRL (1000 Smile Coins)', price: 1000, isUsed: false, usedBy: null, usedAt: null, createdAt: new Date().toISOString() },
+    { id: 'scphp-001', code: 'PH-SAMPLE-001', productId: 'smile-php-100', productName: '100 PHP', price: 100, isUsed: false, usedBy: null, usedAt: null, createdAt: new Date().toISOString() },
+];
+
 
 export const smileCoinRegions = [
     {

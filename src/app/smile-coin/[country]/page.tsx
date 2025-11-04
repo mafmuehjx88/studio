@@ -20,6 +20,9 @@ export default function SmileCoinItemsPage({ params }: SmileCoinItemsPageProps) 
   const { country } = params;
 
   const region = smileCoinRegions.find((r) => r.id === country);
+  
+  // The price for smileCoinProducts is now in Smile Coins, not MMK.
+  // We will filter and use these products directly.
   const products: Product[] = smileCoinProducts.filter((p) => p.country === country);
 
   if (!region) {

@@ -1,3 +1,4 @@
+
 rules_version = '2';
 service cloud.firestore {
   
@@ -25,10 +26,7 @@ service cloud.firestore {
       allow write: if request.auth.token.email == 'marrci448@gmail.com';
     }
 
-    match /smileCodes/{codeId} {
-        // Admin has full control.
-        allow list, read, create, update, delete: if request.auth.token.email == 'marrci448@gmail.com';
-    }
+    // smileCodes are no longer stored in Firestore. This rule is removed.
 
     match /{path=**}/orders/{orderId} {
       // Allow admin to get any order from any user.

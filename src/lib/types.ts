@@ -91,6 +91,6 @@ export interface SmileCode {
   price: number;
   isUsed: boolean;
   usedBy: string | null;
-  usedAt: Timestamp | FieldValue | null;
-  createdAt: Timestamp | FieldValue;
+  usedAt: Timestamp | FieldValue | string | null;
+  createdAt: Timestamp | FieldValue | string;
 }
