@@ -18,22 +18,11 @@ export default function Header({ onBellClick }: HeaderProps) {
     <header className="sticky top-0 z-20 flex h-16 items-center justify-between bg-card px-4">
       {/* Left Section */}
       <div className="flex items-center gap-2">
-        <Button variant="ghost" size="icon" disabled>
-             <Menu className="h-6 w-6" />
-        </Button>
-         <Button variant="ghost" size="icon" onClick={onBellClick}>
-             <Bell className="h-6 w-6" />
-        </Button>
+         <h1 className="text-xl font-bold text-white">AT Game HUB</h1>
       </div>
 
-      {/* Center Section */}
-       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-         <h1 className="text-xl font-bold text-white">AT Game HUB</h1>
-       </div>
-
-
       {/* Right Section */}
-      <div className="flex items-center">
+      <div className="flex items-center gap-2">
         {!loading && (
           user ? (
             <WalletBalance />
@@ -43,6 +32,9 @@ export default function Header({ onBellClick }: HeaderProps) {
             </Button>
           )
         )}
+         <Button variant="ghost" size="icon" onClick={onBellClick}>
+             <Bell className="h-6 w-6" />
+        </Button>
       </div>
     </header>
   );
