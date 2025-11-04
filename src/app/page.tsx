@@ -69,10 +69,11 @@ export default function Home() {
         <h2 className="mb-4 text-center text-2xl font-bold">Games</h2>
         <div className="grid grid-cols-3 gap-3">
           {games.map((game) => {
-              const isComingSoon = false; // All products are available now
+              const isComingSoon = game.id === 'smile-coin';
               const isDigitalProduct = game.id === 'digital-product';
-              const Wrapper = Link;
-              const props = { href: isDigitalProduct ? `/digital-product` : `/games/${game.id}` };
+              
+              const Wrapper = isComingSoon ? 'div' : Link;
+              const props = isComingSoon ? {} : { href: isDigitalProduct ? `/digital-product` : `/games/${game.id}` };
               
               return (
                 <React.Fragment key={`game-${game.id}`}>
