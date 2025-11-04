@@ -24,8 +24,9 @@ export default function AdminUsersPage() {
     }
 
     const q = query(
-      collection(db, 'users'),
-      orderBy("createdAt", "desc")
+      collection(db, 'users')
+      // Removing orderBy to prevent composite index requirement
+      // orderBy("createdAt", "desc") 
     );
 
     const unsubscribe = onSnapshot(
@@ -35,6 +36,15 @@ export default function AdminUsersPage() {
         querySnapshot.forEach((doc) => {
           usersData.push({ uid: doc.id, ...doc.data() } as UserProfile);
         });
+
+        // Sort on the client-side
+        usersData.sort((a, b) => {
+          if (a.createdAt && b.createdAt) {
+            return b.createdAt.toMillis() - a.createdAt.toMillis();
+          }
+          return 0;
+        });
+
         setUsers(usersData);
         setLoading(false);
       },
@@ -113,3 +123,4 @@ export default function AdminUsersPage() {
     </Card>
   );
 }
+
