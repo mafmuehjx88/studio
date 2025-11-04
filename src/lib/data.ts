@@ -118,6 +118,8 @@ export const smileCodes: SmileCode[] = [
     { id: 'scbr-013', code: 'TEST-BRL-008', productId: 'smile-brl-30', productName: '30 BRL (300 Smile Coins)', price: 300, isUsed: false, usedBy: null, usedAt: null, createdAt: new Date().toISOString() },
     { id: 'scbr-014', code: 'TEST-BRL-009', productId: 'smile-brl-30', productName: '30 BRL (300 Smile Coins)', price: 300, isUsed: false, usedBy: null, usedAt: null, createdAt: new Date().toISOString() },
     { id: 'scbr-015', code: 'TEST-BRL-010', productId: 'smile-brl-30', productName: '30 BRL (300 Smile Coins)', price: 300, isUsed: false, usedBy: null, usedAt: null, createdAt: new Date().toISOString() },
+    { id: 'scbr-500', code: 'BR-SAMPLE-500', productId: 'smile-brl-500', productName: '500 BRL (5000 Smile Coins)', price: 5000, isUsed: false, usedBy: null, usedAt: null, createdAt: new Date().toISOString() },
+    { id: 'scbr-1000', code: 'BR-SAMPLE-1000', productId: 'smile-brl-1000', productName: '1000 BRL (10000 Smile Coins)', price: 10000, isUsed: false, usedBy: null, usedAt: null, createdAt: new Date().toISOString() },
 ];
 
 
