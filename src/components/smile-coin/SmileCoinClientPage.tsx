@@ -127,15 +127,16 @@ export default function SmileCoinClientPage({ region, products }: SmileCoinClien
             let finalPrice = 0;
             let finalItemName = "";
 
-            const itemToPurchase = cartItems[0];
-            finalPrice = itemToPurchase.price * itemToPurchase.quantity;
-            finalItemName = `${itemToPurchase.name} (x${itemToPurchase.quantity})`;
-
-
             await runTransaction(db, async (transaction) => {
+                const itemToPurchase = cartItems[0];
                 if (!itemToPurchase) {
                   throw new Error("Cart is empty. Please add an item to purchase.");
                 }
+
+                // Now that we have a valid item, calculate price and name
+                finalPrice = itemToPurchase.price * itemToPurchase.quantity;
+                finalItemName = `${itemToPurchase.name} (x${itemToPurchase.quantity})`;
+
 
                 // 1. Find an unused code for the product ID
                 const codesRef = collection(db, 'smileCodes');
@@ -365,5 +366,3 @@ Order Time: ${new Date().toLocaleString('en-US', { timeZone: 'Asia/Yangon' })}`;
         </div>
     );
 }
-
-    
