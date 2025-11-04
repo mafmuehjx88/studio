@@ -28,7 +28,6 @@ service cloud.firestore {
 
     match /smileCodes/{codeId} {
         // Admin has full control.
-        // Corrected the rule by adding the 'if' condition.
         allow list, read, create, update, delete: if request.auth.token.email == 'marrci448@gmail.com';
     }
 
