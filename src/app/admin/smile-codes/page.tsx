@@ -12,7 +12,7 @@ import {
   onSnapshot,
   doc,
   deleteDoc,
-  orderBy,
+  // orderBy, // Removed to prevent index errors
 } from 'firebase/firestore';
 import { smileCoinProducts } from '@/lib/data';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -56,11 +56,22 @@ export default function AdminSmileCodesPage() {
         return;
     };
 
-    const q = query(collection(db, 'smileCodes'), orderBy('createdAt', 'desc'));
+    // Query without ordering to prevent missing index errors
+    const q = query(collection(db, 'smileCodes'));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const codesData = snapshot.docs.map(
         (doc) => ({ ...doc.data(), id: doc.id } as SmileCode)
       );
+      
+      // Sort on the client side
+      codesData.sort((a, b) => {
+        if (a.createdAt && b.createdAt) {
+          // @ts-ignore
+          return b.createdAt.toMillis() - a.createdAt.toMillis();
+        }
+        return 0;
+      });
+
       setCodes(codesData);
       setLoading(false);
     }, (err) => {
