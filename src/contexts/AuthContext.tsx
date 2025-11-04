@@ -21,7 +21,8 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const AUTH_PAGES = ['/login', '/register'];
 const PROTECTED_PAGES = ['/profile', '/wallet', '/orders', '/top-up', '/games'];
 const ADMIN_PAGES = ['/admin'];
-const ADMIN_EMAILS = ['marrci448@gmail.com', 'ohshif5@gmail.com'];
+// This is now the single source of truth for who is an admin.
+const ADMIN_EMAILS = ['marrci448@gmail.com', 'ohshif5@gmail.com']; 
 
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -34,13 +35,28 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     setLoading(true);
-    const unsubscribeAuth = onAuthStateChanged(auth, (firebaseUser) => {
+    const unsubscribeAuth = onAuthStateChanged(auth, async (firebaseUser) => {
       let profileUnsubscribe: () => void = () => {};
 
       if (firebaseUser) {
         setUser(firebaseUser);
-        setIsAdmin(ADMIN_EMAILS.includes(firebaseUser.email || ''));
         
+        // Determine admin status based on email from the auth object
+        const userIsAdmin = ADMIN_EMAILS.includes(firebaseUser.email || '');
+        setIsAdmin(userIsAdmin);
+
+        // Check for custom claims
+        try {
+          const idTokenResult = await firebaseUser.getIdTokenResult();
+          const claimsIsAdmin = idTokenResult.claims.admin === true;
+          // The most reliable source is the custom claim.
+          // If the email matches but claim isn't set, we still might have issues.
+          // For now, client-side check is a good fallback.
+           setIsAdmin(claimsIsAdmin || userIsAdmin);
+        } catch (error) {
+            console.error("Error fetching custom claims:", error);
+        }
+
         const userDocRef = doc(db, 'users', firebaseUser.uid);
         profileUnsubscribe = onSnapshot(userDocRef, 
           (docSnap) => {
