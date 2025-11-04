@@ -45,8 +45,8 @@ export default function AdminSmileCodesPage() {
   }
 
   return (
-    <div className="space-y-6">
-        <Alert>
+    <div className="grid grid-cols-1 gap-6">
+        <Alert className="bg-card border-border">
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Developer Note</AlertTitle>
             <AlertDescription>
@@ -54,14 +54,14 @@ export default function AdminSmileCodesPage() {
             </AlertDescription>
         </Alert>
 
-      <Card>
+      <Card className="bg-card border-border">
         <CardHeader>
           <CardTitle>Existing Smile Codes</CardTitle>
           <CardDescription>
             List of all available codes, managed in the source code.
           </CardDescription>
         </CardHeader>
-        <CardContent className="max-h-[60vh] overflow-y-auto">
+        <CardContent className="overflow-y-auto">
             {codes.length === 0 ? (
                 <p className="text-center text-muted-foreground py-8">No codes found in src/lib/data.ts</p>
             ) : (
