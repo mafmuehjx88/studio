@@ -102,24 +102,8 @@ export const smileCoinProducts: Product[] = [
 // Add, edit, or remove codes from this array.
 // The purchase logic will automatically handle marking them as "used" in memory.
 export const smileCodes: SmileCode[] = [
-    { id: 'scbr-001', code: 'BR-SAMPLE-001', productId: 'smile-brl-30', productName: '30 BRL (300 Smile Coins)', price: 300, isUsed: false, usedBy: null, usedAt: null, createdAt: new Date().toISOString() },
-    { id: 'scbr-003', code: 'BR-SAMPLE-003', productId: 'smile-brl-100', productName: '100 BRL (1000 Smile Coins)', price: 1000, isUsed: false, usedBy: null, usedAt: null, createdAt: new Date().toISOString() },
-    { id: 'scphp-001', code: 'PH-SAMPLE-001', productId: 'smile-php-100', productName: '100 PHP', price: 100, isUsed: false, usedBy: null, usedAt: null, createdAt: new Date().toISOString() },
-    { id: 'scphp-002', code: 'PH-SAMPLE-002', productId: 'smile-php-100', productName: '100 PHP', price: 100, isUsed: false, usedBy: null, usedAt: null, createdAt: new Date().toISOString() },
-    { id: 'scbr-004', code: '16njdjdkk82829m', productId: 'smile-brl-30', productName: '30 BRL (300 Smile Coins)', price: 300, isUsed: false, usedBy: null, usedAt: null, createdAt: new Date().toISOString() },
-    { id: 'scbr-005', code: '728hjdkdjxjz8292', productId: 'smile-brl-30', productName: '30 BRL (300 Smile Coins)', price: 300, isUsed: false, usedBy: null, usedAt: null, createdAt: new Date().toISOString() },
-    { id: 'scbr-006', code: 'TEST-BRL-001', productId: 'smile-brl-30', productName: '30 BRL (300 Smile Coins)', price: 300, isUsed: false, usedBy: null, usedAt: null, createdAt: new Date().toISOString() },
-    { id: 'scbr-007', code: 'TEST-BRL-002', productId: 'smile-brl-30', productName: '30 BRL (300 Smile Coins)', price: 300, isUsed: false, usedBy: null, usedAt: null, createdAt: new Date().toISOString() },
-    { id: 'scbr-008', code: 'TEST-BRL-003', productId: 'smile-brl-30', productName: '30 BRL (300 Smile Coins)', price: 300, isUsed: false, usedBy: null, usedAt: null, createdAt: new Date().toISOString() },
-    { id: 'scbr-009', code: 'TEST-BRL-004', productId: 'smile-brl-30', productName: '30 BRL (300 Smile Coins)', price: 300, isUsed: false, usedBy: null, usedAt: null, createdAt: new Date().toISOString() },
-    { id: 'scbr-010', code: 'TEST-BRL-005', productId: 'smile-brl-30', productName: '30 BRL (300 Smile Coins)', price: 300, isUsed: false, usedBy: null, usedAt: null, createdAt: new Date().toISOString() },
-    { id: 'scbr-011', code: 'TEST-BRL-006', productId: 'smile-brl-30', productName: '30 BRL (300 Smile Coins)', price: 300, isUsed: false, usedBy: null, usedAt: null, createdAt: new Date().toISOString() },
-    { id: 'scbr-012', code: 'TEST-BRL-007', productId: 'smile-brl-30', productName: '30 BRL (300 Smile Coins)', price: 300, isUsed: false, usedBy: null, usedAt: null, createdAt: new Date().toISOString() },
-    { id: 'scbr-013', code: 'TEST-BRL-008', productId: 'smile-brl-30', productName: '30 BRL (300 Smile Coins)', price: 300, isUsed: false, usedBy: null, usedAt: null, createdAt: new Date().toISOString() },
-    { id: 'scbr-014', code: 'TEST-BRL-009', productId: 'smile-brl-30', productName: '30 BRL (300 Smile Coins)', price: 300, isUsed: false, usedBy: null, usedAt: null, createdAt: new Date().toISOString() },
-    { id: 'scbr-015', code: 'TEST-BRL-010', productId: 'smile-brl-30', productName: '30 BRL (300 Smile Coins)', price: 300, isUsed: false, usedBy: null, usedAt: null, createdAt: new Date().toISOString() },
-    { id: 'scbr-500', code: 'BR-SAMPLE-500', productId: 'smile-brl-500', productName: '500 BRL (5000 Smile Coins)', price: 5000, isUsed: false, usedBy: null, usedAt: null, createdAt: new Date().toISOString() },
-    { id: 'scbr-1000', code: 'BR-SAMPLE-1000', productId: 'smile-brl-1000', productName: '1000 BRL (10000 Smile Coins)', price: 10000, isUsed: false, usedBy: null, usedAt: null, createdAt: new Date().toISOString() },
+    // This array is intentionally left empty. 
+    // Codes should be added by the developer as needed.
 ];
 
 
