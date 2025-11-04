@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
+import { collection, query, onSnapshot } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
@@ -24,10 +24,8 @@ export default function ManualTopUpPage() {
       return;
     }
 
-    const usersCollectionRef = query(
-      collection(db, 'users'),
-      orderBy('createdAt', 'desc')
-    );
+    // Remove orderBy to prevent needing a composite index for now
+    const usersCollectionRef = query(collection(db, 'users'));
 
     const unsubscribe = onSnapshot(
       usersCollectionRef,
@@ -35,6 +33,16 @@ export default function ManualTopUpPage() {
         const usersData = snapshot.docs.map(
           (doc) => ({ ...doc.data(), uid: doc.id } as UserProfile)
         );
+        
+        // Sort manually on the client-side
+        usersData.sort((a, b) => {
+            if (a.createdAt && b.createdAt) {
+                // Assuming createdAt is a Firestore Timestamp
+                return b.createdAt.toMillis() - a.createdAt.toMillis();
+            }
+            return 0;
+        });
+
         setUsers(usersData);
         setLoading(false);
       },
