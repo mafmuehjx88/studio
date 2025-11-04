@@ -123,22 +123,20 @@ export default function SmileCoinClientPage({ region, products }: SmileCoinClien
             const orderId = generateOrderId();
             const orderTimestamp = serverTimestamp();
             
-            // This will hold the single code we find
             let assignedCode: SmileCode | null = null;
             let finalPrice = 0;
             let finalItemName = "";
 
-            // Since we're buying one item at a time now from the cart, get the first one
             const itemToPurchase = cartItems[0];
-            if (!itemToPurchase) {
-                 setIsSubmitting(false);
-                 throw new Error("Cart is empty, cannot proceed.");
-            }
             finalPrice = itemToPurchase.price * itemToPurchase.quantity;
             finalItemName = `${itemToPurchase.name} (x${itemToPurchase.quantity})`;
 
 
             await runTransaction(db, async (transaction) => {
+                if (!itemToPurchase) {
+                  throw new Error("Cart is empty. Please add an item to purchase.");
+                }
+
                 // 1. Find an unused code for the product ID
                 const codesRef = collection(db, 'smileCodes');
                 const q = query(codesRef, where('productId', '==', itemToPurchase.id), where('isUsed', '==', false), limit(1));
