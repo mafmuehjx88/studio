@@ -43,10 +43,6 @@ export default function AdminSmileCodesPage() {
   const { isAdmin } = useAuth();
   const { toast } = useToast();
 
-  const [productId, setProductId] = useState('');
-  const [codeValue, setCodeValue] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   const [codes, setCodes] = useState<SmileCode[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -83,49 +79,6 @@ export default function AdminSmileCodesPage() {
     return () => unsubscribe();
   }, [isAdmin, toast]);
 
-  const handleAddCode = async () => {
-    if (!productId || !codeValue.trim()) {
-      toast({
-        title: 'Missing Information',
-        description: 'Please select a product and enter a code.',
-        variant: 'destructive',
-      });
-      return;
-    }
-    setIsSubmitting(true);
-    try {
-      const product = smileCoinProducts.find((p) => p.id === productId);
-      if (!product) throw new Error('Product not found');
-      
-      await addDoc(collection(db, 'smileCodes'), {
-        code: codeValue.trim(),
-        productId: product.id,
-        productName: product.name,
-        price: product.price,
-        isUsed: false,
-        usedBy: null,
-        usedAt: null,
-        createdAt: serverTimestamp(),
-      });
-
-      toast({
-        title: 'Success!',
-        description: `Code for ${product.name} has been added.`,
-      });
-      setCodeValue('');
-      setProductId('');
-    } catch (error) {
-      console.error('Error adding code:', error);
-      toast({
-        title: 'Error',
-        description: 'Could not add the code.',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   const handleDeleteCode = async (codeId: string) => {
       if (!window.confirm("Are you sure you want to delete this code? This cannot be undone.")) {
           return;
@@ -144,44 +97,7 @@ export default function AdminSmileCodesPage() {
   }
 
   return (
-    <div className="grid gap-6 md:grid-cols-2">
-      <Card>
-        <CardHeader>
-          <CardTitle>Add New Smile Code</CardTitle>
-          <CardDescription>
-            Add a new redeemable code for a Smile Coin product.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <Select
-            value={productId}
-            onValueChange={setProductId}
-            disabled={isSubmitting}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select a Smile Coin Product" />
-            </SelectTrigger>
-            <SelectContent>
-              {smileCoinProducts.map((product) => (
-                <SelectItem key={product.id} value={product.id}>
-                  {product.name} ({product.price} Coins)
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Input
-            value={codeValue}
-            onChange={(e) => setCodeValue(e.target.value)}
-            placeholder="Enter the code value"
-            disabled={isSubmitting}
-          />
-          <Button onClick={handleAddCode} disabled={isSubmitting || !productId || !codeValue}>
-            {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Add Code
-          </Button>
-        </CardContent>
-      </Card>
-
+    <div className="grid gap-6">
       <Card>
         <CardHeader>
           <CardTitle>Existing Codes</CardTitle>
