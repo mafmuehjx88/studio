@@ -9,6 +9,7 @@ import AdminUsersPage from "./users/page";
 import AdminContentPage from "./content/page";
 import AdminSmileCodesPage from "./smile-codes/page";
 import ManualTopUpPage from "./manual-top-up/page";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 export default function AdminPage() {
   const { isAdmin, loading } = useAuth();
@@ -28,13 +29,16 @@ export default function AdminPage() {
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">Admin Panel</h1>
       <Tabs defaultValue="orders" className="w-full">
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="orders">All Orders</TabsTrigger>
-          <TabsTrigger value="users">Users</TabsTrigger>
-          <TabsTrigger value="manual-top-up">Manual Top-Up</TabsTrigger>
-          <TabsTrigger value="content">Content</TabsTrigger>
-          <TabsTrigger value="smile-codes">Smile Codes</TabsTrigger>
-        </TabsList>
+        <ScrollArea>
+          <TabsList className="flex w-full justify-start whitespace-nowrap">
+            <TabsTrigger value="orders">All Orders</TabsTrigger>
+            <TabsTrigger value="users">Users</TabsTrigger>
+            <TabsTrigger value="manual-top-up">Manual Top-Up</TabsTrigger>
+            <TabsTrigger value="content">Content</TabsTrigger>
+            <TabsTrigger value="smile-codes">Smile Codes</TabsTrigger>
+          </TabsList>
+          <ScrollBar orientation="horizontal" className="invisible" />
+        </ScrollArea>
         <TabsContent value="orders">
           <AdminOrdersPage />
         </TabsContent>
