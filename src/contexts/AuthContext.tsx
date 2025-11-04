@@ -38,27 +38,34 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (firebaseUser) {
         setUser(firebaseUser);
 
-        // Force a refresh of the token to get the latest custom claims.
-        const idTokenResult = await firebaseUser.getIdTokenResult(true);
-        const claimsIsAdmin = idTokenResult.claims.admin === true;
-        setIsAdmin(claimsIsAdmin);
+        try {
+          // Force a refresh of the token to get the latest custom claims.
+          const idTokenResult = await firebaseUser.getIdTokenResult(true);
+          const claimsIsAdmin = idTokenResult.claims.admin === true;
+          setIsAdmin(claimsIsAdmin);
 
-        const userDocRef = doc(db, 'users', firebaseUser.uid);
-        profileUnsubscribe = onSnapshot(userDocRef, 
-          (docSnap) => {
-            if (docSnap.exists()) {
-              setUserProfile({ ...docSnap.data(), uid: docSnap.id } as UserProfile);
-            } else {
+          const userDocRef = doc(db, 'users', firebaseUser.uid);
+          profileUnsubscribe = onSnapshot(userDocRef, 
+            (docSnap) => {
+              if (docSnap.exists()) {
+                setUserProfile({ ...docSnap.data(), uid: docSnap.id } as UserProfile);
+              } else {
+                setUserProfile(null);
+              }
+              setLoading(false);
+            }, 
+            (error) => {
+              console.error("Error listening to user profile:", error);
               setUserProfile(null);
+              setLoading(false);
             }
-            setLoading(false);
-          }, 
-          (error) => {
-            console.error("Error listening to user profile:", error);
-            setUserProfile(null);
-            setLoading(false);
-          }
-        );
+          );
+        } catch (error) {
+          console.error("Error getting user token or profile:", error);
+          setIsAdmin(false);
+          setUserProfile(null);
+          setLoading(false);
+        }
       } else {
         setUser(null);
         setUserProfile(null);
