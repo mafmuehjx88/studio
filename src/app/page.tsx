@@ -20,30 +20,22 @@ export default function Home() {
   const logoImage = staticImages['logo'];
 
   // Filter out telegram and tiktok from the main games list to avoid duplication
-  // Also filter out smile-coin by default
+  // Also filter out smile-coin by default, we will add it back in explicitly.
   const displayGames = allGames.filter(g => g.id !== 'telegram' && g.id !== 'tiktok' && g.id !== 'smile-coin');
+  
+  const smileCoinGame = allGames.find(g => g.id === 'smile-coin');
 
   const gamesList: (Game | { id: string, name: string, image: string })[] = [
-    ...displayGames,
-    { id: 'digital-product', name: 'Digital Product', image: 'https://i.ibb.co/wFmXwwNg/zproduct.jpg' }
+    ...displayGames
   ];
 
-  // If the user is an admin, add smile-coin to the list
-  if (isAdmin) {
-    const smileCoinGame = allGames.find(g => g.id === 'smile-coin');
-    if (smileCoinGame) {
-      // find smile-coin's original position and insert it there, or just push
-      // For simplicity, let's find the original index to maintain order.
-      const originalIndex = allGames.findIndex(g => g.id === 'smile-coin');
-      // to avoid complex logic, just put it before digital-product
-      const digitalProductIndex = gamesList.findIndex(g => g.id === 'digital-product');
-      if (digitalProductIndex !== -1) {
-          gamesList.splice(digitalProductIndex, 0, smileCoinGame);
-      } else {
-          gamesList.push(smileCoinGame);
-      }
-    }
+  // Add smile coin to the list for everyone now
+  if (smileCoinGame) {
+      gamesList.push(smileCoinGame);
   }
+
+  // Add digital product at the end
+  gamesList.push({ id: 'digital-product', name: 'Digital Product', image: 'https://i.ibb.co/wFmXwwNg/zproduct.jpg' });
 
 
   return (
