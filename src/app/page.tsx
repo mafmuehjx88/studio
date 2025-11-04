@@ -69,29 +69,36 @@ export default function Home() {
         <h2 className="mb-4 text-center text-2xl font-bold">Games</h2>
         <div className="grid grid-cols-3 gap-3">
           {games.map((game) => {
-              const isComingSoon = game.id === 'smile-coin';
               const isDigitalProduct = game.id === 'digital-product';
+              const isSmileCoin = game.id === 'smile-coin';
               
-              const Wrapper = isComingSoon ? 'div' : Link;
-              const props = isComingSoon ? {} : { href: isDigitalProduct ? `/digital-product` : `/games/${game.id}` };
+              const Wrapper = Link;
+              let props;
+              if (isDigitalProduct) {
+                props = { href: '/digital-product' };
+              } else if (isSmileCoin) {
+                props = { href: '/smile-coin' };
+              } else {
+                props = { href: `/games/${game.id}` };
+              }
               
               return (
                 <React.Fragment key={`game-${game.id}`}>
                     <Wrapper {...props} className="group flex flex-col gap-2 text-center">
-                        <Card className={cn("overflow-hidden transition-transform", !isComingSoon && "group-hover:scale-105")}>
+                        <Card className="overflow-hidden transition-transform group-hover:scale-105">
                             <Image
                             src={game.image}
                             alt={game.name}
                             width={400}
                             height={400}
-                            className={cn("aspect-square w-full rounded-lg object-cover", isComingSoon && "grayscale opacity-50")}
+                            className="aspect-square w-full rounded-lg object-cover"
                             />
                         </Card>
                          <p className="text-xs font-semibold text-foreground">
                             {game.name}
                         </p>
-                        <Button variant="secondary" size="sm" className="h-8 w-full text-xs" disabled={isComingSoon}>
-                            {isDigitalProduct ? "ဝယ်မည်" : (isComingSoon ? "မကြာမီလာမည်" : "ဝယ်မည်")}
+                        <Button variant="secondary" size="sm" className="h-8 w-full text-xs">
+                            {isDigitalProduct ? "ဝယ်မည်" : "ဝယ်မည်"}
                         </Button>
                     </Wrapper>
                 </React.Fragment>

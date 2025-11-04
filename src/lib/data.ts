@@ -86,6 +86,10 @@ export const products: Product[] = [
   { id: 'tiktok-promote-1', gameId: 'tiktok', name: 'Promote View(1$)', category: 'Promote', price: 6900, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
   { id: 'tiktok-promote-2', gameId: 'tiktok', name: 'Promote View(2$)', category: 'Promote', price: 13800, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
   { id: 'tiktok-promote-3', gameId: 'tiktok', name: 'Promote View(3$)', category: 'Promote', price: 20700, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
+
+  // Smile Coin
+  { id: 'smile-coin-brazil', gameId: 'smile-coin', name: 'SMILE CODE BRAZIL', category: 'Smile Code', price: 0, image: 'https://i.ibb.co/cCrz0vM/1760334222340-e17f0352-71c1-419b-b0b4-9385d342cc88.png' },
+  { id: 'smile-coin-philippines', gameId: 'smile-coin', name: 'SMILE CODE PHILIPPINES', category: 'Smile Code', price: 0, image: 'https://i.ibb.co/cCrz0vM/1760334222340-e17f0352-71c1-419b-b0b4-9385d342cc88.png' },
 ];
 
 export const staticImages = {
@@ -131,4 +135,3 @@ export const staticImages = {
     
 
     
-
