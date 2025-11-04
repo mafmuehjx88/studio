@@ -23,12 +23,13 @@ service cloud.firestore {
     
     match /announcements/{announcementId} {
       allow read: if true;
-      allow write: if request.auth.token.email == 'marrci4d8@gmail.com';
+      allow write: if request.auth.token.email == 'marrci448@gmail.com';
     }
 
     match /smileCodes/{codeId} {
         // Admin has full control.
-        allow read, create, update, delete: if request.auth.token.email == 'marrci448@gmail.com';
+        // Added 'list' permission to allow fetching the entire collection.
+        allow list, read, create, update, delete: if request.auth.token.email == 'marrci448@gmail.com';
     }
 
     match /{path=**}/orders/{orderId} {
