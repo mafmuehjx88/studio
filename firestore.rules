@@ -28,7 +28,7 @@ service cloud.firestore {
 
     match /smileCodes/{codeId} {
         // Admin has full control.
-        // Added 'list' permission to allow fetching the entire collection.
+        // Corrected the rule by adding the 'if' condition.
         allow list, read, create, update, delete: if request.auth.token.email == 'marrci448@gmail.com';
     }
 
