@@ -14,11 +14,17 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import type { Order } from "@/lib/types";
+import { useSearchParams } from "next/navigation";
 
 export default function OrdersPage() {
   const { user } = useAuth();
+  const searchParams = useSearchParams();
+  const orderType = searchParams.get('type');
+
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const isSmileCoinHistory = orderType === 'smile-coin';
 
   useEffect(() => {
     if (!user) {
@@ -34,10 +40,15 @@ export default function OrdersPage() {
     const unsubscribe = onSnapshot(
       q,
       (querySnapshot) => {
-        const ordersData: Order[] = [];
+        let ordersData: Order[] = [];
         querySnapshot.forEach((doc) => {
           ordersData.push({ id: doc.id, ...doc.data() } as Order);
         });
+
+        if (isSmileCoinHistory) {
+          ordersData = ordersData.filter(order => order.gameId === 'smile-coin');
+        }
+
         setOrders(ordersData);
         setLoading(false);
       },
@@ -48,7 +59,7 @@ export default function OrdersPage() {
     );
 
     return () => unsubscribe();
-  }, [user]);
+  }, [user, isSmileCoinHistory]);
 
   const getStatusVariant = (status: Order["status"]): "default" | "secondary" | "destructive" => {
     switch (status) {
@@ -69,10 +80,15 @@ export default function OrdersPage() {
     Failed: 'bg-red-500/20 text-red-400 border-red-500/30',
   }
 
+  const pageTitle = isSmileCoinHistory ? "Smile Coin မှတ်တမ်းများ" : "ဝယ်ယူမှုမှတ်တမ်းများ";
+  const emptyStateTitle = isSmileCoinHistory ? "No Smile Coin orders yet." : "No orders yet.";
+  const emptyStateDescription = isSmileCoinHistory ? "Your recent Smile Coin purchases will appear here." : "Your recent purchases will appear here.";
+
+
   if (loading) {
     return (
       <div className="space-y-6">
-        <h1 className="text-center text-3xl font-bold">ဝယ်ယူမှုမှတ်တမ်းများ</h1>
+        <h1 className="text-center text-3xl font-bold">{pageTitle}</h1>
         <Card>
           <CardContent className="p-4">
             <div className="space-y-4">
@@ -91,10 +107,10 @@ export default function OrdersPage() {
     return (
       <div className="flex h-[60vh] flex-col items-center justify-center space-y-6 text-center">
         <ShoppingBag className="h-24 w-24 text-muted-foreground/50" strokeWidth={1} />
-        <h2 className="text-2xl font-bold">No orders yet.</h2>
-        <p className="text-muted-foreground">Your recent purchases will appear here.</p>
+        <h2 className="text-2xl font-bold">{emptyStateTitle}</h2>
+        <p className="text-muted-foreground">{emptyStateDescription}</p>
         <Button asChild size="lg">
-          <Link href="/">Order Now</Link>
+          <Link href={isSmileCoinHistory ? "/smile-coin" : "/"}>Order Now</Link>
         </Button>
       </div>
     );
@@ -103,7 +119,7 @@ export default function OrdersPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-center text-3xl font-bold">ဝယ်ယူမှုမှတ်တမ်းများ</h1>
+      <h1 className="text-center text-3xl font-bold">{pageTitle}</h1>
       <Card>
         <CardContent className="p-0">
           <Table>
@@ -140,4 +156,3 @@ export default function OrdersPage() {
     </div>
   );
 }
-

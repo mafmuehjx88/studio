@@ -18,6 +18,15 @@ export default function SmileCoinPage() {
         <h2 className="text-xl font-semibold mt-4">Products List</h2>
       </div>
 
+       <div className="grid grid-cols-2 gap-4">
+        <Button asChild size="sm" variant="secondary">
+          <Link href="/admin/manual-top-up">ငွေဖြည့်မည်</Link>
+        </Button>
+        <Button asChild variant="secondary" size="sm">
+          <Link href="/orders?type=smile-coin">မှတ်တမ်း</Link>
+        </Button>
+      </div>
+
       <div className="space-y-4">
         {smileCoinRegions.map((region) => (
           <Card key={region.id} className="overflow-hidden bg-card">
