@@ -1,13 +1,17 @@
+
 "use client";
 
 import { useAuth } from "@/contexts/AuthContext";
-import { Wallet } from "lucide-react";
+import { Wallet, Coins } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { Button } from "../ui/button";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 export default function WalletBalance() {
   const { userProfile, loading, user } = useAuth();
+  const pathname = usePathname();
 
   if (!user) {
     return null;
@@ -17,12 +21,26 @@ export default function WalletBalance() {
     return <Skeleton className="h-8 w-24 rounded-full" />;
   }
 
+  const isSmileCoinPage = pathname.startsWith('/smile-coin');
+  
+  const balance = isSmileCoinPage 
+    ? (userProfile?.smileCoinBalance ?? 0).toLocaleString()
+    : `${(userProfile?.walletBalance ?? 0).toFixed(0)} Ks`;
+
+  const Icon = isSmileCoinPage ? Coins : Wallet;
+  
+  const iconColor = isSmileCoinPage ? "text-yellow-400" : "text-primary";
+  
+  const borderColor = isSmileCoinPage ? "border-yellow-400/50" : "border-primary/50";
+  
+  const hoverBgColor = isSmileCoinPage ? "hover:bg-yellow-400/10" : "hover:bg-primary/10";
+
   return (
-    <Button asChild variant="outline" size="sm" className="h-8 rounded-full border-primary/50 text-foreground hover:bg-primary/10 hover:text-foreground">
+    <Button asChild variant="outline" size="sm" className={cn("h-8 rounded-full text-foreground hover:text-foreground", borderColor, hoverBgColor)}>
       <Link href="/wallet" className="flex items-center gap-2">
-        <Wallet className="h-4 w-4 text-primary" />
+        <Icon className={cn("h-4 w-4", iconColor)} />
         <span className="font-semibold">
-          {userProfile ? `${userProfile.walletBalance.toFixed(0)} Ks` : '0 Ks'}
+          {balance}
         </span>
       </Link>
     </Button>
