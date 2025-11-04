@@ -17,7 +17,7 @@ import { BookOpen, History, Info } from 'lucide-react';
 export default function Home() {
   const bannerImage = staticImages['banner'];
 
-  const displayGames = allGames.filter(g => g.id !== 'telegram' && g.id !== 'tiktok' && g.id !== 'smile-coin' && g.id !== 'hok');
+  const displayGames = allGames.filter(g => g.id !== 'telegram' && g.id !== 'tiktok' && g.id !== 'hok');
   
   const gamesList: (Game | { id: string, name: string, image: string })[] = [
     ...displayGames
