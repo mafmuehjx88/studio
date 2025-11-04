@@ -19,13 +19,6 @@ service cloud.firestore {
       allow list: if isAdmin();
     }
     
-    match /topUpRequests/{requestId} {
-      allow create: if request.auth.uid != null;
-      allow get: if request.auth.uid == resource.data.userId || isAdmin();
-      allow list: if isAdmin();
-      allow update: if isAdmin();
-    }
-
     match /settings/{docId} {
       allow read: if true;
       allow write: if isAdmin();
@@ -37,9 +30,8 @@ service cloud.firestore {
     }
 
     match /smileCodes/{codeId} {
-        // Admin has full control. User can read their own used code for history.
+        // Admin has full control.
         allow read, write: if isAdmin();
-        allow get: if request.auth.uid == resource.data.usedBy;
     }
 
     match /{path=**}/orders/{orderId} {

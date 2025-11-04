@@ -56,8 +56,10 @@ export interface TopUpRequest {
     screenshotUrl: string;
     status: 'Pending' | 'Approved' | 'Rejected';
     createdAt: Timestamp | FieldValue;
-    paymentMethod: string;
-    transactionId: string; // Not used in current form, but good for future
+    // The following are not used in the Telegram-only flow,
+    // but are kept for potential future use with a database.
+    paymentMethod?: string; 
+    transactionId?: string;
 }
 
 export interface Announcement {
