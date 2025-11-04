@@ -36,6 +36,7 @@ import { db } from '@/lib/firebase';
 import { sendTelegramNotification } from '@/lib/actions';
 import { generateOrderId } from '@/lib/utils';
 import { Separator } from '../ui/separator';
+import { Label } from '../ui/label';
 
 interface SmileCoinClientPageProps {
     region: {
@@ -130,6 +131,7 @@ export default function SmileCoinClientPage({ region, products }: SmileCoinClien
             // Since we're buying one item at a time now from the cart, get the first one
             const itemToPurchase = cartItems[0];
             if (!itemToPurchase) {
+                 setIsSubmitting(false);
                  throw new Error("Cart is empty, cannot proceed.");
             }
             finalPrice = itemToPurchase.price * itemToPurchase.quantity;
