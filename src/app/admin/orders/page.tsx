@@ -3,7 +3,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { collectionGroup, query, onSnapshot, orderBy, doc, updateDoc } from "firebase/firestore";
+import { collectionGroup, query, onSnapshot, doc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
