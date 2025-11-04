@@ -5,24 +5,26 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowDownLeft, ArrowUpRight } from "lucide-react";
+import { ArrowDownLeft, ArrowUpRight, Coins } from "lucide-react";
 import Link from "next/link";
 
 export default function WalletPage() {
   const { userProfile, loading } = useAuth();
 
-  const balance = userProfile?.walletBalance ?? 0;
+  const mainBalance = userProfile?.walletBalance ?? 0;
+  const smileCoinBalance = userProfile?.smileCoinBalance ?? 0;
 
-  const formattedBalance = new Intl.NumberFormat("en-US").format(balance);
+  const formattedMainBalance = new Intl.NumberFormat("en-US").format(mainBalance);
+  const formattedSmileBalance = new Intl.NumberFormat("en-US").format(smileCoinBalance);
 
   return (
-    <div className="flex flex-col items-center text-center">
-      <h1 className="mb-6 text-3xl font-bold">My Wallet</h1>
+    <div className="space-y-8">
+      <h1 className="text-center text-3xl font-bold">My Wallet</h1>
 
-      <Card className="w-full max-w-xs text-center">
+      <Card className="w-full max-w-sm mx-auto text-center">
         <CardHeader>
           <CardTitle className="text-base font-normal text-muted-foreground">
-            Total Balance
+            Main Balance
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -30,7 +32,7 @@ export default function WalletPage() {
             <Skeleton className="mx-auto h-12 w-48 rounded-md" />
           ) : (
             <p className="text-5xl font-bold text-primary">
-              {formattedBalance} <span className="text-4xl">Ks</span>
+              {formattedMainBalance} <span className="text-4xl">Ks</span>
             </p>
           )}
         </CardContent>
@@ -48,7 +50,32 @@ export default function WalletPage() {
         </CardFooter>
       </Card>
       
-      {/* Transaction History will be added later */}
+       <Card className="w-full max-w-sm mx-auto text-center border-yellow-400/50">
+        <CardHeader>
+          <CardTitle className="flex items-center justify-center gap-2 text-base font-normal text-muted-foreground">
+             <Coins className="h-5 w-5 text-yellow-400"/>
+             Smile Coin Balance
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {loading ? (
+            <Skeleton className="mx-auto h-12 w-48 rounded-md" />
+          ) : (
+            <p className="text-5xl font-bold text-yellow-400">
+              {formattedSmileBalance} <span className="text-4xl">Coins</span>
+            </p>
+          )}
+        </CardContent>
+        <CardFooter className="flex justify-center">
+          <Button asChild className="h-12 text-base w-full">
+            <Link href="/top-up/smile-coin">
+              <ArrowUpRight className="mr-2 h-5 w-5" />
+              Smile Coin ဖြည့်ရန်
+            </Link>
+          </Button>
+        </CardFooter>
+      </Card>
+      
     </div>
   );
 }

@@ -152,7 +152,7 @@ export default function ProfilePage() {
               {userProfile.username.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <div className="space-y-2">
+          <div className="space-y-1">
             <CardTitle className="text-xl">{userProfile.username}</CardTitle>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Wallet className="h-4 w-4 text-primary" />
@@ -167,7 +167,7 @@ export default function ProfilePage() {
              <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Coins className="h-4 w-4 text-yellow-400" />
               <span className="font-semibold text-yellow-400">
-                {(userProfile.smileCoinBalance ?? 0).toLocaleString()}
+                {(userProfile.smileCoinBalance ?? 0).toLocaleString()} Coins
               </span>
             </div>
           </div>
