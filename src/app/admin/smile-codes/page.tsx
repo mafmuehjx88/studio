@@ -12,6 +12,7 @@ import {
   onSnapshot,
   doc,
   deleteDoc,
+  orderBy,
 } from 'firebase/firestore';
 import { smileCoinProducts } from '@/lib/data';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -55,27 +56,21 @@ export default function AdminSmileCodesPage() {
         return;
     };
 
-    const q = query(collection(db, 'smileCodes'));
+    const q = query(collection(db, 'smileCodes'), orderBy('createdAt', 'desc'));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const codesData = snapshot.docs.map(
         (doc) => ({ ...doc.data(), id: doc.id } as SmileCode)
       );
-      // Sort by createdAt descending
-      codesData.sort((a, b) => {
-        if (a.createdAt && b.createdAt) {
-          return b.createdAt.toMillis() - a.createdAt.toMillis();
-        }
-        return 0;
-      });
       setCodes(codesData);
       setLoading(false);
     }, (err) => {
         console.error(err);
+        toast({ title: "Error fetching codes", description: err.message, variant: "destructive" });
         setLoading(false);
     });
 
     return () => unsubscribe();
-  }, [isAdmin]);
+  }, [isAdmin, toast]);
 
   const handleAddCode = async () => {
     if (!productId || !codeValue.trim()) {
