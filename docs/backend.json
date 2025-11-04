@@ -100,7 +100,12 @@
     }
   },
   "auth": {
-    "providers": ["email_password"]
+    "providers": ["email_password"],
+    "customClaims": {
+        "admin": {
+            "type": "boolean"
+        }
+    }
   },
   "firestore": {
     "/users/{userId}": {
