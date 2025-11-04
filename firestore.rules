@@ -16,6 +16,7 @@ service cloud.firestore {
     
     match /users/{userId}/orders/{orderId} {
       allow read, create, update: if request.auth.uid == userId || isAdmin();
+      allow list: if isAdmin();
     }
     
     match /topUpRequests/{requestId} {
@@ -36,9 +37,8 @@ service cloud.firestore {
     }
 
     match /smileCodes/{codeId} {
-        allow read, list, create, update, delete: if isAdmin();
-        // Allow a user to read a code only if it's assigned to them (for history)
-        // This is a future-proofing rule, current logic uses order history.
+        // Admin has full control. User can read their own used code for history.
+        allow read, write: if isAdmin();
         allow get: if request.auth.uid == resource.data.usedBy;
     }
 
