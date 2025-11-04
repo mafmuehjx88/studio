@@ -26,6 +26,7 @@ export interface Product {
   category: string;
   price: number;
   image: string; // This is now a direct URL
+  country?: 'brazil' | 'philippines';
 }
 
 export interface Order {
@@ -77,5 +78,3 @@ export interface PlaceholderImage {
     description: string;
     imageHint?: string;
 }
-
-    

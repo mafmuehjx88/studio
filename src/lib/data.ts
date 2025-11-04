@@ -86,11 +86,29 @@ export const products: Product[] = [
   { id: 'tiktok-promote-1', gameId: 'tiktok', name: 'Promote View(1$)', category: 'Promote', price: 6900, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
   { id: 'tiktok-promote-2', gameId: 'tiktok', name: 'Promote View(2$)', category: 'Promote', price: 13800, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
   { id: 'tiktok-promote-3', gameId: 'tiktok', name: 'Promote View(3$)', category: 'Promote', price: 20700, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
-
-  // Smile Coin
-  { id: 'smile-coin-brazil', gameId: 'smile-coin', name: 'SMILE CODE BRAZIL', category: 'Smile Code', price: 0, image: 'https://i.ibb.co/5x1D58DQ/smilecode-brazil.jpg' },
-  { id: 'smile-coin-philippines', gameId: 'smile-coin', name: 'SMILE CODE PHILIPPINES', category: 'Smile Code', price: 0, image: 'https://i.ibb.co/Lf5zjQd/smilecode-philippines.jpg' },
 ];
+
+export const smileCoinProducts: Product[] = [
+    // Brazil
+    { id: 'smile-brl-30', gameId: 'smile-coin', country: 'brazil', name: '30 BRL (300 Smile Coins)', price: 22975, image: 'https://i.ibb.co/5x1D58DQ/smilecode-brazil.jpg', category: 'Smile Code'},
+    { id: 'smile-brl-100', gameId: 'smile-coin', country: 'brazil', name: '100 BRL (1000 Smile Coins)', price: 74756, image: 'https://i.ibb.co/5x1D58DQ/smilecode-brazil.jpg', category: 'Smile Code'},
+    { id: 'smile-brl-500', gameId: 'smile-coin', country: 'brazil', name: '500 BRL (5000 Smile Coins)', price: 373780, image: 'https://i.ibb.co/5x1D58DQ/smilecode-brazil.jpg', category: 'Smile Code'},
+    // Philippines
+    { id: 'smile-php-100', gameId: 'smile-coin', country: 'philippines', name: '100 PHP', price: 0, image: 'https://i.ibb.co/Lf5zjQd/smilecode-philippines.jpg', category: 'Smile Code'},
+];
+
+export const smileCoinRegions = [
+    {
+        id: 'brazil',
+        name: 'Smile Code Brazil',
+        image: 'https://i.ibb.co/5x1D58DQ/smilecode-brazil.jpg'
+    },
+    {
+        id: 'philippines',
+        name: 'Smile Code Philippines',
+        image: 'https://i.ibb.co/Lf5zjQd/smilecode-philippines.jpg'
+    }
+]
 
 export const staticImages = {
     'banner': {
@@ -129,9 +147,3 @@ export const staticImages = {
         imageHint: `app tutorial`
     }
 }
-
-    
-
-    
-
-    
