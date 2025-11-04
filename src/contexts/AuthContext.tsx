@@ -22,6 +22,7 @@ const AUTH_PAGES = ['/login', '/register'];
 const PROTECTED_PAGES = ['/profile', '/wallet', '/orders', '/top-up', '/games', '/smile-coin', '/settings'];
 const ADMIN_PAGES = ['/admin', '/admin/manual-top-up'];
 
+// Simplified to a single admin email for consistency with security rules
 const ADMIN_EMAILS = ['marrci448@gmail.com'];
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -39,6 +40,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       if (firebaseUser) {
         setUser(firebaseUser);
+        // Simplified admin check
         const userIsAdmin = ADMIN_EMAILS.includes(firebaseUser.email || '');
         setIsAdmin(userIsAdmin);
 
