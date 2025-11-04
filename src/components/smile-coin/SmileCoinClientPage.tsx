@@ -3,19 +3,13 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Minus, Plus, ShoppingCart } from 'lucide-react';
+import { ArrowLeft, Minus, Plus, ShoppingCart } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import WalletBalance from '../layout/WalletBalance';
 import { useRouter } from 'next/navigation';
-
-interface SmileCoinProduct {
-    id: string;
-    name: string;
-    price: number;
-}
+import type { Product } from '@/lib/types';
 
 interface SmileCoinClientPageProps {
     region: {
@@ -23,10 +17,10 @@ interface SmileCoinClientPageProps {
         name: string;
         image: string;
     };
-    products: SmileCoinProduct[];
+    products: Product[];
 }
 
-interface CartItem extends SmileCoinProduct {
+interface CartItem extends Product {
     quantity: number;
 }
 
@@ -36,7 +30,7 @@ export default function SmileCoinClientPage({ region, products }: SmileCoinClien
     const router = useRouter();
     const [cart, setCart] = useState<{[key: string]: CartItem}>({});
 
-    const handleQuantityChange = (productId: string, product: SmileCoinProduct, delta: number) => {
+    const handleQuantityChange = (productId: string, product: Product, delta: number) => {
         setCart(prevCart => {
             const existingItem = prevCart[productId];
             const newQuantity = (existingItem?.quantity || 0) + delta;
@@ -61,7 +55,7 @@ export default function SmileCoinClientPage({ region, products }: SmileCoinClien
         return cart[productId]?.quantity || 0;
     }
 
-    const handleAddToCart = (product: SmileCoinProduct) => {
+    const handleAddToCart = (product: Product) => {
          if (!user) {
             router.push('/login');
             return;
@@ -79,91 +73,58 @@ export default function SmileCoinClientPage({ region, products }: SmileCoinClien
     }
 
     return (
-        <div className="bg-white text-black min-h-screen">
-            <header className="sticky top-0 z-10 bg-white shadow-sm p-4 flex justify-between items-center">
-                <h1 className="text-xl font-bold">Smile Code MM</h1>
-                <div className="flex items-center gap-4">
-                    {user ? (
-                        <>
-                            <WalletBalance />
-                            <Button variant="ghost" size="icon">
-                                <ShoppingCart className="h-6 w-6"/>
-                                {/* Add cart count here later */}
-                            </Button>
-                        </>
-                    ) : (
-                         <Button onClick={() => router.push('/login')}>Login</Button>
-                    )}
-                </div>
-            </header>
+        <div className="space-y-6">
+            <div className="flex items-center gap-4">
+                <Button variant="ghost" size="icon" onClick={() => router.back()}>
+                <ArrowLeft />
+                </Button>
+                <h1 className="text-2xl font-bold">{region.name}</h1>
+            </div>
 
-            <main className="p-4 space-y-6">
-                <Card className="overflow-hidden">
-                    <Image
-                        src={region.image}
-                        alt={region.name}
-                        width={600}
-                        height={300}
-                        className="w-full object-contain"
-                    />
-                </Card>
+            <Card className="overflow-hidden bg-card">
+                <Image
+                    src={region.image}
+                    alt={region.name}
+                    width={600}
+                    height={300}
+                    className="w-full object-contain"
+                />
+            </Card>
 
-                <div className="space-y-4">
-                    {products.map((product) => {
-                        const quantity = getItemQuantity(product.id);
-                        return (
-                            <Card key={product.id} className="p-4">
-                                <div className="flex flex-col space-y-3">
-                                    <div>
-                                        <p className="font-semibold">{product.name}</p>
-                                        <p className="text-lg font-bold text-blue-600">{product.price.toLocaleString()} Ks</p>
-                                    </div>
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-2">
-                                            <Button variant="outline" size="icon" className="h-9 w-9" onClick={() => handleQuantityChange(product.id, product, -1)}>
-                                                <Minus className="h-4 w-4" />
-                                            </Button>
-                                            <Input
-                                                className="h-9 w-16 rounded-md border-gray-300 text-center"
-                                                value={quantity}
-                                                readOnly
-                                            />
-                                            <Button variant="outline" size="icon" className="h-9 w-9" onClick={() => handleQuantityChange(product.id, product, 1)}>
-                                                <Plus className="h-4 w-4" />
-                                            </Button>
-                                        </div>
-                                        <Button className="bg-blue-600 hover:bg-blue-700" onClick={() => handleAddToCart(product)}>
-                                            <ShoppingCart className="mr-2 h-4 w-4" />
-                                            Add to Cart
+            <div className="space-y-4">
+                {products.map((product) => {
+                    const quantity = getItemQuantity(product.id);
+                    return (
+                        <Card key={product.id} className="p-4 bg-card">
+                            <div className="flex flex-col space-y-4">
+                                <div>
+                                    <p className="font-semibold text-foreground">{product.name}</p>
+                                    <p className="text-lg font-bold text-primary">{product.price.toLocaleString()} Ks</p>
+                                </div>
+                                <div className="flex items-center justify-between gap-2">
+                                    <div className="flex items-center gap-1">
+                                        <Button variant="outline" size="icon" className="h-9 w-9" onClick={() => handleQuantityChange(product.id, product, -1)}>
+                                            <Minus className="h-4 w-4" />
+                                        </Button>
+                                        <Input
+                                            className="h-9 w-14 rounded-md border-input bg-background text-center"
+                                            value={quantity}
+                                            readOnly
+                                        />
+                                        <Button variant="outline" size="icon" className="h-9 w-9" onClick={() => handleQuantityChange(product.id, product, 1)}>
+                                            <Plus className="h-4 w-4" />
                                         </Button>
                                     </div>
+                                    <Button className="flex-1" onClick={() => handleAddToCart(product)}>
+                                        <ShoppingCart className="mr-2 h-4 w-4" />
+                                        Add to Cart
+                                    </Button>
                                 </div>
-                            </Card>
-                        )
-                    })}
-                </div>
-            </main>
-             {/* Fake footer to match screenshot */}
-            <footer className="fixed bottom-0 left-0 right-0 z-10 mx-auto max-w-md bg-white border-t">
-                <div className="flex justify-around items-center h-16">
-                    <Button variant="ghost" className="flex flex-col h-auto">
-                        <span className="text-blue-600 font-bold">Product</span>
-                    </Button>
-                    <Button variant="ghost" className="flex flex-col h-auto">
-                        <span>Top Up</span>
-                    </Button>
-                    <Button variant="ghost" className="flex flex-col h-auto relative">
-                        <span>Cart</span>
-                        <div className="absolute -top-1 -right-2 bg-yellow-400 text-black text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
-                            {Object.keys(cart).length}
-                        </div>
-                    </Button>
-                    <Button variant="ghost" className="flex flex-col h-auto">
-                        <span>Profile</span>
-                    </Button>
-                </div>
-            </footer>
+                            </div>
+                        </Card>
+                    )
+                })}
+            </div>
         </div>
     );
 }
-
