@@ -11,6 +11,7 @@ import type { Game } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/contexts/AuthContext';
 import MarqueeText from '@/components/MarqueeText';
+import { ShieldCheck } from 'lucide-react';
 
 
 export default function Home() {
@@ -64,6 +65,15 @@ export default function Home() {
             <p className="font-semibold text-xs">အသုံးပြုနည်း</p>
         </Link>
       </div>
+
+       {isAdmin && (
+        <Button variant="secondary" className="w-full justify-center gap-2" asChild>
+          <Link href="/admin">
+            <ShieldCheck className="h-5 w-5" />
+            Admin Panel
+          </Link>
+        </Button>
+      )}
       
       <MarqueeText />
 
