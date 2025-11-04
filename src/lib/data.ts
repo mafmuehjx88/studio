@@ -89,10 +89,11 @@ export const products: Product[] = [
 ];
 
 export const smileCoinProducts: Product[] = [
-    // Brazil
-    { id: 'smile-brl-30', gameId: 'smile-coin', country: 'brazil', name: '30 BRL (300 Smile Coins)', price: 22975, image: 'https://i.ibb.co/5x1D58DQ/smilecode-brazil.jpg', category: 'Smile Code'},
-    { id: 'smile-brl-100', gameId: 'smile-coin', country: 'brazil', name: '100 BRL (1000 Smile Coins)', price: 74756, image: 'https://i.ibb.co/5x1D58DQ/smilecode-brazil.jpg', category: 'Smile Code'},
-    { id: 'smile-brl-500', gameId: 'smile-coin', country: 'brazil', name: '500 BRL (5000 Smile Coins)', price: 373780, image: 'https://i.ibb.co/5x1D58DQ/smilecode-brazil.jpg', category: 'Smile Code'},
+    // Brazil - Updated Prices & New Product
+    { id: 'smile-brl-30', gameId: 'smile-coin', country: 'brazil', name: '30 BRL (300 Smile Coins)', price: 23500, image: 'https://i.ibb.co/5x1D58DQ/smilecode-brazil.jpg', category: 'Smile Code'},
+    { id: 'smile-brl-100', gameId: 'smile-coin', country: 'brazil', name: '100 BRL (1000 Smile Coins)', price: 75500, image: 'https://i.ibb.co/5x1D58DQ/smilecode-brazil.jpg', category: 'Smile Code'},
+    { id: 'smile-brl-500', gameId: 'smile-coin', country: 'brazil', name: '500 BRL (5000 Smile Coins)', price: 377500, image: 'https://i.ibb.co/5x1D58DQ/smilecode-brazil.jpg', category: 'Smile Code'},
+    { id: 'smile-brl-1000', gameId: 'smile-coin', country: 'brazil', name: '1000 BRL (10000 Smile Coins)', price: 755000, image: 'https://i.ibb.co/5x1D58DQ/smilecode-brazil.jpg', category: 'Smile Code'},
     // Philippines
     { id: 'smile-php-100', gameId: 'smile-coin', country: 'philippines', name: '100 PHP', price: 0, image: 'https://i.ibb.co/Lf5zjQd/smilecode-philippines.jpg', category: 'Smile Code'},
 ];
