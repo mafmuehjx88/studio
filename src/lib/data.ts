@@ -102,8 +102,8 @@ export const smileCoinProducts: Product[] = [
 // Add, edit, or remove codes from this array.
 // The purchase logic will automatically handle marking them as "used" in memory.
 export const smileCodes: SmileCode[] = [
-    // This array is intentionally left empty. 
-    // Codes should be added by the developer as needed.
+    { id: 'scbr-001', code: '19298838#1', productId: 'smile-brl-30', productName: '30 BRL (300 Smile Coins)', price: 300, isUsed: false, usedBy: null, usedAt: null, createdAt: new Date().toISOString() },
+    { id: 'scbr-002', code: '2883829hdj#2', productId: 'smile-brl-30', productName: '30 BRL (300 Smile Coins)', price: 300, isUsed: false, usedBy: null, usedAt: null, createdAt: new Date().toISOString() },
 ];
 
 
