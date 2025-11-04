@@ -20,7 +20,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const AUTH_PAGES = ['/login', '/register'];
 const PROTECTED_PAGES = ['/profile', '/wallet', '/orders', '/top-up', '/games', '/smile-coin', '/settings'];
-const ADMIN_PAGES = ['/admin'];
+const ADMIN_PAGES = ['/admin', '/admin/manual-top-up'];
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<FirebaseUser | null>(null);
