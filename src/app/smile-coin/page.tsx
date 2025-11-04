@@ -20,7 +20,7 @@ export default function SmileCoinPage() {
 
        <div className="grid grid-cols-2 gap-4">
         <Button asChild size="sm" variant="secondary">
-          <Link href="/admin/manual-top-up">ငွေဖြည့်မည်</Link>
+          <Link href="/top-up">ငွေဖြည့်မည်</Link>
         </Button>
         <Button asChild variant="secondary" size="sm">
           <Link href="/orders?type=smile-coin">မှတ်တမ်း</Link>
@@ -52,3 +52,4 @@ export default function SmileCoinPage() {
     </div>
   );
 }
+
