@@ -47,7 +47,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={cn("font-sans antialiased", poppins.variable)} style={{ background: 'linear-gradient(to bottom, #0A192F, #1C3A5E)' }}>
+      <body className={cn("font-sans antialiased bg-gradient-dark-blue", poppins.variable)}>
         <AuthProvider>
           <AppContent>{children}</AppContent>
           <Toaster />
