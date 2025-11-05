@@ -30,7 +30,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
 
   return (
     <div
-      className="relative mx-auto flex min-h-screen w-full max-w-md flex-col bg-background"
+      className="relative mx-auto flex min-h-screen w-full max-w-md flex-col"
     >
       <Header onBellClick={() => setIsSheetOpen(true)} />
       <main className="flex-1 px-4 pb-24 pt-6">{children}</main>
@@ -47,7 +47,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={cn("font-sans antialiased", poppins.variable)}>
+      <body className={cn("font-sans antialiased", poppins.variable)} style={{ background: 'linear-gradient(to bottom, #0A192F, #1C3A5E)' }}>
         <AuthProvider>
           <AppContent>{children}</AppContent>
           <Toaster />
