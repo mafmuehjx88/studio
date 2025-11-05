@@ -1,4 +1,3 @@
-
 "use client";
 
 import Image from 'next/image';
@@ -104,6 +103,15 @@ export default function Home() {
               )
           })}
         </div>
+      </div>
+       <div className="text-center text-xs text-muted-foreground space-x-4 pt-4">
+        <Link href="/terms" className="hover:text-primary hover:underline">
+            Terms & Conditions
+        </Link>
+        <span>&bull;</span>
+        <Link href="/privacy" className="hover:text-primary hover:underline">
+            Privacy Policy
+        </Link>
       </div>
     </div>
   );
