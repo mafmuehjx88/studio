@@ -73,6 +73,6 @@
     @apply bg-background text-foreground;
   }
   .bg-gradient-dark-blue {
-    background: linear-gradient(to bottom, #0A192F, #1C3A5E);
+    background: linear-gradient(180deg, #0B2546 0%, #0F5BE8 50%, #031737 100%);
   }
 }
