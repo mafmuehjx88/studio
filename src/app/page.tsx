@@ -26,10 +26,12 @@ export default function Home() {
   // Add the generic "Digital Product" card
   displayGames.push({ id: 'digital-product', name: 'Digital Product', image: 'https://i.ibb.co/wFmXwwNg/zproduct.jpg' });
 
-  // Add smile coin game for all users now
-  const smileCoinGame = allGames.find(g => g.id === 'smile-coin');
-  if (smileCoinGame) {
-    displayGames.push(smileCoinGame);
+  // Add smile coin game only if user is admin.
+  if (isAdmin) {
+    const smileCoinGame = allGames.find(g => g.id === 'smile-coin');
+    if (smileCoinGame) {
+      displayGames.push(smileCoinGame);
+    }
   }
   
 
@@ -95,7 +97,7 @@ export default function Home() {
                       className="aspect-square w-full rounded-lg object-cover"
                     />
                   </Card>
-                  <p className="mt-2 text-center text-sm font-semibold text-white">
+                  <p className="mt-2 text-center text-xs font-semibold text-white">
                     {game.name}
                   </p>
                 </Link>

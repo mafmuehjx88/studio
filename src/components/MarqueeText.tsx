@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -28,10 +29,10 @@ export default function MarqueeText() {
   }, []);
 
   return (
-    <div className="flex items-center gap-2 rounded-lg bg-card px-3 py-2">
+    <div className="flex items-center gap-2 rounded-lg bg-card px-3 py-1.5">
       <div className="flex-1 overflow-hidden">
         <MarqueeUI>
-          <p className="px-4 text-sm font-medium text-primary">
+          <p className="px-4 text-xs font-medium text-primary">
             {marqueeText}
           </p>
         </MarqueeUI>
