@@ -31,7 +31,6 @@ import { generateOrderId } from '@/lib/utils';
 import type { Game, Product } from '@/lib/types';
 import { FirestorePermissionError } from '@/firebase/errors';
 import { errorEmitter } from '@/firebase/error-emitter';
-import { useDebounce } from 'use-debounce';
 
 interface GameClientPageProps {
     game: Game;
@@ -49,14 +48,6 @@ export default function GameClientPage({ game, products }: GameClientPageProps) 
   const [quantity, setQuantity] = useState(1);
   const [isPurchasing, setIsPurchasing] = useState(false);
 
-  // States for In-Game Name check
-  const [playerName, setPlayerName] = useState<string | null>(null);
-  const [isCheckingName, setIsCheckingName] = useState(false);
-  const [nameCheckError, setNameCheckError] = useState<string | null>(null);
-  const [debouncedUserGameId] = useDebounce(userGameId, 800);
-  const [debouncedUserServerId] = useDebounce(userServerId, 800);
-
-
   const isPassProduct = selectedProduct?.category === 'pass';
   const is2xProduct = selectedProduct?.category === '2x';
   const isQuantityChangable = isPassProduct || is2xProduct || selectedProduct?.gameId === 'telegram' || selectedProduct?.gameId === 'tiktok';
@@ -72,58 +63,14 @@ export default function GameClientPage({ game, products }: GameClientPageProps) 
     ? userProfile.walletBalance >= finalPrice
     : false;
 
-  // --- Start of In-Game Name Check Logic ---
-  const checkPlayerName = useCallback(async (userId: string, serverId: string) => {
-    if (game.id !== 'mlbb' || !userId || !serverId) {
-        setPlayerName(null);
-        setNameCheckError(null);
-        return;
-    }
-
-    setIsCheckingName(true);
-    setPlayerName(null);
-    setNameCheckError(null);
-
-    try {
-        const response = await fetch('/api/check-ml-name', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userId, serverId }),
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            setPlayerName(data.playerName);
-        } else {
-            setNameCheckError(data.error || 'Player not found.');
-        }
-    } catch (error) {
-        setNameCheckError('Failed to check player name.');
-    } finally {
-        setIsCheckingName(false);
-    }
-  }, [game.id]);
-
 
   useEffect(() => {
     // Reset state when dialog closes or game changes
     if (!selectedProduct) {
-        setPlayerName(null);
-        setNameCheckError(null);
-        setIsCheckingName(false);
         setUserGameId('');
         setUserServerId('');
     }
   }, [selectedProduct]);
-
-  useEffect(() => {
-    if (debouncedUserGameId && debouncedUserServerId) {
-        checkPlayerName(debouncedUserGameId, debouncedUserServerId);
-    }
-  }, [debouncedUserGameId, debouncedUserServerId, checkPlayerName]);
-
-  // --- End of In-Game Name Check Logic ---
 
 
   const handleProductClick = (product: Product) => {
@@ -200,7 +147,7 @@ export default function GameClientPage({ game, products }: GameClientPageProps) 
         price: finalPrice,
         gameUserId: userGameId,
         gameServerId: userServerId || '',
-        gameUserName: playerName || '', // Save the checked player name
+        gameUserName: '', // Removed player name check
         paymentMethod: 'Wallet',
         status: 'Pending' as const,
         createdAt: serverTimestamp(),
@@ -218,7 +165,6 @@ Item: *${orderData.itemName}*
 Price: *${finalPrice.toLocaleString()} Ks*
 ----------------------
 Username: \`${userProfile.username}\`
-${playerName ? `IGN: \`${playerName}\`` : ''}
 ${identifierLabel}: \`${userGameId}\`
 ${userServerId ? `Game Server ID: \`${userServerId}\`` : ''}
 ----------------------
@@ -516,26 +462,6 @@ Order Time: ${new Date().toLocaleString('en-US', {
                 )}
               </div>
              )}
-             {/* Player Name Check Result */}
-             <div className="h-5">
-                {isCheckingName && (
-                    <div className="flex items-center gap-2 text-xs text-gray-500">
-                        <Loader2 className="h-3 w-3 animate-spin" />
-                        <span>Checking name...</span>
-                    </div>
-                )}
-                {!isCheckingName && playerName && (
-                    <div className="flex items-center gap-2 text-xs text-blue-600 font-semibold">
-                        <UserCheck className="h-4 w-4" />
-                        <span>{playerName}</span>
-                    </div>
-                )}
-                {!isCheckingName && nameCheckError && (
-                     <div className="text-xs text-red-600 font-semibold">
-                        {nameCheckError}
-                    </div>
-                )}
-             </div>
             </div>
 
 
@@ -597,7 +523,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
             </Button>
             <Button
               onClick={handlePurchase}
-              disabled={!hasSufficientBalance || isPurchasing || (game.id === 'mlbb' && (!playerName || isCheckingName || !!nameCheckError)) }
+              disabled={!hasSufficientBalance || isPurchasing}
               className="h-[42px] w-full rounded-md bg-[#10B981] text-sm font-bold text-white hover:bg-green-600"
             >
               {isPurchasing && (
@@ -611,4 +537,3 @@ Order Time: ${new Date().toLocaleString('en-US', {
     </div>
   );
 }
-
