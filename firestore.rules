@@ -26,7 +26,10 @@ service cloud.firestore {
       allow write: if request.auth.token.email == 'marrci448@gmail.com';
     }
 
-    // smileCodes are no longer stored in Firestore. This rule is removed.
+    match /topUpRequests/{requestId} {
+        allow read, create, update: if request.auth.uid == resource.data.userId || request.auth.token.email == 'marrci448@gmail.com';
+        allow list: if request.auth.token.email == 'marrci448@gmail.com';
+    }
 
     match /{path=**}/orders/{orderId} {
       // Allow admin to get any order from any user.
