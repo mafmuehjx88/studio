@@ -36,6 +36,7 @@ export interface Order {
     username: string;
     gameId?: string;
     gameName?: string;
+    gameUserName?: string; // For storing checked player name
     itemId?: string;
     itemName: string;
     price: number;
