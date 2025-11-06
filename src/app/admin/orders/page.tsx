@@ -3,7 +3,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { collectionGroup, query, onSnapshot, doc, updateDoc } from "firebase/firestore";
+import { collectionGroup, query, onSnapshot, doc, updateDoc, writeBatch, serverTimestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -71,12 +71,33 @@ export default function AdminOrdersPage() {
         return;
     }
     setUpdatingIds(prev => [...prev, order.id]);
+    
+    const batch = writeBatch(db);
+    const orderRef = doc(db, `users/${order.userId}/orders`, order.id);
+    const notificationRef = doc(collection(db, `users/${order.userId}/notifications`));
+
     try {
-      const orderRef = doc(db, `users/${order.userId}/orders`, order.id);
-      await updateDoc(orderRef, {
+      // 1. Update the order status
+      batch.update(orderRef, {
         status: "Completed"
       });
-      toast({ title: "Success", description: "Order has been marked as completed." });
+
+      // 2. Create a notification for the user
+      batch.set(notificationRef, {
+        title: "Order Completed",
+        message: `Your order for ${order.itemName} (${order.price.toLocaleString()} Ks) has been successfully completed.`,
+        createdAt: serverTimestamp(),
+        isRead: false,
+        orderId: order.id,
+        gameName: order.gameName,
+        itemName: order.itemName,
+        price: order.price,
+      });
+
+      // 3. Commit the batch
+      await batch.commit();
+
+      toast({ title: "Success", description: "Order has been marked as completed and user notified." });
     } catch (error) {
       console.error("Error updating order:", error);
       toast({ title: "Error", description: "Failed to update order status.", variant: "destructive" });

@@ -15,6 +15,11 @@ service cloud.firestore {
       allow read, create, update: if request.auth.uid == userId || request.auth.token.email == 'marrci448@gmail.com';
       allow list: if request.auth.token.email == 'marrci448@gmail.com';
     }
+
+    match /users/{userId}/notifications/{notificationId} {
+      allow read, list, update: if request.auth.uid == userId; // User can read/update their own notifications
+      allow create: if request.auth.token.email == 'marrci448@gmail.com'; // Only admin can create
+    }
     
     match /settings/{docId} {
       allow read: if true;

@@ -49,6 +49,20 @@ export interface Order {
     smileCode?: string; // To store the redeemed code
 }
 
+export interface Notification {
+    id: string;
+    title: string;
+    message: string;
+    orderId?: string;
+    isRead: boolean;
+    createdAt: Timestamp | FieldValue;
+    // For rich notifications
+    gameName?: string;
+    itemName?: string;
+    price?: number;
+}
+
+
 export interface TopUpRequest {
     id?: string;
     userId: string;

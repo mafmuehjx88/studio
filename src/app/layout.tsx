@@ -12,7 +12,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { usePathname } from "next/navigation";
 import LoadingScreen from "@/components/layout/LoadingScreen";
 import { useState } from "react";
-import { AnnouncementsSheet } from "@/components/layout/AnnouncementsSheet";
+import { NotificationsSheet } from "@/components/layout/NotificationsSheet";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -35,7 +35,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
       <Header onBellClick={() => setIsSheetOpen(true)} />
       <main className="flex-1 px-4 pb-24 pt-6">{children}</main>
       <Footer />
-      <AnnouncementsSheet isOpen={isSheetOpen} onOpenChange={setIsSheetOpen} />
+      <NotificationsSheet isOpen={isSheetOpen} onOpenChange={setIsSheetOpen} />
     </div>
   );
 }
