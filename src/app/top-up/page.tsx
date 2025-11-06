@@ -15,22 +15,10 @@ import { sendTopUpTelegramNotification } from '@/lib/actions';
 
 const paymentAccounts = [
   {
-    name: 'Pyae Sone Hein',
-    phone: '09769181524',
-    type: 'KBZ Pay',
-    logo: 'https://i.ibb.co/sv95LBKN/11f074fe04271ca1f562331d873344f8-1.jpg',
-  },
-  {
     name: 'Aent Phone Khant',
     phone: '09961034354',
     type: 'KBZ Pay',
     logo: 'https://i.ibb.co/sv95LBKN/11f074fe04271ca1f562331d873344f8-1.jpg',
-  },
-  {
-    name: 'Than Htay',
-    phone: '09769181524',
-    type: 'Wave Pay',
-    logo: 'https://i.ibb.co/7tdxdMP0/new355-ab76bb0483ac7c445251c650cc7c1227-1.jpg',
   },
   {
     name: 'Eant Phone Khant',
