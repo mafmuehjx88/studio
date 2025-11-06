@@ -29,6 +29,8 @@ import { db } from '@/lib/firebase';
 import { sendTelegramNotification } from '@/lib/actions';
 import { generateOrderId } from '@/lib/utils';
 import type { Game, Product } from '@/lib/types';
+import { FirestorePermissionError } from '@/firebase/errors';
+import { errorEmitter } from '@/firebase/error-emitter';
 
 interface GameClientPageProps {
     game: Game;
@@ -93,15 +95,34 @@ export default function GameClientPage({ game, products }: GameClientPageProps) 
 
     setIsPurchasing(true);
     const userDocRef = doc(db, 'users', user.uid);
-    const originalBalance = userProfile.walletBalance;
-
+    
+    // --- Balance Deduction ---
     try {
-      // 1. Deduct balance first
       await updateDoc(userDocRef, {
         walletBalance: increment(-finalPrice),
       });
+    } catch (error: any) {
+      console.error('Balance deduction failed:', error);
+      
+      const permissionError = new FirestorePermissionError({
+        path: userDocRef.path,
+        operation: 'update',
+        requestResourceData: { walletBalance: `increment(${-finalPrice})` },
+      });
+      errorEmitter.emit('permission-error', permissionError);
 
-      // 2. Create order document
+      toast({
+        title: 'Purchase Failed',
+        description:
+          'Could not deduct balance due to a permission error. Please contact support.',
+        variant: 'destructive',
+      });
+      setIsPurchasing(false);
+      return; // Stop the process if balance deduction fails
+    }
+
+    // --- Order Creation ---
+    try {
       const orderId = generateOrderId();
       const orderData = {
         id: orderId,
@@ -122,7 +143,7 @@ export default function GameClientPage({ game, products }: GameClientPageProps) 
       };
       await addDoc(collection(db, `users/${user.uid}/orders`), orderData);
 
-      // 3. Send notification
+      // --- Send notification ONLY after order is successfully created ---
       const identifierLabel = game.userIdentifierLabel || 'Game User ID';
       const notificationMessage = `
 New Order Received!
@@ -143,6 +164,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
 `;
       await sendTelegramNotification(notificationMessage);
 
+      // --- Final Success Toast ---
       const isPremiumToast = game.id === 'telegram' && selectedProduct.category === 'Premium';
       const isSpecialDurationToast = game.id === 'tiktok' || 
                              (game.id === 'telegram' && (selectedProduct.category === 'Subscribers' || selectedProduct.category === 'Boost'));
@@ -167,18 +189,41 @@ Order Time: ${new Date().toLocaleString('en-US', {
       setSelectedProduct(null);
       setUserGameId('');
       setUserServerId('');
-    } catch (error) {
-      console.error('Purchase failed:', error);
+
+    } catch (error: any) {
+      console.error('Order creation or notification failed:', error);
+
+      // --- Rollback Balance ---
       toast({
         title: 'Purchase Failed',
         description:
-          'An error occurred. We have restored your balance. Please try again.',
+          'An error occurred while creating your order. We are automatically refunding your balance.',
         variant: 'destructive',
       });
-      // Rollback balance if order creation failed
-      await updateDoc(userDocRef, {
-        walletBalance: originalBalance, // Restore to original balance
-      });
+      
+      try {
+        await updateDoc(userDocRef, {
+          walletBalance: increment(finalPrice), // Add the balance back
+        });
+        toast({
+          title: 'Balance Restored',
+          description: 'Your balance has been successfully restored.',
+        });
+      } catch (rollbackError: any) {
+         console.error('CRITICAL: Balance rollback failed:', rollbackError);
+         const permissionError = new FirestorePermissionError({
+            path: userDocRef.path,
+            operation: 'update',
+            requestResourceData: { walletBalance: `increment(${finalPrice})` },
+          });
+         errorEmitter.emit('permission-error', permissionError);
+         toast({
+            title: 'CRITICAL ERROR',
+            description: 'Could not restore your balance automatically. Please contact support immediately!',
+            variant: 'destructive',
+            duration: 10000,
+         });
+      }
     } finally {
       setIsPurchasing(false);
     }
@@ -483,18 +528,3 @@ Order Time: ${new Date().toLocaleString('en-US', {
     </div>
   );
 }
-
-    
-
-    
-
-
-
-
-    
-
-    
-
-    
-
-    

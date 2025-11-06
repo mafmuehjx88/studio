@@ -19,6 +19,8 @@ import { useToast } from '@/hooks/use-toast';
 import { doc, updateDoc, increment } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Loader2 } from 'lucide-react';
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError } from '@/firebase/errors';
 
 interface UserTopUpRowProps {
   user: UserProfile;
@@ -86,13 +88,21 @@ export default function UserTopUpRow({ user }: UserTopUpRowProps) {
       });
       setIsTopUpDialogOpen(false);
       setAmount('');
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating wallet balance:', error);
       toast({
         title: 'Error',
         description: 'Failed to update wallet balance. Please try again.',
         variant: 'destructive',
       });
+      
+      const permissionError = new FirestorePermissionError({
+        path: userDocRef.path,
+        operation: 'update',
+        requestResourceData: { [fieldToUpdate]: `increment(${topUpAmount})` },
+      });
+      errorEmitter.emit('permission-error', permissionError);
+
     } finally {
       setIsUpdating(false);
     }

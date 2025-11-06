@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
@@ -55,7 +56,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             setLoading(false);
           }, 
           (error) => {
-            console.error("Error listening to user profile:", error);
+            console.error("AuthContext: Error listening to user profile:", error);
             setUserProfile(null);
             setLoading(false);
           }

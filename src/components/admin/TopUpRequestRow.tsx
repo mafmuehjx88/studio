@@ -21,6 +21,8 @@ import Image from 'next/image';
 import { formatDistanceToNow } from 'date-fns';
 import { Badge } from '../ui/badge';
 import { cn } from '@/lib/utils';
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError } from '@/firebase/errors';
 
 interface TopUpRequestRowProps {
   request: TopUpRequest;
@@ -56,13 +58,20 @@ export default function TopUpRequestRow({ request }: TopUpRequestRowProps) {
             title: `Request ${status}`,
             description: `The request from ${request.username} for ${request.amount.toLocaleString()} Ks has been ${status.toLowerCase()}.`,
         });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error updating request status:', error);
         toast({
             title: 'Error',
             description: 'Failed to update request. Please try again.',
             variant: 'destructive',
         });
+         // Emit a more detailed error for development
+        const permissionError = new FirestorePermissionError({
+            path: requestDocRef.path,
+            operation: 'update',
+            requestResourceData: { status },
+        });
+        errorEmitter.emit('permission-error', permissionError);
     } finally {
         setIsUpdating(null);
     }
