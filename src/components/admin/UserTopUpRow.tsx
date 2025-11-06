@@ -146,19 +146,12 @@ export default function UserTopUpRow({ user }: UserTopUpRowProps) {
                 </p>
             </div>
          </div>
-         <div className="mt-3 grid grid-cols-2 gap-2">
+         <div className="mt-3">
             <div className="space-y-1">
                 <p className="text-xs font-bold text-center text-muted-foreground">Main Wallet</p>
                 <div className="grid grid-cols-2 gap-1">
                     <Button size="sm" className="h-8" onClick={() => handleOpenDialog('main', 'add')}>Top Up</Button>
                     <Button size="sm" className="h-8" variant="destructive" onClick={() => handleOpenDialog('main', 'deduct')}>Deduct</Button>
-                </div>
-            </div>
-            <div className="space-y-1">
-                <p className="text-xs font-bold text-center text-muted-foreground">Smile Coin</p>
-                <div className="grid grid-cols-2 gap-1">
-                    <Button size="sm" className="h-8" variant="secondary" onClick={() => handleOpenDialog('smileCoin', 'add')}>Top Up</Button>
-                    <Button size="sm" className="h-8" variant="destructive" onClick={() => handleOpenDialog('smileCoin', 'deduct')}>Deduct</Button>
                 </div>
             </div>
          </div>
