@@ -1,3 +1,4 @@
+
 // /src/app/api/check-ml-name/route.ts
 import { NextResponse } from 'next/server';
 
@@ -13,9 +14,6 @@ export async function POST(request: Request) {
     // This is less stable than an official API but fulfills the user's request.
     const response = await fetch(`https://api.velixs.com/id-checker/ml?id=${userId}&zone=${serverId}`, {
         method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        }
     });
 
     if (!response.ok) {
