@@ -357,5 +357,3 @@ Order Time: ${new Date().toLocaleString('en-US', { timeZone: 'Asia/Yangon' })}`;
         </div>
     );
 }
-
-    

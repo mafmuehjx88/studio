@@ -162,5 +162,3 @@ export const staticImages = {
         imageHint: `app tutorial`
     }
 }
-
-    
