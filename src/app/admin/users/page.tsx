@@ -67,7 +67,7 @@ export default function AdminUsersPage() {
   if (loading) {
     return (
       <Card>
-        <CardHeader>
+        <CardHeader className="p-4">
           <CardTitle>User Management</CardTitle>
         </CardHeader>
         <CardContent className="p-4">
@@ -84,14 +84,14 @@ export default function AdminUsersPage() {
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="p-4">
         <CardTitle>User Management</CardTitle>
-         <div className="pt-4">
+         <div className="pt-2">
           <Input 
             placeholder="Search by username..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="max-w-sm"
+            className="max-w-sm h-9"
           />
         </div>
       </CardHeader>
@@ -99,21 +99,21 @@ export default function AdminUsersPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Username</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead className="text-right">Wallet</TableHead>
-              <TableHead className="text-right">Smile Coin</TableHead>
+              <TableHead className="px-3">Username</TableHead>
+              <TableHead className="px-3">Email</TableHead>
+              <TableHead className="text-right px-3">Wallet</TableHead>
+              <TableHead className="text-right px-3">Smile Coin</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredUsers.map((user) => (
               <TableRow key={user.uid}>
-                <TableCell className="font-medium">{user.username}</TableCell>
-                <TableCell className="text-muted-foreground">{user.email}</TableCell>
-                <TableCell className="text-right font-semibold text-primary">
-                    {user.walletBalance.toLocaleString()} Ks
+                <TableCell className="p-3 font-medium">{user.username}</TableCell>
+                <TableCell className="p-3 text-muted-foreground text-xs">{user.email}</TableCell>
+                <TableCell className="p-3 text-right font-semibold text-primary">
+                    {user.walletBalance.toFixed(2)}
                 </TableCell>
-                <TableCell className="text-right font-semibold text-yellow-400">
+                <TableCell className="p-3 text-right font-semibold text-yellow-400">
                     {(user.smileCoinBalance ?? 0).toLocaleString()}
                 </TableCell>
               </TableRow>
@@ -124,5 +124,6 @@ export default function AdminUsersPage() {
     </Card>
   );
 }
+
 
 

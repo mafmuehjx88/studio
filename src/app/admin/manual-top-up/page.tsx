@@ -81,11 +81,11 @@ export default function ManualTopUpPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div>
-        <h1 className="text-2xl font-bold">Manual Wallet Top-Up</h1>
-        <p className="text-muted-foreground">
-          Find users and add funds to their wallets directly.
+        <h1 className="text-xl font-bold">Manual Wallet Adjustment</h1>
+        <p className="text-sm text-muted-foreground">
+          Find users to add or deduct funds from their wallets.
         </p>
       </div>
 
@@ -96,15 +96,15 @@ export default function ManualTopUpPage() {
           placeholder="Search by username..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-10"
+          className="pl-10 h-9"
         />
       </div>
 
       {loading && (
-        <div className="space-y-4">
-            <Skeleton className="h-20 w-full" />
-            <Skeleton className="h-20 w-full" />
-            <Skeleton className="h-20 w-full" />
+        <div className="space-y-2">
+            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-24 w-full" />
         </div>
       )}
 
@@ -118,7 +118,7 @@ export default function ManualTopUpPage() {
       )}
 
       {!loading && !error && (
-        <div className="space-y-4">
+        <div className="space-y-2">
             {filteredUsers.length > 0 ? (
                 filteredUsers.map((user) => (
                     <UserTopUpRow key={user.uid} user={user} />
