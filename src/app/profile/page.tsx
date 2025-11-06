@@ -70,7 +70,7 @@ export default function ProfilePage() {
         const fetchedOrders: Order[] = [];
         
         querySnapshot.forEach((doc) => {
-          const order = doc.data() as Order;
+          const order = {...doc.data(), id: doc.id} as Order;
           fetchedOrders.push(order);
           // Only add to total spent if it's not a smile coin purchase
           if (order.status === 'Completed' && order.gameId !== 'smile-coin') {
@@ -78,7 +78,8 @@ export default function ProfilePage() {
           }
         });
 
-        const completedOrders = fetchedOrders.filter(order => order.status === 'Completed');
+        // Filter for the history sheet: only completed non-smile-coin orders
+        const completedOrders = fetchedOrders.filter(order => order.status === 'Completed' && order.gameId !== 'smile-coin');
 
         setTotalSpent(total);
         setOrders(completedOrders);
@@ -187,9 +188,9 @@ export default function ProfilePage() {
                 History
               </Button>
             </SheetTrigger>
-            <SheetContent side="bottom" className="rounded-t-lg">
+            <SheetContent side="bottom" className="rounded-t-lg bg-background">
               <SheetHeader className="text-left">
-                <SheetTitle>Transaction History</SheetTitle>
+                <SheetTitle>Transaction History (Main Wallet)</SheetTitle>
               </SheetHeader>
               <div className="mt-4 max-h-[60vh] overflow-y-auto">
                 {ordersLoading ? (
@@ -270,3 +271,5 @@ export default function ProfilePage() {
     </div>
   );
 }
+
+    
