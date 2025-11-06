@@ -131,6 +131,11 @@ export const staticImages = {
         description: `Logo image`,
         imageHint: `letter A logo`
     },
+    'zenith-logo': {
+        imageUrl: `https://i.ibb.co/yBNG1C2/zenith-logo.png`,
+        description: `Zenith Logo`,
+        imageHint: `letter Z logo`
+    },
     'default-avatar': {
         imageUrl: `https://picsum.photos/seed/default-avatar/400/400`,
         description: `Default user avatar`,
