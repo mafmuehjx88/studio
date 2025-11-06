@@ -83,18 +83,18 @@ export default function ProfilePage() {
           </p>
           <div className="grid grid-cols-1 gap-2">
             <Button variant="outline" asChild>
-              <a href="tel:09891156710" className="text-base">
-                09891156710
+              <a href="tel:09769181524" className="text-base">
+                09769181524
               </a>
             </Button>
             <Button asChild className="bg-[#2AABEE] hover:bg-[#2AABEE]/90">
-              <Link href="#" target="_blank" className="text-base">
+              <Link href="https://t.me/Atgamehub" target="_blank" className="text-base">
                 <Send className="mr-2 h-4 w-4" />
                 Channel
               </Link>
             </Button>
             <Button asChild className="bg-primary hover:bg-primary/90">
-              <Link href="#" className="text-base">
+              <Link href="https://t.me/zenthegod" target="_blank" className="text-base">
                 <Send className="mr-2 h-4 w-4" />
                 Account
               </Link>
