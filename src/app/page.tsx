@@ -52,21 +52,6 @@ export default function Home() {
         )}
       </Card>
 
-      <div className="grid grid-cols-3 gap-2 text-center">
-        <Link href="/top-up" className="space-y-1 rounded-lg bg-card p-3">
-            <span className="text-4xl">💰</span>
-            <p className="font-semibold text-xs">ငွေဖြည့်မည်</p>
-        </Link>
-        <Link href="/orders" className="space-y-1 rounded-lg bg-card p-3">
-             <span className="text-4xl">📦</span>
-            <p className="font-semibold text-xs">အော်ဒါများ</p>
-        </Link>
-        <Link href="/how-to-use" className="space-y-1 rounded-lg bg-card p-3">
-             <span className="text-4xl">📘</span>
-            <p className="font-semibold text-xs">အသုံးပြုနည်း</p>
-        </Link>
-      </div>
-
        {isAdmin && (
         <Button variant="secondary" className="w-full justify-center gap-2" asChild>
           <Link href="/admin">
