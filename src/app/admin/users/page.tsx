@@ -99,10 +99,10 @@ export default function AdminUsersPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="px-3">Username</TableHead>
-              <TableHead className="px-3">Email</TableHead>
-              <TableHead className="text-right px-3">Wallet</TableHead>
-              <TableHead className="text-right px-3">Smile Coin</TableHead>
+              <TableHead className="px-3 py-2">Username</TableHead>
+              <TableHead className="px-3 py-2">Email</TableHead>
+              <TableHead className="text-right px-3 py-2">Wallet</TableHead>
+              <TableHead className="text-right px-3 py-2">Smile Coin</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -124,6 +124,7 @@ export default function AdminUsersPage() {
     </Card>
   );
 }
+
 
 
 

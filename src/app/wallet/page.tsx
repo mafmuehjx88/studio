@@ -66,14 +66,6 @@ export default function WalletPage() {
             </p>
           )}
         </CardContent>
-        <CardFooter className="flex justify-center">
-          <Button asChild className="h-12 text-base w-full">
-            <Link href="/top-up/smile-coin">
-              <ArrowUpRight className="mr-2 h-5 w-5" />
-              Smile Coin ဖြည့်ရန်
-            </Link>
-          </Button>
-        </CardFooter>
       </Card>
       
     </div>

@@ -120,14 +120,14 @@ export default function AdminOrdersPage() {
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="p-4">
         <CardTitle>All Orders</CardTitle>
-        <div className="pt-4">
+        <div className="pt-2">
           <Input 
             placeholder="Search by username..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="max-w-sm"
+            className="max-w-sm h-9"
           />
         </div>
       </CardHeader>
@@ -135,25 +135,25 @@ export default function AdminOrdersPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Username</TableHead>
-              <TableHead>Item</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Action</TableHead>
+              <TableHead className="px-3 py-2">Username</TableHead>
+              <TableHead className="px-3 py-2">Item</TableHead>
+              <TableHead className="px-3 py-2">Date</TableHead>
+              <TableHead className="px-3 py-2">Status</TableHead>
+              <TableHead className="text-right px-3 py-2">Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredOrders.map((order) => (
               <TableRow key={order.id}>
-                <TableCell>{order.username}</TableCell>
-                <TableCell>
-                    <div className="font-medium">{order.itemName}</div>
+                <TableCell className="p-3 font-medium">{order.username}</TableCell>
+                <TableCell className="p-3">
+                    <div className="font-medium text-xs">{order.itemName}</div>
                     <div className="text-xs text-muted-foreground">{order.price.toLocaleString()} Ks</div>
                 </TableCell>
-                <TableCell className="text-xs text-muted-foreground">
+                <TableCell className="p-3 text-xs text-muted-foreground">
                   {order.createdAt ? formatDistanceToNow(order.createdAt.toDate(), { addSuffix: true }) : 'N/A'}
                 </TableCell>
-                 <TableCell>
+                 <TableCell className="p-3">
                      <Badge 
                       variant="outline"
                       className={cn("text-xs", statusColors[order.status])}
@@ -161,7 +161,7 @@ export default function AdminOrdersPage() {
                       {order.status}
                     </Badge>
                 </TableCell>
-                <TableCell className="text-right">
+                <TableCell className="p-3 text-right">
                   {order.status === 'Pending' && (
                     <Button 
                         size="sm" 
@@ -169,7 +169,7 @@ export default function AdminOrdersPage() {
                         disabled={updatingIds.includes(order.id)}
                     >
                       {updatingIds.includes(order.id) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                      Mark as Completed
+                      Complete
                     </Button>
                   )}
                 </TableCell>
