@@ -4,9 +4,9 @@
 
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
-import { doc, onSnapshot } from 'firebase/firestore';
+import { doc, onSnapshot, collection, query, where } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
-import type { UserProfile } from '@/lib/types';
+import type { UserProfile, Notification } from '@/lib/types';
 import { usePathname, useRouter } from 'next/navigation';
 import { FirebaseErrorListener } from '@/components/FirebaseErrorListener';
 
@@ -15,12 +15,13 @@ interface AuthContextType {
   userProfile: UserProfile | null;
   loading: boolean;
   isAdmin: boolean;
+  hasUnreadNotifications: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const AUTH_PAGES = ['/login', '/register'];
-const PROTECTED_PAGES = ['/profile', '/wallet', '/orders', '/top-up', '/games', '/smile-coin', '/settings'];
+const PROTECTED_PAGES = ['/profile', '/wallet', '/orders', '/top-up', '/games', '/smile-coin', '/settings', '/notifications'];
 const ADMIN_PAGES = ['/admin', '/admin/manual-top-up'];
 
 // Simplified to a single admin email for consistency with security rules
@@ -31,6 +32,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -38,10 +40,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setLoading(true);
     const unsubscribeAuth = onAuthStateChanged(auth, async (firebaseUser) => {
       let profileUnsubscribe: () => void = () => {};
+      let notificationUnsubscribe: () => void = () => {};
 
       if (firebaseUser) {
         setUser(firebaseUser);
-        // Simplified admin check
         const userIsAdmin = ADMIN_EMAILS.includes(firebaseUser.email || '');
         setIsAdmin(userIsAdmin);
 
@@ -61,15 +63,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             setLoading(false);
           }
         );
+
+        // Listen for unread notifications
+        const notificationsQuery = query(
+            collection(db, `users/${firebaseUser.uid}/notifications`),
+            where("isRead", "==", false)
+        );
+        notificationUnsubscribe = onSnapshot(notificationsQuery, (snapshot) => {
+            setHasUnreadNotifications(!snapshot.empty);
+        });
+
       } else {
         setUser(null);
         setUserProfile(null);
         setIsAdmin(false);
+        setHasUnreadNotifications(false);
         setLoading(false);
       }
       
       return () => {
         profileUnsubscribe();
+        notificationUnsubscribe();
       };
     });
 
@@ -97,7 +111,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [user, isAdmin, loading, pathname, router]);
 
-  const value = { user, userProfile, loading, isAdmin };
+  const value = { user, userProfile, loading, isAdmin, hasUnreadNotifications };
   
   return (
     <AuthContext.Provider value={value}>

@@ -12,7 +12,6 @@ import { Toaster } from "@/components/ui/toaster";
 import { usePathname } from "next/navigation";
 import LoadingScreen from "@/components/layout/LoadingScreen";
 import { useState } from "react";
-import { NotificationsSheet } from "@/components/layout/NotificationsSheet";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -22,7 +21,9 @@ const poppins = Poppins({
 
 function AppContent({ children }: { children: React.ReactNode }) {
   const { loading } = useAuth();
-  const [isSheetOpen, setIsSheetOpen] = useState(false);
+  
+  const isAuthPage = usePathname() === '/login' || usePathname() === '/register';
+
 
   if (loading) {
     return <LoadingScreen />;
@@ -32,10 +33,9 @@ function AppContent({ children }: { children: React.ReactNode }) {
     <div
       className="relative mx-auto flex min-h-screen w-full max-w-md flex-col"
     >
-      <Header onBellClick={() => setIsSheetOpen(true)} />
+      {!isAuthPage && <Header />}
       <main className="flex-1 px-4 pb-24 pt-6">{children}</main>
-      <Footer />
-      <NotificationsSheet isOpen={isSheetOpen} onOpenChange={setIsSheetOpen} />
+      {!isAuthPage && <Footer />}
     </div>
   );
 }

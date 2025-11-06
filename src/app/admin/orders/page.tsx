@@ -127,8 +127,8 @@ export default function AdminOrdersPage() {
         <CardHeader>
           <CardTitle>All Orders</CardTitle>
         </CardHeader>
-        <CardContent className="p-4">
-          <div className="space-y-4">
+        <CardContent className="p-2">
+          <div className="space-y-2">
             <Skeleton className="h-12 w-full" />
             <Skeleton className="h-12 w-full" />
             <Skeleton className="h-12 w-full" />
@@ -156,40 +156,41 @@ export default function AdminOrdersPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="px-3 py-2">Username</TableHead>
-              <TableHead className="px-3 py-2">Item</TableHead>
-              <TableHead className="px-3 py-2">Date</TableHead>
-              <TableHead className="px-3 py-2">Status</TableHead>
-              <TableHead className="text-right px-3 py-2">Action</TableHead>
+              <TableHead className="px-3 py-2 text-xs">Username</TableHead>
+              <TableHead className="px-3 py-2 text-xs">Item</TableHead>
+              <TableHead className="px-3 py-2 text-xs">Date</TableHead>
+              <TableHead className="px-3 py-2 text-xs">Status</TableHead>
+              <TableHead className="text-right px-3 py-2 text-xs">Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredOrders.map((order) => (
               <TableRow key={order.id}>
-                <TableCell className="p-3 font-medium">{order.username}</TableCell>
-                <TableCell className="p-3">
-                    <div className="font-medium text-xs">{order.itemName}</div>
-                    <div className="text-xs text-muted-foreground">{order.price.toLocaleString()} Ks</div>
+                <TableCell className="p-2 font-medium text-xs">{order.username}</TableCell>
+                <TableCell className="p-2">
+                    <div className="font-medium text-[11px]">{order.itemName}</div>
+                    <div className="text-[10px] text-muted-foreground">{order.price.toLocaleString()} Ks</div>
                 </TableCell>
-                <TableCell className="p-3 text-xs text-muted-foreground">
+                <TableCell className="p-2 text-[11px] text-muted-foreground">
                   {order.createdAt ? formatDistanceToNow(order.createdAt.toDate(), { addSuffix: true }) : 'N/A'}
                 </TableCell>
-                 <TableCell className="p-3">
+                 <TableCell className="p-2">
                      <Badge 
                       variant="outline"
-                      className={cn("text-xs", statusColors[order.status])}
+                      className={cn("text-[10px]", statusColors[order.status])}
                     >
                       {order.status}
                     </Badge>
                 </TableCell>
-                <TableCell className="p-3 text-right">
+                <TableCell className="p-2 text-right">
                   {order.status === 'Pending' && (
                     <Button 
                         size="sm" 
+                        className="h-7 text-xs"
                         onClick={() => handleCompleteOrder(order)}
                         disabled={updatingIds.includes(order.id)}
                     >
-                      {updatingIds.includes(order.id) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                      {updatingIds.includes(order.id) && <Loader2 className="mr-2 h-3 w-3 animate-spin" />}
                       Complete
                     </Button>
                   )}

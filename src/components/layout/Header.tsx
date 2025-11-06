@@ -7,12 +7,8 @@ import WalletBalance from './WalletBalance';
 import Link from 'next/link';
 import { Bell, Menu } from 'lucide-react';
 
-interface HeaderProps {
-    onBellClick: () => void;
-}
-
-export default function Header({ onBellClick }: HeaderProps) {
-  const { user, loading } = useAuth();
+export default function Header() {
+  const { user, loading, hasUnreadNotifications } = useAuth();
   
   return (
     <header className="sticky top-0 z-20 flex h-16 items-center justify-between bg-card px-4">
@@ -25,16 +21,23 @@ export default function Header({ onBellClick }: HeaderProps) {
       <div className="flex items-center gap-2">
         {!loading && (
           user ? (
-            <WalletBalance />
+            <>
+              <WalletBalance />
+              <Button asChild variant="ghost" size="icon" className="relative">
+                <Link href="/notifications">
+                  <Bell className="h-6 w-6" />
+                  {hasUnreadNotifications && (
+                    <span className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-red-500 border-2 border-card"></span>
+                  )}
+                </Link>
+              </Button>
+            </>
           ) : (
             <Button asChild>
               <Link href="/login">Login</Link>
             </Button>
           )
         )}
-         <Button variant="ghost" size="icon" onClick={onBellClick}>
-             <Bell className="h-6 w-6" />
-        </Button>
       </div>
     </header>
   );
