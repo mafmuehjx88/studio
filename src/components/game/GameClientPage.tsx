@@ -597,7 +597,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
             </Button>
             <Button
               onClick={handlePurchase}
-              disabled={!hasSufficientBalance || isPurchasing || !playerName}
+              disabled={!hasSufficientBalance || isPurchasing || (game.id === 'mlbb' && (!playerName || isCheckingName || !!nameCheckError)) }
               className="h-[42px] w-full rounded-md bg-[#10B981] text-sm font-bold text-white hover:bg-green-600"
             >
               {isPurchasing && (
@@ -611,3 +611,4 @@ Order Time: ${new Date().toLocaleString('en-US', {
     </div>
   );
 }
+
