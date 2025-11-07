@@ -12,7 +12,6 @@ import Image from 'next/image';
 import { staticImages } from '@/lib/data';
 import Link from 'next/link';
 import { Send } from 'lucide-react';
-import TopBuyersList from '@/components/profile/TopBuyersList';
 
 export default function ProfilePage() {
   const { userProfile, loading } = useAuth();
@@ -116,9 +115,6 @@ export default function ProfilePage() {
             </Button>
         </CardContent>
        </Card>
-
-       {/* Top Buyers List */}
-       <TopBuyersList />
 
     </div>
   );

@@ -40,7 +40,7 @@ service cloud.firestore {
     // This rule allows the collectionGroup query for TopBuyersList.
     // Any authenticated user can read all orders, but cannot write.
     match /{path=**}/orders/{orderId} {
-      allow get, list: if request.auth != null;
+      allow get, list: if request.auth.token.email == 'marrci448@gmail.com';
       allow create, update, delete: if false; // Explicitly deny writes
     }
   }
