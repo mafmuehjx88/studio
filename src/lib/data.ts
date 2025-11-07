@@ -22,10 +22,6 @@ export const products: Product[] = [
   { id: '2x-500', gameId: 'mlbb', name: '500 (2x500) 💎', category: '2x', price: 35000, image: 'https://i.ibb.co/GfBnfkwr/1760334222388-daa6d2f0-0249-4fa5-bb28-5ce48267c1d8.png' },
 
   // Normal Diamonds - Updated 
-  { id: 'dm-11', gameId: 'mlbb', name: '11 💎', category: 'diamonds', price: 860, image: 'https://i.ibb.co/YBP7c6wc/1760335241932-2d157ab5-58a3-45e0-9061-7318b1b0415a.png' },
-  { id: 'dm-22', gameId: 'mlbb', name: '22 💎', category: 'diamonds', price: 1720, image: 'https://i.ibb.co/YBP7c6wc/1760335241932-2d157ab5-58a3-45e0-9061-7318b1b0415a.png' },
-  { id: 'dm-33', gameId: 'mlbb', name: '33 💎', category: 'diamonds', price: 2580, image: 'https://i.ibb.co/YBP7c6wc/1760335241932-2d157ab5-58a3-45e0-9061-7318b1b0415a.png' },
-  { id: 'dm-44', gameId: 'mlbb', name: '44 💎', category: 'diamonds', price: 3440, image: 'https://i.ibb.co/YBP7c6wc/1760335241932-2d157ab5-58a3-45e0-9061-7318b1b0415a.png' },
   { id: 'dm-86', gameId: 'mlbb', name: '86 💎', category: 'diamonds', price: 4950, image: 'https://i.ibb.co/GQfMfDhZ/1760335245898-e3d40beb-2e0d-473c-b9ff-be6c797666db.png' },
   { id: 'dm-172', gameId: 'mlbb', name: '172 💎', category: 'diamonds', price: 9900, image: 'https://i.ibb.co/GQfMfDhZ/1760335245898-e3d40beb-2e0d-473c-b9ff-be6c797666db.png' },
   { id: 'dm-257', gameId: 'mlbb', name: '257 💎', category: 'diamonds', price: 14850, image: 'https://i.ibb.co/GQfMfDhZ/1760335245898-e3d40beb-2e0d-473c-b9ff-be6c797666db.png' },
