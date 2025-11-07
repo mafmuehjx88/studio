@@ -13,6 +13,7 @@ service cloud.firestore {
     
     match /users/{userId}/orders/{orderId} {
       allow read, create, update: if request.auth.uid == userId || request.auth.token.email == 'marrci448@gmail.com';
+      // Only admin can list orders for a *specific* user
       allow list: if request.auth.token.email == 'marrci448@gmail.com';
     }
 
@@ -36,9 +37,11 @@ service cloud.firestore {
         allow list: if request.auth.token.email == 'marrci448@gmail.com';
     }
 
+    // This rule allows the collectionGroup query for TopBuyersList.
+    // Any authenticated user can read all orders, but cannot write.
     match /{path=**}/orders/{orderId} {
-      // Allow admin to get any order from any user.
-      allow get, list: if request.auth.token.email == 'marrci448@gmail.com';
+      allow get, list: if request.auth != null;
+      allow create, update, delete: if false; // Explicitly deny writes
     }
   }
 }
