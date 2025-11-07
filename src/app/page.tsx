@@ -75,7 +75,7 @@ export default function Home() {
 
       <div>
         <h2 className="mb-4 text-center text-2xl font-bold text-white">Games</h2>
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-3 gap-4">
           {displayGames.map((game) => {
               const isDigitalProduct = game.id === 'digital-product';
               const href = isDigitalProduct ? '/digital-product' : `/games/${game.id}`;
