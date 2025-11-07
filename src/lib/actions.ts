@@ -108,7 +108,7 @@ export async function checkMlbbPlayerName(userId: string, serverId: string): Pro
 
         if (!response.ok) {
             // Try to parse the error response from the API provider
-            const errorData = await response.json().catch(() => ({ error_msg: 'API request failed with status ' + response.status }));
+            const errorData = await response.json().catch(() => ({ error_msg: 'Player not found or API error.' }));
             return { success: false, data: errorData };
         }
 
@@ -123,6 +123,6 @@ export async function checkMlbbPlayerName(userId: string, serverId: string): Pro
 
     } catch (error) {
         console.error("MLBB Player Name Check API Error:", error);
-        return { success: false, data: { error_msg: "An unexpected error occurred while checking the player name." } };
+        return { success: false, data: { error_msg: "An unexpected error occurred. Please try again." } };
     }
 }
