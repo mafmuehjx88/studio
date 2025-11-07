@@ -15,11 +15,13 @@ export const products: Product[] = [
   { id: 'twilight-pass', gameId: 'mlbb', name: 'Twilight Pass', category: 'pass', price: 32000, image: 'https://i.ibb.co/spGS17Wr/1760695899008.jpg' },
   { id: 'weekly-pass', gameId: 'mlbb', name: 'Weekly Pass', category: 'pass', price: 5950, image: 'https://i.ibb.co/wZypZFHg/e406adc7efb93d2994b8bfd30b0f25f0.jpg' },
   
+  // Double Diamonds
   { id: '2x-50', gameId: 'mlbb', name: '50 (2x50) 💎', category: '2x', price: 3500, image: 'https://i.ibb.co/r2GCkBSt/1760334222477-bdd28040-0bd9-4dff-b748-ed7b1a0aecdd.png' },
   { id: '2x-150', gameId: 'mlbb', name: '150 (2x150) 💎', category: '2x', price: 10500, image: 'https://i.ibb.co/SXmLqPqp/1760334222447-c62c5300-1e1f-4f91-90f4-d677eeb054db.png' },
   { id: '2x-250', gameId: 'mlbb', name: '250 (2x250) 💎', category: '2x', price: 17500, image: 'https://i.ibb.co/GfBnfkwr/1760334222388-daa6d2f0-0249-4fa5-bb28-5ce48267c1d8.png' },
   { id: '2x-500', gameId: 'mlbb', name: '500 (2x500) 💎', category: '2x', price: 35000, image: 'https://i.ibb.co/GfBnfkwr/1760334222388-daa6d2f0-0249-4fa5-bb28-5ce48267c1d8.png' },
 
+  // Normal Diamonds - Updated 
   { id: 'dm-11', gameId: 'mlbb', name: '11 💎', category: 'diamonds', price: 860, image: 'https://i.ibb.co/YBP7c6wc/1760335241932-2d157ab5-58a3-45e0-9061-7318b1b0415a.png' },
   { id: 'dm-22', gameId: 'mlbb', name: '22 💎', category: 'diamonds', price: 1720, image: 'https://i.ibb.co/YBP7c6wc/1760335241932-2d157ab5-58a3-45e0-9061-7318b1b0415a.png' },
   { id: 'dm-33', gameId: 'mlbb', name: '33 💎', category: 'diamonds', price: 2580, image: 'https://i.ibb.co/YBP7c6wc/1760335241932-2d157ab5-58a3-45e0-9061-7318b1b0415a.png' },
@@ -27,16 +29,17 @@ export const products: Product[] = [
   { id: 'dm-86', gameId: 'mlbb', name: '86 💎', category: 'diamonds', price: 4950, image: 'https://i.ibb.co/GQfMfDhZ/1760335245898-e3d40beb-2e0d-473c-b9ff-be6c797666db.png' },
   { id: 'dm-172', gameId: 'mlbb', name: '172 💎', category: 'diamonds', price: 9900, image: 'https://i.ibb.co/GQfMfDhZ/1760335245898-e3d40beb-2e0d-473c-b9ff-be6c797666db.png' },
   { id: 'dm-257', gameId: 'mlbb', name: '257 💎', category: 'diamonds', price: 14850, image: 'https://i.ibb.co/GQfMfDhZ/1760335245898-e3d40beb-2e0d-473c-b9ff-be6c797666db.png' },
-  { id: 'dm-343', gameId: 'mlbb', name: '343 💎', category: 'diamonds', price: 19800, image: 'https://i.ibb.co/8g3fNvzk/1760335245056-efd05219-8413-4d21-b8be-79d49af43c09.png' },
+  { id: 'dm-344', gameId: 'mlbb', name: '344 💎', category: 'diamonds', price: 19800, image: 'https://i.ibb.co/8g3fNvzk/1760335245056-efd05219-8413-4d21-b8be-79d49af43c09.png' },
   { id: 'dm-429', gameId: 'mlbb', name: '429 💎', category: 'diamonds', price: 24750, image: 'https://i.ibb.co/8g3fNvzk/1760335245056-efd05219-8413-4d21-b8be-79d49af43c09.png' },
   { id: 'dm-514', gameId: 'mlbb', name: '514 💎', category: 'diamonds', price: 29700, image: 'https://i.ibb.co/nsJWJzSK/1760335244496-8ccf974b-354c-4832-a3f4-c194147570f5.png' },
-  { id: 'dm-600', gameId: 'mlbb', name: '600 💎', category: 'diamonds', price: 34650, image: 'https://i.ibb.co/nsJWJzSK/1760335244496-8ccf974b-354c-4832-a3f4-c194147570f5.png' },
+  { id: 'dm-601', gameId: 'mlbb', name: '601 💎', category: 'diamonds', price: 34650, image: 'https://i.ibb.co/nsJWJzSK/1760335244496-8ccf974b-354c-4832-a3f4-c194147570f5.png' },
   { id: 'dm-706', gameId: 'mlbb', name: '706 💎', category: 'diamonds', price: 40000, image: 'https://i.ibb.co/SwpNnDqk/1760335244180-fc886416-22a7-4a63-9166-5e66419a58c4.png' },
-  { id: 'dm-963', gameId: 'mlbb', name: '963 💎', category: 'diamonds', price: 55396, image: 'https://i.ibb.co/SwpNnDqk/1760335244180-fc886416-22a7-4a63-9166-5e66419a58c4.png' },
-  { id: 'dm-1049', gameId: 'mlbb', name: '1049 💎', category: 'diamonds', price: 61120, image: 'https://i.ibb.co/SwpNnDqk/1760335244180-fc886416-22a7-4a63-9166-5e66419a58c4.png' },
-  { id: 'dm-2098', gameId: 'mlbb', name: '2,098 💎', category: 'diamonds', price: 122240, image: 'https://i.ibb.co/BV24zqgV/1735899441907-5000or-More-MLBB-Diamonds.png' },
-  { id: 'dm-3147', gameId: 'mlbb', name: '3,147 💎', category: 'diamonds', price: 183360, image: 'https://i.ibb.co/BV24zqgV/1735899441907-5000or-More-MLBB-Diamonds.png' },
-  { id: 'dm-4196', gameId: 'mlbb', name: '4,196 💎', category: 'diamonds', price: 244480, image: 'https://i.ibb.co/BV24zqgV/1735899441907-5000or-More-MLBB-Diamonds.png' },
+  { id: 'dm-878', gameId: 'mlbb', name: '878 💎', category: 'diamonds', price: 49000, image: 'https://i.ibb.co/SwpNnDqk/1760335244180-fc886416-22a7-4a63-9166-5e66419a58c4.png' },
+  { id: 'dm-964', gameId: 'mlbb', name: '964 💎', category: 'diamonds', price: 55396, image: 'https://i.ibb.co/SwpNnDqk/1760335244180-fc886416-22a7-4a63-9166-5e66419a58c4.png' },
+  { id: 'dm-1050', gameId: 'mlbb', name: '1050 💎', category: 'diamonds', price: 59500, image: 'https://i.ibb.co/SwpNnDqk/1760335244180-fc886416-22a7-4a63-9166-5e66419a58c4.png' },
+  { id: 'dm-2100', gameId: 'mlbb', name: '2,100 💎', category: 'diamonds', price: 122240, image: 'https://i.ibb.co/BV24zqgV/1735899441907-5000or-More-MLBB-Diamonds.png' },
+  { id: 'dm-3150', gameId: 'mlbb', name: '3,150 💎', category: 'diamonds', price: 183360, image: 'https://i.ibb.co/BV24zqgV/1735899441907-5000or-More-MLBB-Diamonds.png' },
+  { id: 'dm-4200', gameId: 'mlbb', name: '4,200 💎', category: 'diamonds', price: 244480, image: 'https://i.ibb.co/BV24zqgV/1735899441907-5000or-More-MLBB-Diamonds.png' },
 
 
   // PUBG Mobile
