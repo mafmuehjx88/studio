@@ -27,7 +27,7 @@ export default function Home() {
   displayGames.push({ id: 'digital-product', name: 'Digital Product', image: 'https://i.ibb.co/wFmXwwNg/zproduct.jpg' });
   
   // Add the "Game Account" card
-  displayGames.push({ id: 'game-account', name: 'Game Account', image: 'https://i.ibb.co/b3DGFx3/01-JZ3-MCD0-Y8-R4-GN8-R3-V3-SSYJNY.jpg' });
+  displayGames.push({ id: 'game-account', name: 'Game Account', image: 'https://i.ibb.co/cXSttfXb/accountl.png' });
 
   // Add smile coin game only if user is admin.
   if (isAdmin) {
