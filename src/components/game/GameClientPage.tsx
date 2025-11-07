@@ -16,7 +16,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import { Info, Loader2, Minus, Plus, ShoppingBag, UserCheck, ShieldQuestion } from 'lucide-react';
+import { Info, Loader2, Minus, Plus, ShoppingBag, UserCheck, ShieldQuestion, AlertTriangle } from 'lucide-react';
 import {
   doc,
   addDoc,
@@ -73,6 +73,8 @@ export default function GameClientPage({ game, products }: GameClientPageProps) 
     ? userProfile.walletBalance >= finalPrice
     : false;
 
+  const isPurchaseButtonDisabled = !hasSufficientBalance || isPurchasing || (game.id === 'mlbb' && isCheckingPlayer);
+
 
   useEffect(() => {
     // Reset state when dialog closes or game changes
@@ -98,14 +100,19 @@ export default function GameClientPage({ game, products }: GameClientPageProps) 
       setPlayerName(null);
       setPlayerCheckError(null);
 
-      const result = await checkMlbbPlayerName(debouncedUserGameId, debouncedUserServerId);
+      try {
+        const result = await checkMlbbPlayerName(debouncedUserGameId, debouncedUserServerId);
       
-      if (result.success) {
-        setPlayerName(result.data.name);
-      } else {
-        setPlayerCheckError(result.data.error_msg || "Player not found.");
+        if (result.success) {
+          setPlayerName(result.data.name);
+        } else {
+          setPlayerCheckError(result.data.error_msg || "Player not found. Please double check IDs.");
+        }
+      } catch (error) {
+         setPlayerCheckError("Could not verify player. Please double check IDs.");
+      } finally {
+        setIsCheckingPlayer(false);
       }
-      setIsCheckingPlayer(false);
     };
 
     checkPlayer();
@@ -142,10 +149,10 @@ export default function GameClientPage({ game, products }: GameClientPageProps) 
       return;
     }
 
-    if (game.id === 'mlbb' && !playerName) {
+    if (game.id === 'mlbb' && isCheckingPlayer) {
         toast({
-            title: "Player Not Verified",
-            description: "Please enter a valid User ID and Server ID to verify the player.",
+            title: "Verifying Player",
+            description: "Please wait a moment while we check the player name.",
             variant: "destructive"
         });
         return;
@@ -195,7 +202,7 @@ export default function GameClientPage({ game, products }: GameClientPageProps) 
         price: finalPrice,
         gameUserId: userGameId,
         gameServerId: userServerId || '',
-        gameUserName: playerName || '', // Save the checked player name
+        gameUserName: playerName || 'Verification Failed', // Save verification status
         paymentMethod: 'Wallet',
         status: 'Pending' as const,
         createdAt: serverTimestamp(),
@@ -213,7 +220,7 @@ Item: *${orderData.itemName}*
 Price: *${finalPrice.toLocaleString()} Ks*
 ----------------------
 Username: \`${userProfile.username}\`
-${playerName ? `Player Name: \`${playerName}\`` : ''}
+${playerName ? `Player Name: \`${playerName}\`` : 'Player Name: `Verification Failed`'}
 ${identifierLabel}: \`${userGameId}\`
 ${userServerId ? `Game Server ID: \`${userServerId}\`` : ''}
 ----------------------
@@ -332,10 +339,11 @@ Order Time: ${new Date().toLocaleString('en-US', {
     // A more generic way to group products by category
     const productGroups: { [key: string]: Product[] } = {};
     products.forEach(p => {
-        if (!productGroups[p.category]) {
-            productGroups[p.category] = [];
+        const category = p.category || 'general';
+        if (!productGroups[category]) {
+            productGroups[category] = [];
         }
-        productGroups[p.category].push(p);
+        productGroups[category].push(p);
     });
 
     switch (game.id) {
@@ -529,8 +537,8 @@ Order Time: ${new Date().toLocaleString('en-US', {
                         </>
                     ) : playerCheckError ? (
                          <>
-                           <ShieldQuestion className="mr-2 h-4 w-4 text-red-600" />
-                           <span className="text-red-600">{playerCheckError}</span>
+                           <AlertTriangle className="mr-2 h-4 w-4 text-yellow-600" />
+                           <span className="text-yellow-700 font-semibold">ID ကို သေချာစစ်ဆေးပါ</span>
                         </>
                     ) : (
                          <>
@@ -600,7 +608,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
             </Button>
             <Button
               onClick={handlePurchase}
-              disabled={!hasSufficientBalance || isPurchasing || (game.id === 'mlbb' && !playerName)}
+              disabled={isPurchaseButtonDisabled}
               className="h-[42px] w-full rounded-md bg-[#10B981] text-sm font-bold text-white hover:bg-green-600"
             >
               {isPurchasing && (
@@ -614,3 +622,5 @@ Order Time: ${new Date().toLocaleString('en-US', {
     </div>
   );
 }
+
+    

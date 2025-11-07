@@ -101,9 +101,10 @@ export async function checkMlbbPlayerName(userId: string, serverId: string): Pro
         const response = await fetch(apiUrl, {
             method: 'GET',
             headers: {
-                // Add any required headers here. This example API doesn't need any.
                 'Accept': 'application/json',
             },
+            // Add a timeout to the fetch request
+            signal: AbortSignal.timeout(5000) // 5 seconds timeout
         });
 
         if (!response.ok) {
@@ -121,8 +122,14 @@ export async function checkMlbbPlayerName(userId: string, serverId: string): Pro
             return { success: false, data: { error_msg: data.message || "Player not found." } };
         }
 
-    } catch (error) {
+    } catch (error: any) {
         console.error("MLBB Player Name Check API Error:", error);
-        return { success: false, data: { error_msg: "An unexpected error occurred. Please try again." } };
+        if (error.name === 'TimeoutError') {
+             return { success: false, data: { error_msg: "Verification timed out. Please try again." } };
+        }
+        // Throw the error to be caught by the client-side try-catch
+        throw new Error("An unexpected error occurred while checking the player name.");
     }
 }
+
+    
