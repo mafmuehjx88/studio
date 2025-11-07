@@ -48,9 +48,9 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 rounded-lg bg-white p-4 text-black">
       {/* Profile Card */}
-      <div className="rounded-lg bg-[#9C1309] p-4 text-white">
+      <div className="rounded-lg bg-gray-100 p-4 text-black">
         <div className="flex items-center gap-4">
           {zenithLogo && (
             <div className="h-16 w-16 flex-shrink-0 rounded-md bg-white p-1">
@@ -65,7 +65,7 @@ export default function ProfilePage() {
           )}
           <div className="space-y-1">
             <p className="text-xl font-bold">{userProfile.username}</p>
-            <p className="text-lg font-semibold">
+            <p className="text-lg font-semibold text-blue-600">
               {userProfile.walletBalance.toLocaleString()} ကျပ်
             </p>
           </div>
@@ -73,27 +73,27 @@ export default function ProfilePage() {
       </div>
 
       {/* Info Card */}
-      <Card className="bg-card">
+      <Card className="bg-white text-black">
         <CardContent className="space-y-4 p-4">
-          <p className="text-center text-sm leading-relaxed text-muted-foreground">
+          <p className="text-center text-sm leading-relaxed text-gray-600">
             မြန်မာစံတော်ချိန် မနက်၉နာရီ မှ ည ၁၀နာရီ အတွင်း ငွေဖြည့်သွင်း
             ဝယ်ယူပါက ၁၅မိနစ် အတွင်းအကောင့်ထဲ ရောက်လာမှာဖြစ်ပါတယ်
             သိလိုသည်များကို ဖုန်းဆက်မေးပါ။(အရေးကြီး မှဆက်ပါ)
             ယုံကြည်စွာဝယ်ယူနိုင်ပါတယ်ဗျ..
           </p>
           <div className="grid grid-cols-1 gap-2">
-            <Button variant="outline" asChild>
+            <Button variant="outline" asChild className="text-black border-gray-300">
               <a href="tel:09769181524" className="text-base">
                 09769181524
               </a>
             </Button>
-            <Button asChild className="bg-[#2AABEE] hover:bg-[#2AABEE]/90">
+            <Button asChild className="bg-[#2AABEE] hover:bg-[#2AABEE]/90 text-white">
               <Link href="https://t.me/Atgamehub" target="_blank" className="text-base">
                 <Send className="mr-2 h-4 w-4" />
                 Channel
               </Link>
             </Button>
-            <Button asChild className="bg-primary hover:bg-primary/90">
+            <Button asChild className="bg-blue-600 hover:bg-blue-700 text-white">
               <Link href="https://t.me/zenthegod" target="_blank" className="text-base">
                 <Send className="mr-2 h-4 w-4" />
                 Account
@@ -104,7 +104,7 @@ export default function ProfilePage() {
       </Card>
 
       {/* Logout Button as a separate card */}
-       <Card className="bg-card">
+       <Card className="bg-white">
         <CardContent className="p-2">
             <Button
                 variant="destructive"
