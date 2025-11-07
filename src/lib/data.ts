@@ -8,6 +8,11 @@ export const games: Game[] = [
   { id: 'smile-coin', name: 'Smile coin', image: 'https://i.ibb.co/4R3wTGHd/images-1-1.jpg', bannerImage: 'https://i.ibb.co/cCrz0vM/1760334222340-e17f0352-71c1-419b-b0b4-9385d342cc88.png', needsServerId: false, needsUserIdentifier: true, userIdentifierLabel: 'Player ID' },
   { id: 'telegram', name: 'Telegram', image: 'https://i.ibb.co/fVKbf2Bw/01-JZ3-RJE7-RGAM58-RVVTY8-GVBFW.jpg', bannerImage: 'https://i.ibb.co/fVKbf2Bw/01-JZ3-RJE7-RGAM58-RVVTY8-GVBFW.jpg', needsServerId: false, needsUserIdentifier: true, userIdentifierLabel: 'Telegram Link' },
   { id: 'tiktok', name: 'Tiktok', image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png', bannerImage: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png', needsServerId: false, needsUserIdentifier: true, userIdentifierLabel: 'Account/Post Link' },
+  { id: 'mlbb-malaysia', name: 'MLBB Malaysia', image: 'https://i.ibb.co/xLd2X4r/mlbb-malaysia.jpg', bannerImage: 'https://i.ibb.co/NnNMr8gq/New-Project-85-E9-F449-A.png', needsServerId: true, needsUserIdentifier: true, userIdentifierLabel: 'User ID' },
+  { id: 'mlbb-sg', name: 'MLBB SG', image: 'https://i.ibb.co/qYgLcF1/mlbb-sg.jpg', bannerImage: 'https://i.ibb.co/NnNMr8gq/New-Project-85-E9-F449-A.png', needsServerId: true, needsUserIdentifier: true, userIdentifierLabel: 'User ID' },
+  { id: 'mlbb-php', name: 'MLBB Php', image: 'https://i.ibb.co/d2XfC6s/mlbb-php.jpg', bannerImage: 'https://i.ibb.co/NnNMr8gq/New-Project-85-E9-F449-A.png', needsServerId: true, needsUserIdentifier: true, userIdentifierLabel: 'User ID' },
+  { id: 'magic-chess', name: 'Magic Chess', image: 'https://i.ibb.co/Y05b8P0/magic-chess.jpg', bannerImage: 'https://i.ibb.co/NnNMr8gq/New-Project-85-E9-F449-A.png', needsServerId: true, needsUserIdentifier: true, userIdentifierLabel: 'User ID' },
+  { id: 'blood-strike', name: 'Blood Strike', image: 'https://i.ibb.co/L8T9Cns/blood-strike.jpg', bannerImage: 'https://i.ibb.co/L8T9Cns/blood-strike.jpg', needsServerId: false, needsUserIdentifier: true, userIdentifierLabel: 'Player ID' },
 ];
 
 export const products: Product[] = [
@@ -85,6 +90,10 @@ export const products: Product[] = [
   { id: 'tiktok-promote-1', gameId: 'tiktok', name: 'Promote View(1$)', category: 'Promote', price: 6900, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
   { id: 'tiktok-promote-2', gameId: 'tiktok', name: 'Promote View(2$)', category: 'Promote', price: 13800, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
   { id: 'tiktok-promote-3', gameId: 'tiktok', name: 'Promote View(3$)', category: 'Promote', price: 20700, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
+
+  // New game products (can be empty)
+  { id: 'ms-pass-1', gameId: 'magic-chess', name: 'Magic Chess Pass', category: 'Pass', price: 15000, image: 'https://i.ibb.co/Y05b8P0/magic-chess.jpg'},
+  { id: 'bs-item-1', gameId: 'blood-strike', name: 'Gold', category: 'Currency', price: 5000, image: 'https://i.ibb.co/L8T9Cns/blood-strike.jpg'},
 ];
 
 export const smileCoinProducts: Product[] = [
