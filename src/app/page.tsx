@@ -11,7 +11,7 @@ import type { Game } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/contexts/AuthContext';
 import MarqueeText from '@/components/MarqueeText';
-import { ShieldCheck } from 'lucide-react';
+import { ShieldCheck, UserCheck } from 'lucide-react';
 
 
 export default function Home() {
@@ -61,6 +61,15 @@ export default function Home() {
           </Link>
         </Button>
       )}
+
+      <div className="flex justify-center">
+        <Button variant="secondary" className="border border-primary/20 bg-card hover:bg-accent" asChild>
+            <Link href="/games/mlbb">
+                <UserCheck className="mr-2 h-5 w-5 text-primary" />
+                <span className="font-bold">MLBB Server Check</span>
+            </Link>
+        </Button>
+      </div>
       
       <MarqueeText />
 
@@ -102,3 +111,4 @@ export default function Home() {
     </div>
   );
 }
+
