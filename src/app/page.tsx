@@ -25,6 +25,9 @@ export default function Home() {
 
   // Add the generic "Digital Product" card
   displayGames.push({ id: 'digital-product', name: 'Digital Product', image: 'https://i.ibb.co/wFmXwwNg/zproduct.jpg' });
+  
+  // Add the "Game Account" card
+  displayGames.push({ id: 'game-account', name: 'Game Account', image: 'https://i.ibb.co/b3DGFx3/01-JZ3-MCD0-Y8-R4-GN8-R3-V3-SSYJNY.jpg' });
 
   // Add smile coin game only if user is admin.
   if (isAdmin) {
@@ -78,7 +81,15 @@ export default function Home() {
         <div className="grid grid-cols-3 gap-4">
           {displayGames.map((game) => {
               const isDigitalProduct = game.id === 'digital-product';
-              const href = isDigitalProduct ? '/digital-product' : `/games/${game.id}`;
+              const isGameAccount = game.id === 'game-account';
+              
+              let href = `/games/${game.id}`;
+              if (isDigitalProduct) {
+                href = '/digital-product';
+              } else if (isGameAccount) {
+                // You can set a specific link for Game Account or use a placeholder
+                href = '#'; // Or a new page like '/game-accounts'
+              }
               
               return (
                 <Link key={game.id} href={href} className="group">
