@@ -16,7 +16,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import { Info, Loader2, Minus, Plus, ShoppingBag, UserCheck } from 'lucide-react';
+import { Info, Loader2, Minus, Plus, ShoppingBag, UserCheck, ShieldQuestion } from 'lucide-react';
 import {
   doc,
   addDoc,
@@ -26,11 +26,13 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { sendTelegramNotification } from '@/lib/actions';
+import { sendTelegramNotification, checkMlbbPlayerName } from '@/lib/actions';
 import { generateOrderId } from '@/lib/utils';
 import type { Game, Product } from '@/lib/types';
 import { FirestorePermissionError } from '@/firebase/errors';
 import { errorEmitter } from '@/firebase/error-emitter';
+import { useDebounce } from 'use-debounce';
+
 
 interface GameClientPageProps {
     game: Game;
@@ -47,6 +49,14 @@ export default function GameClientPage({ game, products }: GameClientPageProps) 
   const [userServerId, setUserServerId] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [isPurchasing, setIsPurchasing] = useState(false);
+
+  // States for MLBB player name check
+  const [isCheckingPlayer, setIsCheckingPlayer] = useState(false);
+  const [playerName, setPlayerName] = useState<string | null>(null);
+  const [playerCheckError, setPlayerCheckError] = useState<string | null>(null);
+  const [debouncedUserGameId] = useDebounce(userGameId, 500);
+  const [debouncedUserServerId] = useDebounce(userServerId, 500);
+
 
   const isPassProduct = selectedProduct?.category === 'pass';
   const is2xProduct = selectedProduct?.category === '2x';
@@ -69,8 +79,37 @@ export default function GameClientPage({ game, products }: GameClientPageProps) 
     if (!selectedProduct) {
         setUserGameId('');
         setUserServerId('');
+        setPlayerName(null);
+        setPlayerCheckError(null);
+        setIsCheckingPlayer(false);
     }
   }, [selectedProduct]);
+
+  // Effect for checking MLBB player name
+  useEffect(() => {
+    if (game.id !== 'mlbb' || !debouncedUserGameId || !debouncedUserServerId) {
+      setPlayerName(null);
+      setPlayerCheckError(null);
+      return;
+    }
+
+    const checkPlayer = async () => {
+      setIsCheckingPlayer(true);
+      setPlayerName(null);
+      setPlayerCheckError(null);
+
+      const result = await checkMlbbPlayerName(debouncedUserGameId, debouncedUserServerId);
+      
+      if (result.success) {
+        setPlayerName(result.data.name);
+      } else {
+        setPlayerCheckError(result.data.error_msg || "Player not found.");
+      }
+      setIsCheckingPlayer(false);
+    };
+
+    checkPlayer();
+  }, [debouncedUserGameId, debouncedUserServerId, game.id]);
 
 
   const handleProductClick = (product: Product) => {
@@ -101,6 +140,15 @@ export default function GameClientPage({ game, products }: GameClientPageProps) 
         variant: 'destructive',
       });
       return;
+    }
+
+    if (game.id === 'mlbb' && !playerName) {
+        toast({
+            title: "Player Not Verified",
+            description: "Please enter a valid User ID and Server ID to verify the player.",
+            variant: "destructive"
+        });
+        return;
     }
 
     setIsPurchasing(true);
@@ -147,7 +195,7 @@ export default function GameClientPage({ game, products }: GameClientPageProps) 
         price: finalPrice,
         gameUserId: userGameId,
         gameServerId: userServerId || '',
-        gameUserName: '', // Removed player name check
+        gameUserName: playerName || '', // Save the checked player name
         paymentMethod: 'Wallet',
         status: 'Pending' as const,
         createdAt: serverTimestamp(),
@@ -165,6 +213,7 @@ Item: *${orderData.itemName}*
 Price: *${finalPrice.toLocaleString()} Ks*
 ----------------------
 Username: \`${userProfile.username}\`
+${playerName ? `Player Name: \`${playerName}\`` : ''}
 ${identifierLabel}: \`${userGameId}\`
 ${userServerId ? `Game Server ID: \`${userServerId}\`` : ''}
 ----------------------
@@ -450,19 +499,47 @@ Order Time: ${new Date().toLocaleString('en-US', {
                         onChange={(e) => setUserGameId(e.target.value)}
                         placeholder={game.userIdentifierLabel || 'User ID'}
                         required
+                        type="number"
                     />
                 )}
                 {game.needsServerId && (
                   <Input
-                    className="h-10 rounded-md border-[#E5E7EB]"
+                    className="h-10 w-24 rounded-md border-[#E5E7EB]"
                     value={userServerId}
                     onChange={(e) => setUserServerId(e.target.value)}
                     placeholder="Server ID"
+                    type="number"
                   />
                 )}
               </div>
              )}
             </div>
+            
+            {game.id === 'mlbb' && (
+                <div className="flex h-10 items-center rounded-md bg-gray-100 px-3 text-sm">
+                    {isCheckingPlayer ? (
+                        <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin text-gray-500" />
+                            <span className="text-gray-500">Checking player...</span>
+                        </>
+                    ) : playerName ? (
+                        <>
+                           <UserCheck className="mr-2 h-4 w-4 text-green-600" />
+                           <span className="font-semibold text-green-700">{playerName}</span>
+                        </>
+                    ) : playerCheckError ? (
+                         <>
+                           <ShieldQuestion className="mr-2 h-4 w-4 text-red-600" />
+                           <span className="text-red-600">{playerCheckError}</span>
+                        </>
+                    ) : (
+                         <>
+                           <Info className="mr-2 h-4 w-4 text-gray-500" />
+                           <span className="text-gray-500">Enter ID & Server to verify name</span>
+                        </>
+                    )}
+                </div>
+            )}
 
 
             <div className="flex h-[45px] items-center justify-between rounded-md bg-[#F3F4F6] p-2.5 text-sm">
@@ -523,7 +600,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
             </Button>
             <Button
               onClick={handlePurchase}
-              disabled={!hasSufficientBalance || isPurchasing}
+              disabled={!hasSufficientBalance || isPurchasing || (game.id === 'mlbb' && !playerName)}
               className="h-[42px] w-full rounded-md bg-[#10B981] text-sm font-bold text-white hover:bg-green-600"
             >
               {isPurchasing && (

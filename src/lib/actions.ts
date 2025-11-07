@@ -80,3 +80,49 @@ export async function sendTopUpTelegramNotification({ caption, photoBase64 }: { 
         throw error; // Re-throw to be caught by the client
     }
 }
+
+
+/**
+ * Checks the MLBB player name using an external API.
+ * @param userId The player's User ID.
+ * @param serverId The player's Server ID.
+ * @returns An object with success status and the player's name or an error message.
+ */
+export async function checkMlbbPlayerName(userId: string, serverId: string): Promise<{ success: boolean; data: any }> {
+    if (!userId || !serverId) {
+        return { success: false, data: { error_msg: "User ID and Server ID are required." } };
+    }
+    
+    // IMPORTANT: This external API is for demonstration. In a real application, 
+    // you should use a reliable, authenticated API provider.
+    const apiUrl = `https://gateway.irvankede.com/v1/data/ml?id=${userId}&zone=${serverId}`;
+    
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'GET',
+            headers: {
+                // Add any required headers here. This example API doesn't need any.
+                'Accept': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            // Try to parse the error response from the API provider
+            const errorData = await response.json().catch(() => ({ error_msg: 'API request failed with status ' + response.status }));
+            return { success: false, data: errorData };
+        }
+
+        const data = await response.json();
+        
+        // The API returns a 'nama' field for the player name.
+        if (data && data.nama) {
+            return { success: true, data: { name: data.nama } };
+        } else {
+            return { success: false, data: { error_msg: data.message || "Player not found." } };
+        }
+
+    } catch (error) {
+        console.error("MLBB Player Name Check API Error:", error);
+        return { success: false, data: { error_msg: "An unexpected error occurred while checking the player name." } };
+    }
+}
