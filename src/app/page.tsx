@@ -77,7 +77,7 @@ export default function Home() {
       <MarqueeText />
 
       <div>
-        <h2 className="mb-4 text-center text-2xl font-bold text-white">Games</h2>
+        <h2 className="mb-4 text-center text-xl font-bold uppercase text-white">Our Products</h2>
         <div className="grid grid-cols-3 gap-4">
           {displayGames.map((game) => {
               const isDigitalProduct = game.id === 'digital-product';
@@ -92,17 +92,17 @@ export default function Home() {
               }
               
               return (
-                <Link key={game.id} href={href} className="group">
-                  <Card className="overflow-hidden transition-transform group-hover:scale-105 rounded-lg border-2 border-transparent group-hover:border-primary">
+                <Link key={game.id} href={href} className="group text-center">
+                  <Card className="overflow-hidden transition-transform group-hover:scale-105 rounded-lg border-2 border-transparent group-hover:border-primary bg-secondary">
                     <Image
                       src={game.image}
                       alt={game.name}
                       width={400}
                       height={400}
-                      className="aspect-square w-full rounded-lg object-cover"
+                      className="aspect-square w-full object-cover"
                     />
                   </Card>
-                  <p className="mt-2 text-center text-[11px] font-semibold text-white">
+                  <p className="mt-2 text-xs font-semibold text-primary">
                     {game.name}
                   </p>
                 </Link>
@@ -122,4 +122,3 @@ export default function Home() {
     </div>
   );
 }
-

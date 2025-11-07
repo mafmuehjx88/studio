@@ -27,7 +27,7 @@ export default function WalletBalance() {
   });
 
   return (
-    <Button asChild variant="default" size="sm" className="h-9 rounded-md bg-black text-white hover:bg-gray-800 border border-gray-700 shadow-md">
+    <Button asChild variant="outline" size="sm" className="h-9 rounded-md bg-black text-white hover:bg-gray-800 border border-white/50 hover:text-white shadow-md">
       <Link href="/wallet" className="flex items-center gap-2">
         <span className="font-semibold text-sm">
           {balance} Ks

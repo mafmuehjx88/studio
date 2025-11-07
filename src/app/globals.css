@@ -4,17 +4,17 @@
 
 @layer base {
   :root {
-    --background: 224 71.4% 4.1%;
-    --foreground: 210 40% 98%;
+    --background: 0 0% 0%; /* Black */
+    --foreground: 210 40% 98%; /* White */
 
-    --card: 211 100% 16%; 
+    --card: 0 0% 8%; /* Near Black for cards, headers, footers */
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 84% 4.9%;
+    --popover: 0 0% 0%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 211 100% 50%;
+    --primary: 84 93% 54%; /* Bright Green */
+    --primary-foreground: 0 0% 0%; /* Black for text on green buttons */
 
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
@@ -22,30 +22,30 @@
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 84 93% 54%; /* Bright Green */
+    --accent-foreground: 0 0% 0%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 210 40% 98%;
+    --ring: 84 93% 54%; /* Bright Green */
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 224 71.4% 4.1%;
-    --foreground: 210 20% 98%;
+    --background: 0 0% 0%; /* Black */
+    --foreground: 210 20% 98%; /* White */
     
-    --card: 211 100% 16%; 
+    --card: 0 0% 8%; /* Near Black for cards, headers, footers */
     --card-foreground: 210 20% 98%;
 
-    --popover: 224 71.4% 4.1%;
+    --popover: 0 0% 0%;
     --popover-foreground: 210 20% 98%;
 
-    --primary: 210 20% 98%;
-    --primary-foreground: 211 100% 50%;
+    --primary: 84 93% 54%; /* Bright Green */
+    --primary-foreground: 0 0% 0%;
 
     --secondary: 215 27.9% 16.9%;
     --secondary-foreground: 210 20% 98%;
@@ -53,15 +53,15 @@
     --muted: 215 27.9% 16.9%;
     --muted-foreground: 217.9 10.6% 64.9%;
 
-    --accent: 215 27.9% 16.9%;
-    --accent-foreground: 210 20% 98%;
+    --accent: 84 93% 54%; /* Bright Green */
+    --accent-foreground: 0 0% 0%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 20% 98%;
 
     --border: 215 27.9% 16.9%;
     --input: 215 27.9% 16.9%;
-    --ring: 210 20% 98%;
+    --ring: 84 93% 54%; /* Bright Green */
   }
 }
 
@@ -71,8 +71,5 @@
   }
   body {
     @apply bg-background text-foreground;
-  }
-  .bg-gradient-dark-blue {
-    background: linear-gradient(180deg, #0B2546 0%, #0F5BE8 50%, #031737 100%);
   }
 }
