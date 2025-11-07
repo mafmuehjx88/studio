@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { collectionGroup, query, where, getDocs } from 'firebase/firestore';
+import { collectionGroup, query, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import type { Order, UserProfile } from '@/lib/types';
 import { useAuth } from '@/contexts/AuthContext';
@@ -35,17 +35,16 @@ export default function TopBuyersList() {
     const fetchTopBuyers = async () => {
       setLoading(true);
       try {
-        const ordersQuery = query(
-          collectionGroup(db, 'orders'),
-          where('status', '==', 'Completed')
-        );
+        // Query all orders without filtering by status to avoid index requirement
+        const ordersQuery = query(collectionGroup(db, 'orders'));
 
         const ordersSnapshot = await getDocs(ordersQuery);
         const userSpending: { [key: string]: { totalSpent: number, username: string } } = {};
 
         ordersSnapshot.forEach((doc) => {
           const order = doc.data() as Order;
-          if (order.userId && order.price > 0) { // Only count orders with a user and price
+          // Filter for completed orders on the client-side
+          if (order.status === 'Completed' && order.userId && order.price > 0) {
             if (!userSpending[order.userId]) {
               userSpending[order.userId] = { totalSpent: 0, username: order.username };
             }
