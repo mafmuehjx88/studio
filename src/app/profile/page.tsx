@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { staticImages } from '@/lib/data';
 import Link from 'next/link';
-import { Send } from 'lucide-react';
+import { Send, LogOut, Phone } from 'lucide-react';
 
 export default function ProfilePage() {
   const { userProfile, loading } = useAuth();
@@ -82,8 +82,9 @@ export default function ProfilePage() {
             ယုံကြည်စွာဝယ်ယူနိုင်ပါတယ်ဗျ..
           </p>
           <div className="grid grid-cols-1 gap-2">
-            <Button variant="outline" asChild className="text-black border-gray-300">
-              <a href="tel:09769181524" className="text-base">
+            <Button variant="outline" asChild className="text-black border-gray-300 hover:bg-gray-100">
+              <a href="tel:09769181524" className="text-base font-semibold">
+                 <Phone className="mr-2 h-4 w-4" />
                 09769181524
               </a>
             </Button>
@@ -107,10 +108,10 @@ export default function ProfilePage() {
        <Card className="bg-white">
         <CardContent className="p-2">
             <Button
-                variant="destructive"
-                className="w-full text-base h-11"
+                className="w-full h-11 text-base font-bold bg-green-500 text-white hover:bg-green-600"
                 onClick={handleLogout}
                 >
+                <LogOut className="mr-2 h-5 w-5" />
                 Logout
             </Button>
         </CardContent>
