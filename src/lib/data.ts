@@ -90,9 +90,6 @@ export const products: Product[] = [
   { id: 'tiktok-promote-1', gameId: 'tiktok', name: 'Promote View(1$)', category: 'Promote', price: 6900, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
   { id: 'tiktok-promote-2', gameId: 'tiktok', name: 'Promote View(2$)', category: 'Promote', price: 13800, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
   { id: 'tiktok-promote-3', gameId: 'tiktok', name: 'Promote View(3$)', category: 'Promote', price: 20700, image: 'https://i.ibb.co/R4ZNmZ0N/01-JZ3-RW989-ZE3-EXHZVG7-BVQJ8-Z.png' },
-
-  // New game products (can be empty)
-  { id: 'bs-item-1', gameId: 'blood-strike', name: 'Gold', category: 'Currency', price: 5000, image: 'https://i.ibb.co/gFtCWwsF/01-JZ3-KV10-C5-EZ5-BN4-JMTFEYXKV.jpg'},
 ];
 
 export const smileCoinProducts: Product[] = [
