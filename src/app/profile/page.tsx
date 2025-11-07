@@ -82,7 +82,7 @@ export default function ProfilePage() {
             ယုံကြည်စွာဝယ်ယူနိုင်ပါတယ်ဗျ..
           </p>
           <div className="grid grid-cols-1 gap-2">
-            <Button variant="outline" asChild className="text-black border-gray-300 hover:bg-gray-100">
+            <Button asChild className="border border-gray-300 bg-white text-black hover:bg-gray-100">
               <a href="tel:09769181524" className="text-base font-semibold">
                  <Phone className="mr-2 h-4 w-4" />
                 09769181524
