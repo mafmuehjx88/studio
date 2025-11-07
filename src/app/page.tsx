@@ -49,7 +49,7 @@ export default function Home() {
             priority
           />
         ) : (
-          <Skeleton className="aspect-[2.5/1] w-full" />
+          <Skeleton className="aspect-[2.s1/1] w-full" />
         )}
       </Card>
 
@@ -66,7 +66,7 @@ export default function Home() {
 
       <div>
         <h2 className="mb-4 text-center text-2xl font-bold text-white">Games</h2>
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-4 gap-2">
           {displayGames.map((game) => {
               const isDigitalProduct = game.id === 'digital-product';
               const href = isDigitalProduct ? '/digital-product' : `/games/${game.id}`;
@@ -82,7 +82,7 @@ export default function Home() {
                       className="aspect-square w-full rounded-lg object-cover"
                     />
                   </Card>
-                  <p className="mt-2 text-center text-xs font-semibold text-white">
+                  <p className="mt-2 text-center text-[11px] font-semibold text-white">
                     {game.name}
                   </p>
                 </Link>
