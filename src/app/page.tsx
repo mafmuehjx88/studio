@@ -64,10 +64,10 @@ export default function Home() {
 
       <div className="flex justify-center">
         <Button variant="secondary" className="border border-primary/20 bg-card hover:bg-accent" asChild>
-            <Link href="/games/mlbb">
+            <a href="https://pizzoshop.com/mlchecker" target="_blank" rel="noopener noreferrer">
                 <UserCheck className="mr-2 h-5 w-5 text-primary" />
                 <span className="font-bold">MLBB Server Check</span>
-            </Link>
+            </a>
         </Button>
       </div>
       
