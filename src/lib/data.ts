@@ -131,14 +131,14 @@ export const staticImages = {
         imageHint: `game collage`
     },
     'logo': {
-        imageUrl: `https://i.ibb.co/7J7VJBGy/IMG-20251031-090933-686.jpg`,
+        imageUrl: `https://i.ibb.co/0RWt8y5F/file-00000000766072068c8048cd95f60c70.png`,
         description: `Logo image`,
-        imageHint: `letter A logo`
+        imageHint: `Z logo`
     },
     'zenith-logo': {
-        imageUrl: `https://i.ibb.co/yBNG1C2/zenith-logo.png`,
+        imageUrl: `https://i.ibb.co/0RWt8y5F/file-00000000766072068c8048cd95f60c70.png`,
         description: `Zenith Logo`,
-        imageHint: `letter Z logo`
+        imageHint: `Z logo`
     },
     'default-avatar': {
         imageUrl: `https://picsum.photos/seed/default-avatar/400/400`,
