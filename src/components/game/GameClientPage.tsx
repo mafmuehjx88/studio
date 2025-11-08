@@ -26,7 +26,7 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { sendTelegramNotification, checkMlbbPlayerName } from '@/lib/actions';
+import { sendTelegramNotification, checkMlbbPlayerName, checkPubgPlayerName } from '@/lib/actions';
 import { generateOrderId } from '@/lib/utils';
 import type { Game, Product } from '@/lib/types';
 import { FirestorePermissionError } from '@/firebase/errors';
@@ -50,7 +50,7 @@ export default function GameClientPage({ game, products }: GameClientPageProps) 
   const [quantity, setQuantity] = useState(1);
   const [isPurchasing, setIsPurchasing] = useState(false);
 
-  // States for MLBB player name check
+  // States for player name check
   const [isCheckingPlayer, setIsCheckingPlayer] = useState(false);
   const [playerName, setPlayerName] = useState<string | null>(null);
   const [playerCheckError, setPlayerCheckError] = useState<string | null>(null);
@@ -73,7 +73,7 @@ export default function GameClientPage({ game, products }: GameClientPageProps) 
     ? userProfile.walletBalance >= finalPrice
     : false;
 
-  const isPurchaseButtonDisabled = !hasSufficientBalance || isPurchasing || (game.id === 'mlbb' && isCheckingPlayer);
+  const isPurchaseButtonDisabled = !hasSufficientBalance || isPurchasing || isCheckingPlayer;
 
 
   useEffect(() => {
@@ -87,21 +87,31 @@ export default function GameClientPage({ game, products }: GameClientPageProps) 
     }
   }, [selectedProduct]);
 
-  // Effect for checking MLBB player name
+  // Effect for checking Player name
   useEffect(() => {
-    if (game.id !== 'mlbb' || !debouncedUserGameId || !debouncedUserServerId) {
-      setPlayerName(null);
-      setPlayerCheckError(null);
-      return;
-    }
-
     const checkPlayer = async () => {
       setIsCheckingPlayer(true);
       setPlayerName(null);
       setPlayerCheckError(null);
 
       try {
-        const result = await checkMlbbPlayerName(debouncedUserGameId, debouncedUserServerId);
+        let result;
+        if (game.id === 'mlbb') {
+          if (!debouncedUserGameId || !debouncedUserServerId) {
+             setIsCheckingPlayer(false);
+             return;
+          }
+          result = await checkMlbbPlayerName(debouncedUserGameId, debouncedUserServerId);
+        } else if (game.id === 'pubg') {
+          if (!debouncedUserGameId) {
+             setIsCheckingPlayer(false);
+             return;
+          }
+          result = await checkPubgPlayerName(debouncedUserGameId);
+        } else {
+          setIsCheckingPlayer(false);
+          return;
+        }
       
         if (result.success) {
           setPlayerName(result.data.name);
@@ -115,7 +125,12 @@ export default function GameClientPage({ game, products }: GameClientPageProps) 
       }
     };
 
-    checkPlayer();
+    if ((game.id === 'mlbb' && debouncedUserGameId && debouncedUserServerId) || (game.id === 'pubg' && debouncedUserGameId)) {
+        checkPlayer();
+    } else {
+        setPlayerName(null);
+        setPlayerCheckError(null);
+    }
   }, [debouncedUserGameId, debouncedUserServerId, game.id]);
 
 
@@ -149,7 +164,7 @@ export default function GameClientPage({ game, products }: GameClientPageProps) 
       return;
     }
 
-    if (game.id === 'mlbb' && isCheckingPlayer) {
+    if (isCheckingPlayer) {
         toast({
             title: "Verifying Player",
             description: "Please wait a moment while we check the player name.",
@@ -449,6 +464,36 @@ Order Time: ${new Date().toLocaleString('en-US', {
     }
   };
 
+  const renderPlayerCheck = () => {
+    if (game.id !== 'mlbb' && game.id !== 'pubg') return null;
+
+    return (
+        <div className="flex h-10 items-center rounded-md bg-gray-100 px-3 text-sm">
+            {isCheckingPlayer ? (
+                <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin text-gray-500" />
+                    <span className="text-gray-500">Checking player...</span>
+                </>
+            ) : playerName ? (
+                <>
+                   <UserCheck className="mr-2 h-4 w-4 text-green-600" />
+                   <span className="font-semibold text-green-700">{playerName}</span>
+                </>
+            ) : playerCheckError ? (
+                 <>
+                   <AlertTriangle className="mr-2 h-4 w-4 text-yellow-600" />
+                   <span className="text-yellow-700 font-semibold">ID ကို သေချာစစ်ဆေးပါ</span>
+                </>
+            ) : (
+                 <>
+                   <Info className="mr-2 h-4 w-4 text-gray-500" />
+                   <span className="text-gray-500">Enter ID to verify name</span>
+                </>
+            )}
+        </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {(game.bannerImage || game.image) && (
@@ -523,31 +568,7 @@ Order Time: ${new Date().toLocaleString('en-US', {
              )}
             </div>
             
-            {game.id === 'mlbb' && (
-                <div className="flex h-10 items-center rounded-md bg-gray-100 px-3 text-sm">
-                    {isCheckingPlayer ? (
-                        <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin text-gray-500" />
-                            <span className="text-gray-500">Checking player...</span>
-                        </>
-                    ) : playerName ? (
-                        <>
-                           <UserCheck className="mr-2 h-4 w-4 text-green-600" />
-                           <span className="font-semibold text-green-700">{playerName}</span>
-                        </>
-                    ) : playerCheckError ? (
-                         <>
-                           <AlertTriangle className="mr-2 h-4 w-4 text-yellow-600" />
-                           <span className="text-yellow-700 font-semibold">ID ကို သေချာစစ်ဆေးပါ</span>
-                        </>
-                    ) : (
-                         <>
-                           <Info className="mr-2 h-4 w-4 text-gray-500" />
-                           <span className="text-gray-500">Enter ID & Server to verify name</span>
-                        </>
-                    )}
-                </div>
-            )}
+            {renderPlayerCheck()}
 
 
             <div className="flex h-[45px] items-center justify-between rounded-md bg-[#F3F4F6] p-2.5 text-sm">

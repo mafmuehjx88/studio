@@ -132,4 +132,44 @@ export async function checkMlbbPlayerName(userId: string, serverId: string): Pro
     }
 }
 
+/**
+ * Checks the PUBG player name using an external API.
+ * @param userId The player's ID.
+ * @returns An object with success status and the player's name or an error message.
+ */
+export async function checkPubgPlayerName(userId: string): Promise<{ success: boolean; data: any }> {
+    if (!userId) {
+        return { success: false, data: { error_msg: "Player ID is required." } };
+    }
+    
+    const apiUrl = `https://gateway.irvankede.com/v1/data/pubg?id=${userId}`;
+    
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'GET',
+            headers: { 'Accept': 'application/json' },
+            signal: AbortSignal.timeout(5000) // 5 seconds timeout
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ error_msg: 'Player not found or API error.' }));
+            return { success: false, data: errorData };
+        }
+
+        const data = await response.json();
+        
+        if (data && data.nama) {
+            return { success: true, data: { name: data.nama } };
+        } else {
+            return { success: false, data: { error_msg: data.message || "Player not found." } };
+        }
+
+    } catch (error: any) {
+        console.error("PUBG Player Name Check API Error:", error);
+        if (error.name === 'TimeoutError') {
+             return { success: false, data: { error_msg: "Verification timed out. Please try again." } };
+        }
+        throw new Error("An unexpected error occurred while checking the player name.");
+    }
+}
     
