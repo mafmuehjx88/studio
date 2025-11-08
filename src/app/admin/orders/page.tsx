@@ -15,7 +15,7 @@ import type { Order } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow, subHours } from "date-fns";
 
 export default function AdminOrdersPage() {
   const { isAdmin } = useAuth();
@@ -32,16 +32,21 @@ export default function AdminOrdersPage() {
       return;
     }
 
-    // Remove orderBy from the query to prevent index errors.
-    // We will sort the data on the client-side.
     const q = query(collectionGroup(db, 'orders'));
 
     const unsubscribe = onSnapshot(
       q,
       (querySnapshot) => {
         const ordersData: Order[] = [];
+        const twentyFourHoursAgo = subHours(new Date(), 24);
+
         querySnapshot.forEach((doc) => {
-          ordersData.push({ ...doc.data(), id: doc.id, userId: doc.ref.parent.parent!.id } as Order);
+          const order = { ...doc.data(), id: doc.id, userId: doc.ref.parent.parent!.id } as Order;
+          
+          // Only show orders from the last 24 hours
+          if (order.createdAt && order.createdAt.toDate() > twentyFourHoursAgo) {
+            ordersData.push(order);
+          }
         });
         
         // Sort the data on the client-side by creation date, descending
@@ -125,7 +130,7 @@ export default function AdminOrdersPage() {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>All Orders</CardTitle>
+          <CardTitle>Recent Orders (Last 24 Hours)</CardTitle>
         </CardHeader>
         <CardContent className="p-2">
           <div className="space-y-2">
@@ -142,7 +147,7 @@ export default function AdminOrdersPage() {
   return (
     <Card>
       <CardHeader className="p-4">
-        <CardTitle>All Orders</CardTitle>
+        <CardTitle>Recent Orders (Last 24 Hours)</CardTitle>
         <div className="pt-2">
           <Input 
             placeholder="Search by username..."
@@ -164,39 +169,47 @@ export default function AdminOrdersPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredOrders.map((order) => (
-              <TableRow key={order.id}>
-                <TableCell className="p-2 font-medium text-xs">{order.username}</TableCell>
-                <TableCell className="p-2">
-                    <div className="font-medium text-[11px]">{order.itemName}</div>
-                    <div className="text-[10px] text-muted-foreground">{order.price.toLocaleString()} Ks</div>
-                </TableCell>
-                <TableCell className="p-2 text-[11px] text-muted-foreground">
-                  {order.createdAt ? formatDistanceToNow(order.createdAt.toDate(), { addSuffix: true }) : 'N/A'}
-                </TableCell>
-                 <TableCell className="p-2">
-                     <Badge 
-                      variant="outline"
-                      className={cn("text-[10px]", statusColors[order.status])}
-                    >
-                      {order.status}
-                    </Badge>
-                </TableCell>
-                <TableCell className="p-2 text-right">
-                  {order.status === 'Pending' && (
-                    <Button 
-                        size="sm" 
-                        className="h-7 text-xs"
-                        onClick={() => handleCompleteOrder(order)}
-                        disabled={updatingIds.includes(order.id)}
-                    >
-                      {updatingIds.includes(order.id) && <Loader2 className="mr-2 h-3 w-3 animate-spin" />}
-                      Complete
-                    </Button>
-                  )}
-                </TableCell>
-              </TableRow>
-            ))}
+            {filteredOrders.length === 0 ? (
+                <TableRow>
+                    <TableCell colSpan={5} className="h-24 text-center">
+                        No recent orders in the last 24 hours.
+                    </TableCell>
+                </TableRow>
+            ) : (
+                filteredOrders.map((order) => (
+                  <TableRow key={order.id}>
+                    <TableCell className="p-2 font-medium text-xs">{order.username}</TableCell>
+                    <TableCell className="p-2">
+                        <div className="font-medium text-[11px]">{order.itemName}</div>
+                        <div className="text-[10px] text-muted-foreground">{order.price.toLocaleString()} Ks</div>
+                    </TableCell>
+                    <TableCell className="p-2 text-[11px] text-muted-foreground">
+                      {order.createdAt ? formatDistanceToNow(order.createdAt.toDate(), { addSuffix: true }) : 'N/A'}
+                    </TableCell>
+                     <TableCell className="p-2">
+                         <Badge 
+                          variant="outline"
+                          className={cn("text-[10px]", statusColors[order.status])}
+                        >
+                          {order.status}
+                        </Badge>
+                    </TableCell>
+                    <TableCell className="p-2 text-right">
+                      {order.status === 'Pending' && (
+                        <Button 
+                            size="sm" 
+                            className="h-7 text-xs"
+                            onClick={() => handleCompleteOrder(order)}
+                            disabled={updatingIds.includes(order.id)}
+                        >
+                          {updatingIds.includes(order.id) && <Loader2 className="mr-2 h-3 w-3 animate-spin" />}
+                          Complete
+                        </Button>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))
+            )}
           </TableBody>
         </Table>
       </CardContent>
