@@ -12,6 +12,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { usePathname } from "next/navigation";
 import LoadingScreen from "@/components/layout/LoadingScreen";
 import { useState } from "react";
+import OfflineIndicator from "@/components/layout/OfflineIndicator";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -20,7 +21,7 @@ const poppins = Poppins({
 });
 
 function AppContent({ children }: { children: React.ReactNode }) {
-  const { loading } = useAuth();
+  const { loading, isOnline } = useAuth();
   
   const isAuthPage = usePathname() === '/login' || usePathname() === '/register';
 
@@ -33,6 +34,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
     <div
       className="relative mx-auto flex min-h-screen w-full max-w-md flex-col"
     >
+      <OfflineIndicator isOnline={isOnline} />
       {!isAuthPage && <Header />}
       <main className="flex-1 px-4 pb-24 pt-6">{children}</main>
       {!isAuthPage && <Footer />}

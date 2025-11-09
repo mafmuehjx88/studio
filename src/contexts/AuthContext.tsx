@@ -15,6 +15,7 @@ interface AuthContextType {
   loading: boolean;
   isAdmin: boolean;
   hasUnreadNotifications: boolean;
+  isOnline: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -32,6 +33,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
+  const [isOnline, setIsOnline] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -89,6 +91,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => unsubscribeAuth();
   }, []);
 
+  // Check for online/offline status
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsOnline(navigator.onLine);
+    }
+    
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
 
   useEffect(() => {
     if (loading) return;
@@ -110,7 +130,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [user, isAdmin, loading, pathname, router]);
 
-  const value = { user, userProfile, loading, isAdmin, hasUnreadNotifications };
+  const value = { user, userProfile, loading, isAdmin, hasUnreadNotifications, isOnline };
   
   return (
     <AuthContext.Provider value={value}>
