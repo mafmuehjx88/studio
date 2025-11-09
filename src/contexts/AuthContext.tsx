@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
-  const [isOnline, setIsOnline] = useState(true);
+  const [isOnline, setIsOnline] = useState(true); // Default to true, will be updated on client
   const router = useRouter();
   const pathname = usePathname();
 
@@ -93,9 +93,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // Check for online/offline status
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setIsOnline(navigator.onLine);
-    }
+    // This effect runs only on the client
+    setIsOnline(navigator.onLine);
     
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
