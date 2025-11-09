@@ -4,13 +4,71 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import AdminOrdersPage from "./orders/page";
-import AdminUsersPage from "./users/page";
-import AdminContentPage from "./content/page";
-import AdminSmileCodesPage from "./smile-codes/page";
-import ManualTopUpPage from "./manual-top-up/page";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import Link from 'next/link';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { 
+    Newspaper, 
+    BellRing, 
+    Users, 
+    Megaphone, 
+    ShoppingBag, 
+    Wallet, 
+    CheckCheck,
+    Smile
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+
+
+const adminNavItems = [
+    {
+        title: "All Orders",
+        href: "/admin/orders",
+        icon: ShoppingBag,
+        description: "View and manage all recent user orders."
+    },
+    {
+        title: "User Management",
+        href: "/admin/users",
+        icon: Users,
+        description: "Browse and view all registered users."
+    },
+    {
+        title: "Manual Top-Up",
+        href: "/admin/manual-top-up",
+        icon: Wallet,
+        description: "Manually adjust user wallet balances."
+    },
+    {
+        title: "Top-Up Requests",
+        href: "/admin/top-up-requests",
+        icon: CheckCheck,
+        description: "Approve or reject user top-up requests."
+    },
+    {
+        title: "Home Notice",
+        href: "/admin/home-notice",
+        icon: Megaphone,
+        description: "Update the homepage's scrolling marquee text."
+    },
+    {
+        title: "Announce Notice",
+        href: "/admin/announce-notice",
+        icon: Newspaper,
+        description: "Post a site-wide announcement to all users."
+    },
+     {
+        title: "Send Notification",
+        href: "/admin/send-notification",
+        icon: BellRing,
+        description: "Send a direct notification to a specific user."
+    },
+    {
+        title: "Smile Codes",
+        href: "/admin/smile-codes",
+        icon: Smile,
+        description: "Manage Smile.One codes for the store."
+    }
+];
 
 export default function AdminPage() {
   const { isAdmin, loading } = useAuth();
@@ -28,34 +86,26 @@ export default function AdminPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Admin Panel</h1>
-      <Tabs defaultValue="orders" className="w-full">
-        <ScrollArea>
-          <TabsList className="flex w-full justify-start whitespace-nowrap">
-            <TabsTrigger value="orders">All Orders</TabsTrigger>
-            <TabsTrigger value="users">Users</TabsTrigger>
-            <TabsTrigger value="manual-top-up">Manual Top-Up</TabsTrigger>
-            <TabsTrigger value="content">Content</TabsTrigger>
-            <TabsTrigger value="smile-codes">Smile Codes</TabsTrigger>
-          </TabsList>
-          <ScrollBar orientation="horizontal" className="invisible" />
-        </ScrollArea>
-        <TabsContent value="orders">
-          <AdminOrdersPage />
-        </TabsContent>
-        <TabsContent value="users">
-          <AdminUsersPage />
-        </TabsContent>
-        <TabsContent value="manual-top-up">
-          <ManualTopUpPage />
-        </TabsContent>
-        <TabsContent value="content">
-            <AdminContentPage />
-        </TabsContent>
-         <TabsContent value="smile-codes">
-            <AdminSmileCodesPage />
-        </TabsContent>
-      </Tabs>
+      <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {adminNavItems.map((item) => (
+            <Link href={item.href} key={item.title}>
+                <Card className="hover:bg-primary/5 hover:border-primary/20 transition-colors h-full">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">
+                            {item.title}
+                        </CardTitle>
+                        <item.icon className="h-5 w-5 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-xs text-muted-foreground">
+                            {item.description}
+                        </p>
+                    </CardContent>
+                </Card>
+            </Link>
+        ))}
+      </div>
     </div>
   );
 }
