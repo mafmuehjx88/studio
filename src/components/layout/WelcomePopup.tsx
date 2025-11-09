@@ -43,7 +43,7 @@ export default function WelcomePopup() {
         </button>
         <div className="p-6 space-y-4 text-center">
             <h2 className="text-xl font-bold text-gray-800">
-                ZenithHarrai Shop က ကြိုဆိုပါတယ်ဗျ..
+                AT Game Store က ကြိုဆိုပါတယ်ဗျ..
             </h2>
             <p className="text-sm text-gray-600 leading-relaxed">
                 ငွေဖြည့်ထားရင် ကြိုက်တဲ့အချိန်ဝယ်လို့ရတာမလို့ ကြိုတင်ငွေဖြည့်ထားခြင်းဖြင့် အဆင်ပြေကြပါစေ.. သုံးနည်းမသိပါက - App အသုံးနည်း ဆိုတဲ့စာရဲ့ အပေါ်က နှစ်ခုကို နှိပ်ကြည့်ပေးပါဗျ။
