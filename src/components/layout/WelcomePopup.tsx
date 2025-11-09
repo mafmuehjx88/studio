@@ -74,7 +74,7 @@ export default function WelcomePopup() {
                 အခုဝယ် အခုရမစောင့်ရပါဘူး
             </p>
 
-            <div className="relative h-48 mt-4">
+            <div className="relative aspect-video mt-4">
                 {characterImage && (
                     <Image
                         src={characterImage.imageUrl}
