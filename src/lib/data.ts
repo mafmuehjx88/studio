@@ -166,13 +166,13 @@ export const staticImages = {
         imageHint: `app tutorial`
     },
     'popup-character': {
-        imageUrl: 'https://i.ibb.co/5kPz7vj/character-popup.png',
-        description: 'Anime character for the welcome popup',
-        imageHint: 'anime character'
+        imageUrl: 'https://i.ibb.co/TDbPj6q/New-Project-97-1-F34-A05.png',
+        description: 'New Project 97-1-F34-A05',
+        imageHint: 'game banner'
     },
     'popup-logo': {
         imageUrl: 'https://i.ibb.co/hCKjD0s/zenith-harrai-shop-logo.png',
-        description: 'Zenith Harrai Shop logo for the welcome popup',
+        description: 'AT Game Store logo for the welcome popup',
         imageHint: 'shop logo'
     }
 }
