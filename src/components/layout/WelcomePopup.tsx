@@ -8,8 +8,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { staticImages } from '@/lib/data';
-import Image from 'next/image';
 import { X } from 'lucide-react';
 
 const POPUP_SEEN_KEY = 'welcomePopupSeen';
@@ -29,15 +27,12 @@ export default function WelcomePopup() {
     sessionStorage.setItem(POPUP_SEEN_KEY, 'true');
     setIsOpen(false);
   };
-  
-  const characterImage = staticImages['popup-character'];
-  const logoImage = staticImages['popup-logo'];
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-[340px] w-[90vw] bg-white text-black p-0 rounded-lg overflow-hidden">
         <DialogHeader className="sr-only">
-          <DialogTitle>Welcome to AT Game Store</DialogTitle>
+            <DialogTitle>Welcome to AT Game Store</DialogTitle>
         </DialogHeader>
         <button
             onClick={handleClose}
@@ -70,32 +65,9 @@ export default function WelcomePopup() {
                     ကိုယ့်ကြိုက်တဲ့အချိန် ဝယ်ယူနိုင်ပါပဲ ဖြစ်ပါတယ်ဗျ
                 </p>
             </div>
-             <p className="font-bold text-lg text-red-600">
+             <p className="font-bold text-lg text-red-600 pt-2">
                 အခုဝယ် အခုရမစောင့်ရပါဘူး
             </p>
-
-            <div className="relative aspect-video mt-4">
-                {characterImage && (
-                    <Image
-                        src={characterImage.imageUrl}
-                        alt={characterImage.description}
-                        layout="fill"
-                        objectFit="contain"
-                        className="z-0"
-                    />
-                )}
-                 {logoImage && (
-                    <div className="absolute bottom-4 left-4 z-10">
-                        <Image
-                            src={logoImage.imageUrl}
-                            alt={logoImage.description}
-                            width={100}
-                            height={50}
-                            objectFit="contain"
-                        />
-                    </div>
-                )}
-            </div>
         </div>
       </DialogContent>
     </Dialog>
