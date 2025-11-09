@@ -5,6 +5,8 @@ import { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
+  DialogHeader,
+  DialogTitle,
 } from '@/components/ui/dialog';
 import { staticImages } from '@/lib/data';
 import Image from 'next/image';
@@ -34,6 +36,9 @@ export default function WelcomePopup() {
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-[340px] w-[90vw] bg-white text-black p-0 rounded-lg overflow-hidden">
+        <DialogHeader className="sr-only">
+          <DialogTitle>Welcome to AT Game Store</DialogTitle>
+        </DialogHeader>
         <button
             onClick={handleClose}
             className="absolute top-2 right-2 p-1.5 rounded-full bg-black/10 hover:bg-black/20 transition-colors z-10"
