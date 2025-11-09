@@ -164,5 +164,15 @@ export const staticImages = {
         imageUrl: `https://i.ibb.co/PNY5d7G/how-to-use-guide-3.jpg`,
         description: `Guide on how to use the app - Step 3`,
         imageHint: `app tutorial`
+    },
+    'popup-character': {
+        imageUrl: 'https://i.ibb.co/5kPz7vj/character-popup.png',
+        description: 'Anime character for the welcome popup',
+        imageHint: 'anime character'
+    },
+    'popup-logo': {
+        imageUrl: 'https://i.ibb.co/hCKjD0s/zenith-harrai-shop-logo.png',
+        description: 'Zenith Harrai Shop logo for the welcome popup',
+        imageHint: 'shop logo'
     }
 }
