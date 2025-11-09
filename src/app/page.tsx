@@ -52,7 +52,7 @@ export default function Home() {
             priority
           />
         ) : (
-          <Skeleton className="aspect-[2.s1/1] w-full" />
+          <Skeleton className="aspect-[2.5/1] w-full" />
         )}
       </Card>
 
@@ -100,6 +100,7 @@ export default function Home() {
                       width={400}
                       height={400}
                       className="aspect-square w-full object-cover"
+                      priority
                     />
                   </Card>
                   <p className="mt-2 text-xs font-semibold text-primary">
