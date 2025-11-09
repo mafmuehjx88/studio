@@ -5,7 +5,7 @@ import type { Product } from '@/lib/types';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
 import { cn } from '@/lib/utils';
-import Image from 'next/image';
+// import Image from 'next/image'; // No longer using Next/Image
 
 interface ProductCardProps {
   product: Product;
@@ -32,11 +32,12 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
         )}
         
         {product.image && (
-             <Image
+             <img
                 src={product.image}
                 alt={product.name}
                 width={100}
                 height={100}
+                loading="eager" // Force immediate loading
                 className={cn(
                   "w-full object-cover",
                   isPassProduct ? "rounded-full" : "rounded-md"

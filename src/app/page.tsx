@@ -1,7 +1,7 @@
 
 "use client";
 
-import Image from 'next/image';
+// import Image from 'next/image'; // No longer using Next/Image
 import Link from 'next/link';
 import React from 'react';
 import { Button } from '@/components/ui/button';
@@ -42,14 +42,14 @@ export default function Home() {
     <div className="space-y-6">
       <Card className="overflow-hidden border-none rounded-lg">
         {bannerImage ? (
-          <Image
+          <img
             src={bannerImage.imageUrl}
             alt={bannerImage.description}
             width={1200}
             height={400}
+            loading="eager"
             className="aspect-[2.5/1] w-full object-cover"
             data-ai-hint={bannerImage.imageHint}
-            priority
           />
         ) : (
           <Skeleton className="aspect-[2.5/1] w-full" />
@@ -94,13 +94,13 @@ export default function Home() {
               return (
                 <Link key={game.id} href={href} className="group text-center">
                   <Card className="overflow-hidden transition-transform group-hover:scale-105 rounded-lg border-2 border-transparent group-hover:border-primary bg-secondary">
-                    <Image
+                    <img
                       src={game.image}
                       alt={game.name}
                       width={400}
                       height={400}
+                      loading="eager"
                       className="aspect-square w-full object-cover"
-                      priority
                     />
                   </Card>
                   <p className="mt-2 text-xs font-semibold text-primary">

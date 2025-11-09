@@ -3,7 +3,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
+// import Image from 'next/image'; // No longer using Next/Image
 import { useAuth } from '@/contexts/AuthContext';
 import ProductGrid from '@/components/ProductGrid';
 import {
@@ -497,13 +497,13 @@ Order Time: ${new Date().toLocaleString('en-US', {
   return (
     <div className="space-y-6">
       {(game.bannerImage || game.image) && (
-        <Image
+        <img
           src={game.bannerImage || game.image}
           alt={game.name}
           width={600}
           height={300}
+          loading="eager"
           className="aspect-[2/1] w-full rounded-lg object-contain"
-          priority
         />
       )}
 
@@ -643,5 +643,3 @@ Order Time: ${new Date().toLocaleString('en-US', {
     </div>
   );
 }
-
-    
