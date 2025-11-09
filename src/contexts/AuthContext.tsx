@@ -3,7 +3,7 @@
 
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
-import { doc, onSnapshot, collection, query, where } from 'firebase/firestore';
+import { doc, onSnapshot, collection, query, where, Unsubscribe } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
 import type { UserProfile, Notification } from '@/lib/types';
 import { usePathname, useRouter } from 'next/navigation';
@@ -33,15 +33,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
-  const [isOnline, setIsOnline] = useState(true); // Default to true, will be updated on client
+  const [isOnline, setIsOnline] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
-    setLoading(true);
-    const unsubscribeAuth = onAuthStateChanged(auth, async (firebaseUser) => {
-      let profileUnsubscribe: () => void = () => {};
-      let notificationUnsubscribe: () => void = () => {};
+    let profileUnsubscribe: Unsubscribe | null = null;
+    let notificationUnsubscribe: Unsubscribe | null = null;
+    
+    const unsubscribeAuth = onAuthStateChanged(auth, (firebaseUser) => {
+      // First, cleanup any existing listeners from the previous user state
+      if (profileUnsubscribe) profileUnsubscribe();
+      if (notificationUnsubscribe) notificationUnsubscribe();
 
       if (firebaseUser) {
         setUser(firebaseUser);
@@ -65,7 +68,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           }
         );
 
-        // Listen for unread notifications
         const notificationsQuery = query(
             collection(db, `users/${firebaseUser.uid}/notifications`),
             where("isRead", "==", false)
@@ -81,14 +83,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setHasUnreadNotifications(false);
         setLoading(false);
       }
-      
-      return () => {
-        profileUnsubscribe();
-        notificationUnsubscribe();
-      };
     });
 
-    return () => unsubscribeAuth();
+    return () => {
+      // Cleanup auth and any remaining listeners on component unmount
+      unsubscribeAuth();
+      if (profileUnsubscribe) profileUnsubscribe();
+      if (notificationUnsubscribe) notificationUnsubscribe();
+    };
   }, []);
 
   // Check for online/offline status
